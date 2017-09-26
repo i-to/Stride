@@ -1,0 +1,4 @@
+Source/.vs/*
+
+Binary/Debug/*
+Binary/Release/*
