@@ -66,14 +66,17 @@ namespace Stride.Gui
                 new Pen { Brush = Brushes.Black, Thickness = DrawingMetrics.StaffLinesThickness };
         }
 
-        void SetupNoteDrawing(GlyphRunDrawing drawing, int testNoteStaffPosition, Brush brush)
+        void SetupNoteDrawing(GlyphRunDrawing drawing, int staffPosition, Brush brush)
         {
-            var testNoteY = StaffPositionToYOffset(testNoteStaffPosition);
+            var testNoteY = StaffPositionToYOffset(staffPosition);
             if (!testNoteY.HasValue)
+            {
+                drawing.GlyphRun = null;
                 return;
-            var testNoteOrigin = new Point(NoteX, testNoteY.Value);
+            }
+            var noteOrigin = new Point(NoteX, testNoteY.Value);
             drawing.GlyphRun = GlyphRunBuilder.CreateGlyphRun(
-                TypefaceProvider.Typeface, NoteText, testNoteOrigin, DrawingMetrics.GlyphSize);
+                TypefaceProvider.Typeface, NoteText, noteOrigin, DrawingMetrics.GlyphSize);
             drawing.ForegroundBrush = brush;
         }
     }

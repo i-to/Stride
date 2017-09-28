@@ -53,12 +53,20 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DrawingMetrics.cs" />
+    <Compile Include="Model\Drill.cs" />
+    <Compile Include="Model\DrillStaff.cs" />
     <Compile Include="DrillMusicDrawingContainer.cs" />
     <Compile Include="DrillViewModel.cs" />
     <Compile Include="EntryPoint.cs" />
+    <Compile Include="Input\Dispatcher.cs" />
+    <Compile Include="Input\KeyboardPitchMapping.cs" />
+    <Compile Include="Input\KeyboardSink.cs" />
+    <Compile Include="Input\MainWindow.cs" />
     <Compile Include="MusicDrawingBuilder.cs" />
     <Compile Include="MusicSymbolToFontText.cs" />
-    <Compile Include="Pitch.cs" />
+    <Compile Include="Input\NoteInput.cs" />
+    <Compile Include="Music\Pitch.cs" />
+    <Compile Include="Root.cs" />
     <Compile Include="StaffLinesGeometryBuilder.cs" />
     <Compile Include="DrillControl.xaml.cs">
       <DependentUpon>DrillControl.xaml</DependentUpon>
@@ -69,6 +77,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GlyphRunBuilder.cs" />
+    <Compile Include="Utility\NullableExtensions.cs" />
     <Page Include="DrillControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

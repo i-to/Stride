@@ -1,28 +1,40 @@
 ﻿using System;
 using System.Windows.Media;
+using Stride.Gui.Model;
+using Stride.Gui.Music;
 
 namespace Stride.Gui
 {
     public class DrillViewModel
     {
         readonly MusicDrawingBuilder MusicDrawingBuilder;
+        readonly Drill Drill;
 
-        public DrillViewModel(MusicDrawingBuilder musicDrawingBuilder)
+        public DrillViewModel(MusicDrawingBuilder musicDrawingBuilder, Drill drill)
         {
             MusicDrawingBuilder = musicDrawingBuilder;
+            Drill = drill;
         }
 
         public Drawing MusicDrawing => MusicDrawingBuilder.Drawing;
+        public event EventHandler MusicDrawingChanged;
+        void RaiseMusicDrawingChanged() => MusicDrawingChanged?.Invoke(this, EventArgs.Empty);
 
-        public void SetupDrawing()
+        public void InitializeDrill() => UpdatePlayedPitch(null);
+
+        public void UpdatePlayedPitch(Pitch? pitch)
         {
-            var testNoteStaffPosition = ComputeStaffPosition(Pitch.B4);
-            var playedNoteStaffPosition = ComputeStaffPosition(Pitch.F5);
+            Drill.SetPlayedPitch(pitch);
+            var testNoteStaffPosition = ComputeStaffPosition(Drill.Staff.TestPitch);
+            var playedNoteStaffPosition = ComputeStaffPosition(Drill.Staff.PlayedPitch);
             MusicDrawingBuilder.UpdateDrawing(testNoteStaffPosition, playedNoteStaffPosition);
+            RaiseMusicDrawingChanged();
         }
 
-        int ComputeStaffPosition(Pitch pitch)
+        int ComputeStaffPosition(Pitch? pitchObj)
         {
+            if (!pitchObj.HasValue) return -1;
+            var pitch = pitchObj.Value;
             if (pitch == Pitch.D4) return 0;
             if (pitch == Pitch.E4) return 1;
             if (pitch == Pitch.F4) return 2;
