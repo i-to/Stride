@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Stride.Gui.Music;
+using Stride.Gui.Utility;
 
 namespace Stride.Gui.Model
 {
@@ -12,23 +14,47 @@ namespace Stride.Gui.Model
             Pitch.C5, Pitch.D5, Pitch.E5, Pitch.F5, Pitch.G5
         };
 
+        readonly double[] PitchWeights;
         readonly Random Random;
 
         public Drill()
         {
             Random = new Random();
-            Reset();
+            PitchWeights = Enumerable.Range(0, Pitches.Count).Select(_ => 3.0).ToArray();
+            SwitchToNextQuestion();
         }
 
         public DrillStaff Staff { get; private set; }
 
-        Pitch RandomPitch => Pitches[Random.Next(0, Pitches.Count)];
+        Pitch ComputeNextPitch()
+        {
+            var random = Random.NextDouble();
+            var index = WeighedDistribution.BucketIndexOfValue(PitchWeights, random);
+            return Pitches[index];
+        }
 
-        public void Reset() => Staff = new DrillStaff(RandomPitch);
+        public void SwitchToNextQuestion()
+        {
+            var nextPitch = ComputeNextPitch();
+            Staff = new DrillStaff(nextPitch);
+        }
+
         public void SetPlayedPitch(Pitch? pitch)
         {
-            if (pitch == null && Staff.TestPitch == Staff.PlayedPitch)
-                Reset();
+            if (pitch == null)
+            {
+                var index = Pitches.FindIndex(Staff.TestPitch);
+                if (Staff.TestPitch == Staff.PlayedPitch)
+                {
+                    if (PitchWeights[index] > 1.0)
+                        PitchWeights[index] -= 1.0;
+                    SwitchToNextQuestion();
+                }
+                else
+                {
+                    PitchWeights[index] += 3.0;
+                }
+            }
             Staff = Staff.WithPlayedPitch(pitch);
         }
     }
