@@ -5,6 +5,8 @@ namespace Stride.Gui
 {
     public class Root
     {
+        readonly NoteInputMode NoteInputMode = NoteInputMode.Midi;
+
         public readonly App Application;
         public readonly MainWindow MainWindow;
         public readonly DrillControl DrillControl;
@@ -25,15 +27,18 @@ namespace Stride.Gui
             DrillViewModel = new DrillViewModel(musicDrawingBuilder, new Drill());
             var keyboardPitchMapping = new KeyboardPitchMapping();
             var noteInput = new NoteInput(DrillViewModel);
-            var inputDispatcher = new Dispatcher(keyboardPitchMapping, noteInput);
+            var midiPitchMapping = new MidiPitchMapping();
+            var noteInputConverter = new NoteInputConverter(keyboardPitchMapping, midiPitchMapping, noteInput,
+                NoteInputMode);
             DrillControl = new DrillControl(DrillViewModel);
-            MainWindow = new MainWindow(inputDispatcher) {Content = DrillControl};
+            MainWindow = new MainWindow(noteInputConverter, noteInputConverter) {Content = DrillControl};
         }
 
         public void Run()
         {
             DrillViewModel.InitializeDrill();
             Application.Run(MainWindow);
+            MainWindow.Dispose();
         }
     }
 }

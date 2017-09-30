@@ -1,4 +1,5 @@
 Source/.vs/*
+Source/packages/*
 
 Binary/Debug/*
 Binary/Release/*

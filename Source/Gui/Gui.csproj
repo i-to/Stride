@@ -38,6 +38,9 @@
     <StartupObject>Stride.Gui.EntryPoint</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NAudio, Version=1.8.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NAudio.1.8.3\lib\net35\NAudio.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -53,12 +56,16 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="DrawingMetrics.cs" />
+    <Compile Include="Input\MidiPitchMapping.cs" />
+    <Compile Include="Input\MidiSink.cs" />
+    <Compile Include="Input\NoteInputMode.cs" />
+    <Compile Include="Input\MidiEventExtensions.cs" />
     <Compile Include="Model\Drill.cs" />
     <Compile Include="Model\DrillStaff.cs" />
     <Compile Include="DrillMusicDrawingContainer.cs" />
     <Compile Include="DrillViewModel.cs" />
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="Input\Dispatcher.cs" />
+    <Compile Include="Input\NoteInputConverter.cs" />
     <Compile Include="Input\KeyboardPitchMapping.cs" />
     <Compile Include="Input\KeyboardSink.cs" />
     <Compile Include="Input\MainWindow.cs" />
@@ -78,6 +85,7 @@
     </Compile>
     <Compile Include="GlyphRunBuilder.cs" />
     <Compile Include="Utility\NullableExtensions.cs" />
+    <Compile Include="Utility\ObjectExtensions.cs" />
     <Page Include="DrillControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -102,6 +110,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Fonts\Bravura.otf" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
