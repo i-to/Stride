@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media;
 
-namespace Stride
+namespace Stride.MusicDrawing
 {
     public class MusicDrawingBuilder
     {
@@ -10,7 +10,7 @@ namespace Stride
         readonly GlyphRunBuilder GlyphRunBuilder;
         readonly MusicSymbolToFontText MusicSymbolToFontText;
         readonly StaffLinesGeometryBuilder StaffLinesGeometryBuilder;
-        readonly TypefaceProvider TypefaceProvider;
+        readonly MusicTypefaceProvider MusicTypefaceProvider;
         readonly DrillMusicDrawingContainer DrawingContainer;
 
         public MusicDrawingBuilder(
@@ -18,12 +18,12 @@ namespace Stride
             GlyphRunBuilder glyphRunBuilder,
             MusicSymbolToFontText musicSymbolToFontText,
             StaffLinesGeometryBuilder staffLinesGeometryBuilder,
-            TypefaceProvider typefaceProvider,
+            MusicTypefaceProvider musicTypefaceProvider,
             DrillMusicDrawingContainer drawingContainer)
         {
             GlyphRunBuilder = glyphRunBuilder;
             StaffLinesGeometryBuilder = staffLinesGeometryBuilder;
-            TypefaceProvider = typefaceProvider;
+            MusicTypefaceProvider = musicTypefaceProvider;
             DrawingContainer = drawingContainer;
             MusicSymbolToFontText = musicSymbolToFontText;
             DrawingMetrics = drawingMetrics;
@@ -54,7 +54,7 @@ namespace Stride
         public void UpdateDrawing(int testNoteStaffPosition, int playedNoteStaffPosition)
         {
             DrawingContainer.ClefDrawing.GlyphRun = GlyphRunBuilder.CreateGlyphRun(
-                TypefaceProvider.Typeface, ClefText, GClefOrigin, DrawingMetrics.GlyphSize);
+                MusicTypefaceProvider.Typeface, ClefText, GClefOrigin, DrawingMetrics.GlyphSize);
             DrawingContainer.ClefDrawing.ForegroundBrush = Brushes.Black;
 
             SetupNoteDrawing(DrawingContainer.TestNoteDrawing, testNoteStaffPosition, Brushes.Black);
@@ -76,7 +76,7 @@ namespace Stride
             }
             var noteOrigin = new Point(NoteX, testNoteY.Value);
             drawing.GlyphRun = GlyphRunBuilder.CreateGlyphRun(
-                TypefaceProvider.Typeface, NoteText, noteOrigin, DrawingMetrics.GlyphSize);
+                MusicTypefaceProvider.Typeface, NoteText, noteOrigin, DrawingMetrics.GlyphSize);
             drawing.ForegroundBrush = brush;
         }
     }

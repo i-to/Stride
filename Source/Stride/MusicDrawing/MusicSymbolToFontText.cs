@@ -1,4 +1,4 @@
-﻿namespace Stride
+﻿namespace Stride.MusicDrawing
 {
     public class MusicSymbolToFontText
     {

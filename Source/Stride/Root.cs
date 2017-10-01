@@ -1,5 +1,6 @@
 using Stride.Input;
 using Stride.Model;
+using Stride.MusicDrawing;
 
 namespace Stride
 {
@@ -17,7 +18,7 @@ namespace Stride
             Application = new App();
             var glyphRunBuilder = new GlyphRunBuilder();
             var staffLinesGeometryBuilder = new StaffLinesGeometryBuilder();
-            var typefaceProvider = new TypefaceProvider();
+            var typefaceProvider = new MusicTypefaceProvider();
             var musicSymbolToFontText = new MusicSymbolToFontText();
             var drawingContainer = new DrillMusicDrawingContainer();
             var drawingMetrics = new DrawingMetrics(baseSize: 8);

@@ -2,11 +2,11 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 
-namespace Stride
+namespace Stride.MusicDrawing
 {
-    public class TypefaceProvider
+    public class MusicTypefaceProvider
     {
-        public TypefaceProvider()
+        public MusicTypefaceProvider()
         {
             var fontFamily = new FontFamily(new Uri("pack://application:,,,/"), "./Fonts/#Bravura");
             Typeface = new Typeface(fontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);

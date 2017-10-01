@@ -1,6 +1,6 @@
 using System.Windows.Media;
 
-namespace Stride
+namespace Stride.MusicDrawing
 {
     public class DrillMusicDrawingContainer
     {

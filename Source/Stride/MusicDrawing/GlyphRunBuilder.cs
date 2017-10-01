@@ -2,7 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Media;
 
-namespace Stride
+namespace Stride.MusicDrawing
 {
     public class GlyphRunBuilder
     {

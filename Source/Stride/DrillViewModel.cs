@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using Stride.Model;
 using Stride.Music;
+using Stride.MusicDrawing;
 
 namespace Stride
 {

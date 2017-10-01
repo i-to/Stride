@@ -64,35 +64,35 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="DrawingMetrics.cs" />
+    <Compile Include="MusicDrawing\DrawingMetrics.cs" />
     <Compile Include="Input\MidiPitchMapping.cs" />
     <Compile Include="Input\MidiSink.cs" />
     <Compile Include="Input\NoteInputMode.cs" />
     <Compile Include="Input\MidiEventExtensions.cs" />
     <Compile Include="Model\Drill.cs" />
     <Compile Include="Model\DrillStaff.cs" />
-    <Compile Include="DrillMusicDrawingContainer.cs" />
+    <Compile Include="MusicDrawing\DrillMusicDrawingContainer.cs" />
     <Compile Include="DrillViewModel.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Input\NoteInputConverter.cs" />
     <Compile Include="Input\KeyboardPitchMapping.cs" />
     <Compile Include="Input\KeyboardSink.cs" />
     <Compile Include="Input\MainWindow.cs" />
-    <Compile Include="MusicDrawingBuilder.cs" />
-    <Compile Include="MusicSymbolToFontText.cs" />
+    <Compile Include="MusicDrawing\MusicDrawingBuilder.cs" />
+    <Compile Include="MusicDrawing\MusicSymbolToFontText.cs" />
     <Compile Include="Input\NoteInput.cs" />
     <Compile Include="Music\Pitch.cs" />
     <Compile Include="Root.cs" />
-    <Compile Include="StaffLinesGeometryBuilder.cs" />
+    <Compile Include="MusicDrawing\StaffLinesGeometryBuilder.cs" />
     <Compile Include="DrillControl.xaml.cs">
       <DependentUpon>DrillControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TypefaceProvider.cs" />
+    <Compile Include="MusicDrawing\MusicTypefaceProvider.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GlyphRunBuilder.cs" />
+    <Compile Include="MusicDrawing\GlyphRunBuilder.cs" />
     <Compile Include="Utility\Combinator.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs" />
