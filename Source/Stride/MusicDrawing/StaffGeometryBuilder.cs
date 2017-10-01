@@ -5,7 +5,7 @@ namespace Stride.MusicDrawing
 {
     public class StaffGeometryBuilder
     {
-        public Geometry CreateGrandStaffGeometry(DrawingMetrics metrics, double length)
+        public Geometry CreateGrandStaffGeometry(StavesMetrics metrics, double length)
         {
             var geometry = new GeometryGroup();
             AddStaffGeometry(geometry, metrics, length, false);
@@ -13,7 +13,7 @@ namespace Stride.MusicDrawing
             return geometry;
         }
 
-        void AddStaffGeometry(GeometryGroup geometry, DrawingMetrics metrics, double length, bool grandStaffOffset)
+        void AddStaffGeometry(GeometryGroup geometry, StavesMetrics metrics, double length, bool grandStaffOffset)
         {
             for (int i = 0; i != metrics.StaffLinesCount; ++i)
             {

@@ -64,7 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="MusicDrawing\DrawingMetrics.cs" />
+    <Compile Include="MusicDrawing\StavesMetrics.cs" />
     <Compile Include="Input\MidiPitchMapping.cs" />
     <Compile Include="Input\MidiSink.cs" />
     <Compile Include="Input\NoteInputMode.cs" />

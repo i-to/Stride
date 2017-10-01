@@ -21,7 +21,7 @@ namespace Stride
             var typefaceProvider = new MusicTypefaceProvider();
             var musicSymbolToFontText = new MusicSymbolToFontText();
             var drawingContainer = new DrillMusicDrawingContainer();
-            var drawingMetrics = new DrawingMetrics(baseSize: 8);
+            var drawingMetrics = new StavesMetrics(baseSize: 8);
             var musicDrawingBuilder = new MusicDrawingBuilder(
                 drawingMetrics, glyphRunBuilder, musicSymbolToFontText, staffLinesGeometryBuilder,
                 typefaceProvider, drawingContainer);

@@ -4,20 +4,22 @@ namespace Stride.MusicDrawing
 {
     public class DrillMusicDrawingContainer
     {
-        public readonly GeometryDrawing StaffLinesDrawing;
-        public readonly GlyphRunDrawing ClefDrawing, TestNoteDrawing, PlayedNoteDrawing;
+        public readonly GeometryDrawing StaffLines;
+        public readonly GlyphRunDrawing TreebleClef, BassClef, TestNote, PlayedNote;
 
         public DrillMusicDrawingContainer()
         {
             var drawing = new DrawingGroup();
-            StaffLinesDrawing = new GeometryDrawing();
-            ClefDrawing = new GlyphRunDrawing();
-            TestNoteDrawing = new GlyphRunDrawing();
-            PlayedNoteDrawing = new GlyphRunDrawing();
-            drawing.Children.Add(StaffLinesDrawing);
-            drawing.Children.Add(ClefDrawing);
-            drawing.Children.Add(TestNoteDrawing);
-            drawing.Children.Add(PlayedNoteDrawing);
+            StaffLines = new GeometryDrawing();
+            TreebleClef = new GlyphRunDrawing();
+            BassClef = new GlyphRunDrawing();
+            TestNote = new GlyphRunDrawing();
+            PlayedNote = new GlyphRunDrawing();
+            drawing.Children.Add(StaffLines);
+            drawing.Children.Add(TreebleClef);
+            drawing.Children.Add(BassClef);
+            drawing.Children.Add(TestNote);
+            drawing.Children.Add(PlayedNote);
             Drawing = drawing;
         }
 

@@ -2,12 +2,12 @@
 
 namespace Stride.MusicDrawing
 {
-    public class DrawingMetrics
+    public class StavesMetrics
     {
         // Half distance between two staff lines.
         public readonly double BaseSize;
 
-        public DrawingMetrics(double baseSize)
+        public StavesMetrics(double baseSize)
         {
             BaseSize = baseSize;
         }

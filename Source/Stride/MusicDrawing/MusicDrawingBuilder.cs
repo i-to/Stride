@@ -6,7 +6,7 @@ namespace Stride.MusicDrawing
 {
     public class MusicDrawingBuilder
     {
-        readonly DrawingMetrics DrawingMetrics;
+        readonly StavesMetrics Metrics;
         readonly GlyphRunBuilder GlyphRunBuilder;
         readonly MusicSymbolToFontText MusicSymbolToFontText;
         readonly StaffGeometryBuilder StaffGeometryBuilder;
@@ -14,7 +14,7 @@ namespace Stride.MusicDrawing
         readonly DrillMusicDrawingContainer DrawingContainer;
 
         public MusicDrawingBuilder(
-            DrawingMetrics drawingMetrics,
+            StavesMetrics metrics,
             GlyphRunBuilder glyphRunBuilder,
             MusicSymbolToFontText musicSymbolToFontText,
             StaffGeometryBuilder staffGeometryBuilder,
@@ -26,17 +26,15 @@ namespace Stride.MusicDrawing
             MusicTypefaceProvider = musicTypefaceProvider;
             DrawingContainer = drawingContainer;
             MusicSymbolToFontText = musicSymbolToFontText;
-            DrawingMetrics = drawingMetrics;
+            Metrics = metrics;
         }
 
         public Drawing Drawing => DrawingContainer.Drawing;
 
-        public double StaffLinesLength => 20.0 * DrawingMetrics.BaseSize;
-        public Point GClefOrigin => new Point(0, 4.0 * DrawingMetrics.BaseSize);
-        public double NoteX => 10.0 * DrawingMetrics.BaseSize;
-
-        string ClefText => MusicSymbolToFontText.TreebleClef.ToString();
-        string NoteText => MusicSymbolToFontText.WholeNote.ToString();
+        public double StaffLinesLength => 20.0 * Metrics.BaseSize;
+        public Point TreebleClefOrigin => new Point(0, 4.0 * Metrics.BaseSize);
+        public Point BassClefOrigin => new Point(0, 2.0 * Metrics.BaseSize + Metrics.GrandStaffOffset);
+        public double NoteX => 10.0 * Metrics.BaseSize;
 
         double? StaffPositionToYOffset(int staffPosition)
         {
@@ -44,7 +42,7 @@ namespace Stride.MusicDrawing
                 throw new ArgumentException($"The expected range for {nameof(staffPosition)} is [-1, 10]");
             if (staffPosition == -1)
                 return null;
-            return (9 - staffPosition) * DrawingMetrics.BaseSize;
+            return (9 - staffPosition) * Metrics.BaseSize;
         }
 
         // Staff position parameter indicates a number of semi-tones above the
@@ -53,17 +51,21 @@ namespace Stride.MusicDrawing
         // A special value of -1 indicates that the note is not to be shown.
         public void UpdateDrawing(int testNoteStaffPosition, int playedNoteStaffPosition)
         {
-            DrawingContainer.ClefDrawing.GlyphRun = GlyphRunBuilder.CreateGlyphRun(
-                MusicTypefaceProvider.Typeface, ClefText, GClefOrigin, DrawingMetrics.GlyphSize);
-            DrawingContainer.ClefDrawing.ForegroundBrush = Brushes.Black;
+            SetupCleffDrawing(MusicSymbolToFontText.TreebleClef, DrawingContainer.TreebleClef, TreebleClefOrigin);
+            SetupCleffDrawing(MusicSymbolToFontText.BassClef, DrawingContainer.BassClef, BassClefOrigin);
+            SetupNoteDrawing(DrawingContainer.TestNote, testNoteStaffPosition, Brushes.Black);
+            SetupNoteDrawing(DrawingContainer.PlayedNote, playedNoteStaffPosition, Brushes.Red);
+            SetupStavesDrawing(DrawingContainer.StaffLines);
+        }
 
-            SetupNoteDrawing(DrawingContainer.TestNoteDrawing, testNoteStaffPosition, Brushes.Black);
-            SetupNoteDrawing(DrawingContainer.PlayedNoteDrawing, playedNoteStaffPosition, Brushes.Red);
-
-            DrawingContainer.StaffLinesDrawing.Geometry = StaffGeometryBuilder.CreateGrandStaffGeometry(
-                DrawingMetrics, StaffLinesLength);
-            DrawingContainer.StaffLinesDrawing.Pen =
-                new Pen { Brush = Brushes.Black, Thickness = DrawingMetrics.StaffLinesThickness };
+        void SetupCleffDrawing(char symbol, GlyphRunDrawing drawing, Point origin)
+        {
+            drawing.GlyphRun = GlyphRunBuilder.CreateGlyphRun(
+                MusicTypefaceProvider.Typeface,
+                symbol.ToString(),
+                origin,
+                Metrics.GlyphSize);
+            drawing.ForegroundBrush = Brushes.Black;
         }
 
         void SetupNoteDrawing(GlyphRunDrawing drawing, int staffPosition, Brush brush)
@@ -75,9 +77,17 @@ namespace Stride.MusicDrawing
                 return;
             }
             var noteOrigin = new Point(NoteX, testNoteY.Value);
+            var noteText = MusicSymbolToFontText.WholeNote.ToString();
             drawing.GlyphRun = GlyphRunBuilder.CreateGlyphRun(
-                MusicTypefaceProvider.Typeface, NoteText, noteOrigin, DrawingMetrics.GlyphSize);
+                MusicTypefaceProvider.Typeface, noteText, noteOrigin, Metrics.GlyphSize);
             drawing.ForegroundBrush = brush;
         }
+
+        void SetupStavesDrawing(GeometryDrawing drawing)
+        {
+            drawing.Geometry = StaffGeometryBuilder.CreateGrandStaffGeometry(Metrics, StaffLinesLength);
+            drawing.Pen = new Pen { Brush = Brushes.Black, Thickness = Metrics.StaffLinesThickness };
+        }
+
     }
 }
