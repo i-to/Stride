@@ -25,5 +25,13 @@
         public static Pitch G5 = Create(Octave.Fifth, Note.G);
         public static Pitch A5 = Create(Octave.Fifth, Note.A);
         public static Pitch B5 = Create(Octave.Fifth, Note.B);
+
+        public static Pitch C6 = Create(Octave.Sixth, Note.C);
+        public static Pitch D6 = Create(Octave.Sixth, Note.D);
+        public static Pitch E6 = Create(Octave.Sixth, Note.E);
+        public static Pitch F6 = Create(Octave.Sixth, Note.F);
+        public static Pitch G6 = Create(Octave.Sixth, Note.G);
+        public static Pitch A6 = Create(Octave.Sixth, Note.A);
+        public static Pitch B6 = Create(Octave.Sixth, Note.B);
     }
 }

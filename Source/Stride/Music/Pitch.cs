@@ -20,7 +20,7 @@ namespace Stride.Music
         {
             var octaveDistance = pitch.Octave - Octave;
             var pitchDistance = pitch.Note - Note;
-            return Const.NotesInOctave * octaveDistance + pitchDistance;
+            return (Const.NotesInOctave - 1) * octaveDistance + pitchDistance;
         }
 
         public bool IsInRangeInclusive(Pitch low, Pitch high) => this >= low && this <= high;
@@ -51,5 +51,7 @@ namespace Stride.Music
         public bool Equals(Pitch other) => other == this;
         public override bool Equals(object obj) => obj as Pitch == this;
         public override int GetHashCode() => Hash.Compute(Octave.GetHashCode(), Note.GetHashCode());
+
+        public override string ToString() => $"{Note}{Octave.Number}";
     }
 }

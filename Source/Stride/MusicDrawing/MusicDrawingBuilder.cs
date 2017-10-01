@@ -1,9 +1,79 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
 using Stride.Music;
+using Stride.Utility;
 
 namespace Stride.MusicDrawing
 {
+    /// <summary>
+    /// Ledger lines at a given position of the single staff.
+    /// </summary>
+    public class LedgerLines
+    {
+        /// <summary>
+        /// Indices represent number of legder lines on each side (0 - for no lines).
+        /// </summary>
+        public readonly int Top, Bottom;
+
+        public LedgerLines(int top, int bottom)
+        {
+            Top = top;
+            Bottom = bottom;
+        }
+
+        public static readonly LedgerLines Absent = new LedgerLines(0, 0);
+
+        public static LedgerLines CreateTop(int count) => 
+            new LedgerLines(count, 0);
+
+        public static LedgerLines CreateBottom(int count) => 
+            new LedgerLines(0, count);
+
+        public static LedgerLines CreateSingle(int count, bool top) =>
+            top ? CreateTop(count) : CreateBottom(count);
+
+        public LedgerLines Combine(LedgerLines other)
+        {
+            var top = Math.Max(Top, other.Top);
+            var bottom = Math.Max(Bottom, other.Bottom);
+            return new LedgerLines(top, bottom);
+        }
+    }
+
+    /// <summary>
+    /// Ledger lines at a given position of the grand staff.
+    /// </summary>
+    public class GrandStaffLedgerLines
+    {
+        public readonly LedgerLines TreebleClef, BassClef;
+
+        public GrandStaffLedgerLines(LedgerLines treebleClef, LedgerLines bassClef)
+        {
+            TreebleClef = treebleClef;
+            BassClef = bassClef;
+        }
+
+        public static readonly GrandStaffLedgerLines Absent =
+            new GrandStaffLedgerLines(LedgerLines.Absent, LedgerLines.Absent);
+
+        public static GrandStaffLedgerLines CreateTreeble(LedgerLines lines) =>
+            new GrandStaffLedgerLines(lines, LedgerLines.Absent);
+
+        public static GrandStaffLedgerLines CreateBass(LedgerLines lines) =>
+            new GrandStaffLedgerLines(LedgerLines.Absent, lines);
+
+        public static GrandStaffLedgerLines CreateSingle(LedgerLines lines, bool treeble) =>
+            treeble ? CreateTreeble(lines) : CreateBass(lines);
+
+        public GrandStaffLedgerLines Combine(GrandStaffLedgerLines other)
+        {
+            var treeble = TreebleClef.Combine(other.TreebleClef);
+            var bass = BassClef.Combine(other.BassClef);
+            return new GrandStaffLedgerLines(treeble, bass);
+        }
+    }
+
     public class MusicDrawingBuilder
     {
         readonly StavesMetrics Metrics;
@@ -48,14 +118,15 @@ namespace Stride.MusicDrawing
 
         public void UpdateDrawing(StaffPosition testNotePosition, StaffPosition playedNotePosition)
         {
-            SetupCleffDrawing(MusicSymbolToFontText.TreebleClef, DrawingContainer.TreebleClef, TreebleClefOrigin);
-            SetupCleffDrawing(MusicSymbolToFontText.BassClef, DrawingContainer.BassClef, BassClefOrigin);
-            SetupNoteDrawing(DrawingContainer.TestNote, testNotePosition, Brushes.Black);
-            SetupNoteDrawing(DrawingContainer.PlayedNote, playedNotePosition, Brushes.Red);
-            SetupStavesDrawing(DrawingContainer.StaffLines);
+            BuildCleffDrawing(MusicSymbolToFontText.TreebleClef, DrawingContainer.TreebleClef, TreebleClefOrigin);
+            BuildCleffDrawing(MusicSymbolToFontText.BassClef, DrawingContainer.BassClef, BassClefOrigin);
+            BuildNoteDrawing(DrawingContainer.TestNote, testNotePosition, Brushes.Black);
+            BuildNoteDrawing(DrawingContainer.PlayedNote, playedNotePosition, Brushes.Red);
+            var ledgerLines = LedgerLinesComputation.ComputeLedgerLines(testNotePosition, playedNotePosition);
+            BuildStaffDrawing(DrawingContainer.StaffLines, ledgerLines);
         }
 
-        void SetupCleffDrawing(char symbol, GlyphRunDrawing drawing, Point origin)
+        void BuildCleffDrawing(char symbol, GlyphRunDrawing drawing, Point origin)
         {
             drawing.GlyphRun = GlyphRunBuilder.CreateGlyphRun(
                 MusicTypefaceProvider.Typeface,
@@ -65,7 +136,7 @@ namespace Stride.MusicDrawing
             drawing.ForegroundBrush = Brushes.Black;
         }
 
-        void SetupNoteDrawing(GlyphRunDrawing drawing, StaffPosition notePosition, Brush brush)
+        void BuildNoteDrawing(GlyphRunDrawing drawing, StaffPosition notePosition, Brush brush)
         {
             var testNoteY = StaffPositionToYOffset(notePosition);
             if (!testNoteY.HasValue)
@@ -80,11 +151,10 @@ namespace Stride.MusicDrawing
             drawing.ForegroundBrush = brush;
         }
 
-        void SetupStavesDrawing(GeometryDrawing drawing)
+        void BuildStaffDrawing(GeometryDrawing drawing, GrandStaffLedgerLines ledgerLines)
         {
-            drawing.Geometry = StaffGeometryBuilder.CreateGrandStaffGeometry(Metrics, StaffLinesLength);
+            drawing.Geometry = StaffGeometryBuilder.CreateGrandStaffGeometry(Metrics, StaffLinesLength, ledgerLines, NoteX);
             drawing.Pen = new Pen { Brush = Brushes.Black, Thickness = Metrics.StaffLinesThickness };
         }
-
     }
 }
