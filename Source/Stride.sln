@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui", "Gui\Gui.csproj", "{4D8D8A97-BCEF-43C9-9203-11BFD66F3400}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride", "Stride\Stride.csproj", "{4D8D8A97-BCEF-43C9-9203-11BFD66F3400}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

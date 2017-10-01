@@ -3,4 +3,4 @@ Source/packages/*
 
 Binary/Debug/*
 Binary/Release/*
-Source/Gui/obj/*
+Source/Stride/obj/*
