@@ -39,7 +39,7 @@ namespace Stride.Model
             Staff = new DrillStaff(nextPitch);
         }
 
-        public void SetPlayedPitch(Pitch? pitch)
+        public void SetPlayedPitch(Pitch pitch)
         {
             if (pitch == null)
             {

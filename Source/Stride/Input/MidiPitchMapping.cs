@@ -5,7 +5,7 @@ namespace Stride.Input
 {
     public class MidiPitchMapping
     {
-        public Pitch? Map(NoteEvent noteEvent)
+        public Pitch Map(NoteEvent noteEvent)
         {
             switch (noteEvent.NoteNumber)
             {

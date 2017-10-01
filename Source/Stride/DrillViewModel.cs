@@ -23,7 +23,7 @@ namespace Stride
 
         public void InitializeDrill() => UpdatePlayedPitch(null);
 
-        public void UpdatePlayedPitch(Pitch? pitch)
+        public void UpdatePlayedPitch(Pitch pitch)
         {
             Drill.SetPlayedPitch(pitch);
             var testNoteStaffPosition = ComputeStaffPosition(Drill.Staff.TestPitch);
@@ -32,10 +32,9 @@ namespace Stride
             RaiseMusicDrawingChanged();
         }
 
-        int ComputeStaffPosition(Pitch? pitchObj)
+        int ComputeStaffPosition(Pitch pitch)
         {
-            if (!pitchObj.HasValue) return -1;
-            var pitch = pitchObj.Value;
+            if (pitch is null) return -1;
             if (pitch == Pitch.D4) return 0;
             if (pitch == Pitch.E4) return 1;
             if (pitch == Pitch.F4) return 2;

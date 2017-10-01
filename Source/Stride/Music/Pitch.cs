@@ -1,8 +1,33 @@
-﻿namespace Stride.Music
+﻿using System;
+using Stride.Utility;
+
+namespace Stride.Music
 {
-    public enum Pitch
+    public partial class Pitch : IEquatable<Pitch>
     {
-        D4, E4, F4, G4, A4, B4,
-        C5, D5, E5, F5, G5
+        public readonly Octave Octave;
+        public readonly Note Note;
+
+        public Pitch(Octave octave, Note note)
+        {
+            Octave = octave;
+            Note = note;
+        }
+
+        public static Pitch Create(Octave octave, Note note) => new Pitch(octave, note);
+
+        public static bool operator ==(Pitch left, Pitch right)
+        {
+            if (left is null)
+                return right is null;
+            if (right is null)
+                return false;
+            return left.Note == right.Note && left.Octave == right.Octave;
+        }
+
+        public static bool operator !=(Pitch left, Pitch right) => !(left == right);
+        public bool Equals(Pitch other) => other == this;
+        public override bool Equals(object obj) => obj as Pitch == this;
+        public override int GetHashCode() => Hash.Compute((int) Octave, (int) Note);
     }
 }

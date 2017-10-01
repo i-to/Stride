@@ -5,7 +5,7 @@ namespace Stride.Input
 {
     public class KeyboardPitchMapping
     {
-        public Pitch? Map(Key key)
+        public Pitch Map(Key key)
         {
             switch (key)
             {

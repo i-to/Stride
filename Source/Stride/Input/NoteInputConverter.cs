@@ -28,29 +28,32 @@ namespace Stride.Input
         {
             if (NoteInputMode != NoteInputMode.Keyboard)
                 return;
-            KeyboardPitchMapping.Map(args.Key).ForValue(NoteInput.NoteOn);
+            var pitch = KeyboardPitchMapping.Map(args.Key);
+            NoteInput.NoteOn(pitch);
         }
 
         public void KeyUp(KeyEventArgs args)
         {
             if (NoteInputMode != NoteInputMode.Keyboard)
                 return;
-            KeyboardPitchMapping.Map(args.Key).ForValue(NoteInput.NoteOff);
+            var pitch = KeyboardPitchMapping.Map(args.Key);
+            NoteInput.NoteOff(pitch);
         }
 
         public void MidiEvent(MidiEvent midiEvent)
         {
             if (NoteInputMode != NoteInputMode.Midi)
                 return;
-
             if (midiEvent.IsNoteOn())
-                MidiPitchMapping
-                    .Map(midiEvent.Cast<NoteEvent>())
-                    .ForValue(NoteInput.NoteOn);
+            {
+                var pitch = MidiPitchMapping.Map(midiEvent.Cast<NoteEvent>());
+                NoteInput.NoteOn(pitch);
+            }
             else if (midiEvent.IsNoteOff())
-                MidiPitchMapping
-                    .Map(midiEvent.Cast<NoteEvent>())
-                    .ForValue(NoteInput.NoteOff);
+            {
+                var pitch = MidiPitchMapping.Map(midiEvent.Cast<NoteEvent>());
+                NoteInput.NoteOff(pitch);
+            }
         }
     }
 }
