@@ -64,6 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="MusicDrawing\StaffPosition.cs" />
     <Compile Include="MusicDrawing\StavesMetrics.cs" />
     <Compile Include="Input\MidiPitchMapping.cs" />
     <Compile Include="Input\MidiSink.cs" />
@@ -81,6 +82,8 @@
     <Compile Include="MusicDrawing\MusicDrawingBuilder.cs" />
     <Compile Include="MusicDrawing\MusicSymbolToFontText.cs" />
     <Compile Include="Input\NoteInput.cs" />
+    <Compile Include="Music\Clef.cs" />
+    <Compile Include="Music\Const.cs" />
     <Compile Include="Music\Note.cs" />
     <Compile Include="Music\Octave.cs" />
     <Compile Include="Music\Pitch.cs" />

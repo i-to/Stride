@@ -1,27 +1,42 @@
-﻿using NAudio.Midi;
+﻿using System;
+using NAudio.Midi;
 using Stride.Music;
 
 namespace Stride.Input
 {
     public class MidiPitchMapping
     {
+        Pitch MakeNatural(Note note, Octave octave)
+        {
+            return new Pitch(octave, note);
+        }
+
+        // todo: add support for flats/sharps
+        Pitch MakeSharp(Note note, Octave octave)
+        {
+            throw new NotImplementedException();
+        }
+
         public Pitch Map(NoteEvent noteEvent)
         {
-            switch (noteEvent.NoteNumber)
+            var octave = Octave.OfNumber(noteEvent.NoteNumber / Const.SemitonesInOctave - 1);
+            switch (noteEvent.NoteNumber % Const.SemitonesInOctave)
             {
-                case 62: return Pitch.D4;
-                case 64: return Pitch.E4;
-                case 65: return Pitch.F4;
-                case 67: return Pitch.G4;
-                case 69: return Pitch.A4;
-                case 71: return Pitch.B4;
-                case 72: return Pitch.C5;
-                case 74: return Pitch.D5;
-                case 76: return Pitch.E5;
-                case 77: return Pitch.F5;
-                case 79: return Pitch.G5;
+
+                case 0 : return MakeNatural(Note.C, octave);
+                case 1 : return MakeSharp  (Note.C, octave);
+                case 2 : return MakeNatural(Note.D, octave);
+                case 3 : return MakeSharp  (Note.D, octave);
+                case 4 : return MakeNatural(Note.E, octave);
+                case 5 : return MakeNatural(Note.F, octave);
+                case 6 : return MakeSharp  (Note.F, octave);
+                case 7 : return MakeNatural(Note.G, octave);
+                case 8 : return MakeSharp  (Note.G, octave);
+                case 9 : return MakeNatural(Note.A, octave);
+                case 10: return MakeSharp  (Note.A, octave);
+                case 11: return MakeNatural(Note.B, octave);
             }
-            return null;
+            throw new InvalidOperationException();
         }
     }
 }

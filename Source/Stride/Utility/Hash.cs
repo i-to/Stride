@@ -12,5 +12,10 @@
                 return hash;
             }
         }
+
+        public static int Compute<T, S>(T first, S second) 
+            where T : class
+            where S : class => 
+            Compute(first.GetHashCode(), second.GetHashCode());
     }
 }

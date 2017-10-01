@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Media;
+using Stride.Music;
 
 namespace Stride.MusicDrawing
 {
@@ -15,7 +16,7 @@ namespace Stride.MusicDrawing
 
         void AddStaffGeometry(GeometryGroup geometry, StavesMetrics metrics, double length, bool grandStaffOffset)
         {
-            for (int i = 0; i != metrics.StaffLinesCount; ++i)
+            for (int i = 0; i != Const.LinesInStaff; ++i)
             {
                 var yOffset = metrics.StaffLinesDistance * i;
                 if (grandStaffOffset)
