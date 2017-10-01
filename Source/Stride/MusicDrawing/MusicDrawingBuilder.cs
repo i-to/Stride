@@ -9,7 +9,7 @@ namespace Stride.MusicDrawing
         readonly DrawingMetrics DrawingMetrics;
         readonly GlyphRunBuilder GlyphRunBuilder;
         readonly MusicSymbolToFontText MusicSymbolToFontText;
-        readonly StaffLinesGeometryBuilder StaffLinesGeometryBuilder;
+        readonly StaffGeometryBuilder StaffGeometryBuilder;
         readonly MusicTypefaceProvider MusicTypefaceProvider;
         readonly DrillMusicDrawingContainer DrawingContainer;
 
@@ -17,12 +17,12 @@ namespace Stride.MusicDrawing
             DrawingMetrics drawingMetrics,
             GlyphRunBuilder glyphRunBuilder,
             MusicSymbolToFontText musicSymbolToFontText,
-            StaffLinesGeometryBuilder staffLinesGeometryBuilder,
+            StaffGeometryBuilder staffGeometryBuilder,
             MusicTypefaceProvider musicTypefaceProvider,
             DrillMusicDrawingContainer drawingContainer)
         {
             GlyphRunBuilder = glyphRunBuilder;
-            StaffLinesGeometryBuilder = staffLinesGeometryBuilder;
+            StaffGeometryBuilder = staffGeometryBuilder;
             MusicTypefaceProvider = musicTypefaceProvider;
             DrawingContainer = drawingContainer;
             MusicSymbolToFontText = musicSymbolToFontText;
@@ -60,8 +60,8 @@ namespace Stride.MusicDrawing
             SetupNoteDrawing(DrawingContainer.TestNoteDrawing, testNoteStaffPosition, Brushes.Black);
             SetupNoteDrawing(DrawingContainer.PlayedNoteDrawing, playedNoteStaffPosition, Brushes.Red);
 
-            DrawingContainer.StaffLinesDrawing.Geometry = StaffLinesGeometryBuilder.CreateStaffLinesGeometry(
-                DrawingMetrics.StaffLinesOrigin, StaffLinesLength, DrawingMetrics.StaffLinesDistance);
+            DrawingContainer.StaffLinesDrawing.Geometry = StaffGeometryBuilder.CreateGrandStaffGeometry(
+                DrawingMetrics, StaffLinesLength);
             DrawingContainer.StaffLinesDrawing.Pen =
                 new Pen { Brush = Brushes.Black, Thickness = DrawingMetrics.StaffLinesThickness };
         }

@@ -17,7 +17,7 @@ namespace Stride
         {
             Application = new App();
             var glyphRunBuilder = new GlyphRunBuilder();
-            var staffLinesGeometryBuilder = new StaffLinesGeometryBuilder();
+            var staffLinesGeometryBuilder = new StaffGeometryBuilder();
             var typefaceProvider = new MusicTypefaceProvider();
             var musicSymbolToFontText = new MusicSymbolToFontText();
             var drawingContainer = new DrillMusicDrawingContainer();

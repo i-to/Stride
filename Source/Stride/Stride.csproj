@@ -83,7 +83,7 @@
     <Compile Include="Input\NoteInput.cs" />
     <Compile Include="Music\Pitch.cs" />
     <Compile Include="Root.cs" />
-    <Compile Include="MusicDrawing\StaffLinesGeometryBuilder.cs" />
+    <Compile Include="MusicDrawing\StaffGeometryBuilder.cs" />
     <Compile Include="DrillControl.xaml.cs">
       <DependentUpon>DrillControl.xaml</DependentUpon>
     </Compile>

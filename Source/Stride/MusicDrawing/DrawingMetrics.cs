@@ -12,9 +12,11 @@ namespace Stride.MusicDrawing
             BaseSize = baseSize;
         }
 
+        public int StaffLinesCount => 5;
+        public Point Origin => new Point(0, 0);
         public double StaffLinesDistance => 2.0 * BaseSize;
         public double GlyphSize => 8.0 * BaseSize;
-        public Point StaffLinesOrigin => new Point(0, 0);
         public double StaffLinesThickness => 1;
+        public double GrandStaffOffset => 2.0 * StaffLinesDistance * StaffLinesCount;
     }
 }
