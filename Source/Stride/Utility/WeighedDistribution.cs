@@ -7,14 +7,14 @@ namespace Stride.Utility
 {
     public static class WeighedDistribution
     {
-        public static IEnumerable<double> ComputeCumulativeWeights(IEnumerable<double> absoluteWeights)
+        public static IEnumerable<double> ComputeCumulativeWeights(IEnumerable<int> absoluteWeights)
         {
-            var sum = absoluteWeights.Sum();
+            double sum = absoluteWeights.Sum();
             var normalizedWeights = absoluteWeights.Select(w => w / sum);
             return normalizedWeights.Scan(Combinator.SumTwoDoubles);
         }
 
-        public static int BucketIndexOfValue(IEnumerable<double> absoluteWeights, double normalizedValue)
+        public static int BucketIndexOfValue(IEnumerable<int> absoluteWeights, double normalizedValue)
         {
             if (!normalizedValue.IsInRangeInclusiveLower(0.0, 1.0))
                 throw new ArgumentException($"Expected value in range [0.0, 1.0), given {normalizedValue}.");
@@ -27,7 +27,7 @@ namespace Stride.Utility
     {
         public static void Test()
         {
-            var weights = new double[] {1, 2, 3};
+            var weights = new [] {1, 2, 3};
             var cumulativeWeights = WeighedDistribution.ComputeCumulativeWeights(weights); // = [0.1666666667; 0.5; 1.0]
             cumulativeWeights.ToArray();
             WeighedDistribution.BucketIndexOfValue(weights, 0.0); // = 0

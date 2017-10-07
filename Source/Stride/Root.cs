@@ -45,11 +45,10 @@ namespace Stride
             Database = new Database();
         }
         
-        DrillSession CreateDrillSession(IReadOnlyList<double> lastSessionWeights)
+        DrillSession CreateDrillSession(IReadOnlyList<int> lastSessionWeights)
         {
             var pitches = Pitches.DiatonicRange(Pitch.C4, 15).ToArray().ToReadOnlyList();
-            var pitchWeights = lastSessionWeights?.ToArray()
-                ?? Enumerable.Range(0, pitches.Count).Select(_ => 3.0).ToArray();
+            var pitchWeights = lastSessionWeights ?? Enumerable.Range(0, pitches.Count).Select(_ => 10);
             return new DrillSession(pitches, pitchWeights);
         }
 

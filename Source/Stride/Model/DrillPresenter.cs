@@ -43,13 +43,13 @@ namespace Stride.Model
                 var index = Session.Pitches.FindIndex(Staff.TestPitch);
                 if (Staff.TestPitch == Staff.PlayedPitch)
                 {
-                    if (Session.PitchWeights[index] > 1.0)
-                        Session.PitchWeights[index] -= 1.0;
+                    if (Session.PitchWeights[index] > 1)
+                        Session.PitchWeights[index] -= 1;
                     SwitchToNextQuestion();
                 }
                 else
                 {
-                    Session.PitchWeights[index] += 3.0;
+                    Session.PitchWeights[index] += 3;
                 }
             }
             Staff = Staff.WithPlayedPitch(pitch);
