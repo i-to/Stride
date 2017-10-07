@@ -4,8 +4,8 @@ namespace Stride.Model
 {
     public class PerformanceFeedback
     {
-        public readonly int PenaltyMultiplierPerWrongAnswer = 3;
-        public readonly int MaxPenaliziableWrongAnswers = 3;
+        public readonly int PenaltyPerWrongAnswer = 10;
+        public readonly int MaxPenaliziableWrongAnswers = 5;
         public readonly int MaxPenalizableSeconds = 5;
         public readonly int SecondsPenaltyMultiplier = 1;
         public readonly int WeightDecrementPerCorrectAnswer = 1;
@@ -13,7 +13,7 @@ namespace Stride.Model
 
         public void UpdateWeight(ref int weight, AnswerPerformance performance)
         {
-            var wrongAnswerPenalty = PenaltyMultiplierPerWrongAnswer
+            var wrongAnswerPenalty = PenaltyPerWrongAnswer
                                      * performance.WrongAnswersCount.LimitFromTop(MaxPenaliziableWrongAnswers);
             var timePenalty = SecondsPenaltyMultiplier * 
                               performance.FullSecondsElapsed.LimitFromTop(MaxPenalizableSeconds);
