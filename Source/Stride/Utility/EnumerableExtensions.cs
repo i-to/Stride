@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Stride.Utility
 {
     public static class EnumerableExtensions
     {
+        public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> enumerable) =>
+            enumerable.ToArray();
+
         public static int FindIndex<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
             int index = 0;

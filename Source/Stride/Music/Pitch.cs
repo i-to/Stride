@@ -16,11 +16,13 @@ namespace Stride.Music
 
         public static Pitch Create(Octave octave, Note note) => new Pitch(octave, note);
 
+        public Pitch NextDiatonic => Create(Note == Note.B ? Octave.Next : Octave, Note.Next);
+
         public int DiatonicDistanceTo(Pitch pitch)
         {
             var octaveDistance = pitch.Octave - Octave;
-            var pitchDistance = pitch.Note - Note;
-            return (Const.NotesInOctave - 1) * octaveDistance + pitchDistance;
+            var pitchDistance = pitch.Note.Number - Note.Number;
+            return Const.NotesInOctave * octaveDistance + pitchDistance;
         }
 
         public bool IsInRangeInclusive(Pitch low, Pitch high) => this >= low && this <= high;
@@ -36,12 +38,12 @@ namespace Stride.Music
 
         public static bool operator >(Pitch left, Pitch right) => 
             left.Octave == right.Octave
-                ? left.Note > right.Note
+                ? left.Note.Number > right.Note.Number
                 : left.Octave > right.Octave;
 
         public static bool operator <(Pitch left, Pitch right) =>
             left.Octave == right.Octave
-                ? left.Note < right.Note
+                ? left.Note.Number < right.Note.Number
                 : left.Octave < right.Octave;
 
         public static bool operator >=(Pitch left, Pitch right) => !(left < right);

@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Stride.Music;
 using Stride.Utility;
 
 namespace Stride.Model
 {
-    public class Drill
+    public class DrillPresenter
     {
-        readonly IReadOnlyList<Pitch> Pitches = new[]
-        {
-            Pitch.D4, Pitch.E4, Pitch.F4, Pitch.G4, Pitch.A4, Pitch.B4,
-            Pitch.C5, Pitch.D5, Pitch.E5, Pitch.F5, Pitch.G5
-        };
-
-        readonly double[] PitchWeights;
         readonly Random Random;
 
-        public Drill()
+        public DrillPresenter()
         {
             Random = new Random();
-            PitchWeights = Enumerable.Range(0, Pitches.Count).Select(_ => 3.0).ToArray();
+        }
+
+        DrillSession Session;
+
+        public void Start(DrillSession session)
+        {
+            Session = session;
             SwitchToNextQuestion();
         }
 
@@ -29,8 +26,8 @@ namespace Stride.Model
         Pitch ComputeNextPitch()
         {
             var random = Random.NextDouble();
-            var index = WeighedDistribution.BucketIndexOfValue(PitchWeights, random);
-            return Pitches[index];
+            var index = WeighedDistribution.BucketIndexOfValue(Session.PitchWeights, random);
+            return Session.Pitches[index];
         }
 
         public void SwitchToNextQuestion()
@@ -43,16 +40,16 @@ namespace Stride.Model
         {
             if (pitch == null)
             {
-                var index = Pitches.FindIndex(Staff.TestPitch);
+                var index = Session.Pitches.FindIndex(Staff.TestPitch);
                 if (Staff.TestPitch == Staff.PlayedPitch)
                 {
-                    if (PitchWeights[index] > 1.0)
-                        PitchWeights[index] -= 1.0;
+                    if (Session.PitchWeights[index] > 1.0)
+                        Session.PitchWeights[index] -= 1.0;
                     SwitchToNextQuestion();
                 }
                 else
                 {
-                    PitchWeights[index] += 3.0;
+                    Session.PitchWeights[index] += 3.0;
                 }
             }
             Staff = Staff.WithPlayedPitch(pitch);

@@ -38,15 +38,10 @@ namespace Stride.Music
             throw new ArgumentOutOfRangeException($"Expected octave number within [0, 8], given: {number}");
         }
 
-        public static bool operator ==(Octave left, Octave right)
-        {
-            if (left is null)
-                return right is null;
-            if (right is null)
-                return false;
-            return left.Number == right.Number;
-        }
+        public Octave Next => OfNumber(Number + 1);
+        public Octave Previous => OfNumber(Number - 1);
 
+        public static bool operator ==(Octave left, Octave right) => ReferenceEquals(left, right);
         public static bool operator !=(Octave left, Octave right) => !(left == right);
 
         public static int operator -(Octave left, Octave right) => left.Number - right.Number;

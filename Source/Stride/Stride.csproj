@@ -64,6 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\DrillSession.cs" />
     <Compile Include="MusicDrawing\LedgerLinesComputation.cs" />
     <Compile Include="MusicDrawing\StaffPosition.cs" />
     <Compile Include="MusicDrawing\StavesMetrics.cs" />
@@ -71,7 +72,7 @@
     <Compile Include="Input\MidiSink.cs" />
     <Compile Include="Input\NoteInputMode.cs" />
     <Compile Include="Input\MidiEventExtensions.cs" />
-    <Compile Include="Model\Drill.cs" />
+    <Compile Include="Model\DrillPresenter.cs" />
     <Compile Include="Model\DrillStaff.cs" />
     <Compile Include="MusicDrawing\DrillMusicDrawingContainer.cs" />
     <Compile Include="DrillViewModel.cs" />
@@ -88,7 +89,9 @@
     <Compile Include="Music\Note.cs" />
     <Compile Include="Music\Octave.cs" />
     <Compile Include="Music\Pitch.cs" />
+    <Compile Include="Music\Pitches.cs" />
     <Compile Include="Music\PitchLiterals.cs" />
+    <Compile Include="Persistence\Database.cs" />
     <Compile Include="Root.cs" />
     <Compile Include="MusicDrawing\StaffGeometryBuilder.cs" />
     <Compile Include="DrillControl.xaml.cs">
@@ -100,6 +103,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MusicDrawing\GlyphRunBuilder.cs" />
+    <Compile Include="Persistence\SessionRecord.cs" />
     <Compile Include="Utility\Combinator.cs" />
     <Compile Include="Utility\DoubleExtensions.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs" />
@@ -107,6 +111,7 @@
     <Compile Include="Utility\IntExtensions.cs" />
     <Compile Include="Utility\NullableExtensions.cs" />
     <Compile Include="Utility\ObjectExtensions.cs" />
+    <Compile Include="Utility\StringExtensions.cs" />
     <Compile Include="Utility\WeighedDistribution.cs" />
     <Page Include="DrillControl.xaml">
       <SubType>Designer</SubType>

@@ -9,25 +9,25 @@ namespace Stride
     public class DrillViewModel
     {
         readonly MusicDrawingBuilder MusicDrawingBuilder;
-        readonly Drill Drill;
+        readonly DrillPresenter DrillPresenter;
 
-        public DrillViewModel(MusicDrawingBuilder musicDrawingBuilder, Drill drill)
+        public DrillViewModel(MusicDrawingBuilder musicDrawingBuilder, DrillPresenter drillPresenter)
         {
             MusicDrawingBuilder = musicDrawingBuilder;
-            Drill = drill;
+            DrillPresenter = drillPresenter;
         }
 
         public Drawing MusicDrawing => MusicDrawingBuilder.Drawing;
         public event EventHandler MusicDrawingChanged;
         void RaiseMusicDrawingChanged() => MusicDrawingChanged?.Invoke(this, EventArgs.Empty);
 
-        public void InitializeDrill() => UpdatePlayedPitch(null);
+        public void InitializeDrillDrawing() => UpdatePlayedPitch(null);
 
         public void UpdatePlayedPitch(Pitch pitch)
         {
-            Drill.SetPlayedPitch(pitch);
-            var testNoteStaffPosition = ComputeStaffPosition(Drill.Staff.TestPitch);
-            var playedNoteStaffPosition = ComputeStaffPosition(Drill.Staff.PlayedPitch);
+            DrillPresenter.SetPlayedPitch(pitch);
+            var testNoteStaffPosition = ComputeStaffPosition(DrillPresenter.Staff.TestPitch);
+            var playedNoteStaffPosition = ComputeStaffPosition(DrillPresenter.Staff.PlayedPitch);
             MusicDrawingBuilder.UpdateDrawing(testNoteStaffPosition, playedNoteStaffPosition);
             RaiseMusicDrawingChanged();
         }
