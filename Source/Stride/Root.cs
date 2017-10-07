@@ -31,14 +31,20 @@ namespace Stride
             var drawingContainer = new DrillMusicDrawingContainer();
             var drawingMetrics = new StavesMetrics(baseSize: 8);
             var musicDrawingBuilder = new MusicDrawingBuilder(
-                drawingMetrics, glyphRunBuilder, musicSymbolToFontText, staffLinesGeometryBuilder,
-                typefaceProvider, drawingContainer);
-            DrillPresenter = new DrillPresenter();
+                drawingMetrics,
+                glyphRunBuilder,
+                musicSymbolToFontText,
+                staffLinesGeometryBuilder,
+                typefaceProvider,
+                drawingContainer);
+            DrillPresenter = new DrillPresenter(new AnswerTracker(), new PerformanceFeedback());
             DrillViewModel = new DrillViewModel(musicDrawingBuilder, DrillPresenter);
             var keyboardPitchMapping = new KeyboardPitchMapping();
-            var noteInput = new NoteInput(DrillViewModel);
             var midiPitchMapping = new MidiPitchMapping();
-            var noteInputConverter = new NoteInputConverter(keyboardPitchMapping, midiPitchMapping, noteInput,
+            var noteInputConverter = new NoteInputConverter(
+                keyboardPitchMapping,
+                midiPitchMapping,
+                DrillViewModel,
                 NoteInputMode);
             DrillControl = new DrillControl(DrillViewModel);
             MainWindow = new MainWindow(noteInputConverter, noteInputConverter) {Content = DrillControl};

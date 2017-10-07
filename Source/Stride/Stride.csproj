@@ -64,7 +64,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\AnswerPerformance.cs" />
+    <Compile Include="Model\AnswerTracker.cs" />
     <Compile Include="Model\DrillSession.cs" />
+    <Compile Include="Model\PerformanceFeedback.cs" />
     <Compile Include="MusicDrawing\LedgerLinesComputation.cs" />
     <Compile Include="MusicDrawing\StaffPosition.cs" />
     <Compile Include="MusicDrawing\StavesMetrics.cs" />
@@ -73,7 +76,6 @@
     <Compile Include="Input\NoteInputMode.cs" />
     <Compile Include="Input\MidiEventExtensions.cs" />
     <Compile Include="Model\DrillPresenter.cs" />
-    <Compile Include="Model\DrillStaff.cs" />
     <Compile Include="MusicDrawing\DrillMusicDrawingContainer.cs" />
     <Compile Include="DrillViewModel.cs" />
     <Compile Include="EntryPoint.cs" />
@@ -83,7 +85,7 @@
     <Compile Include="Input\MainWindow.cs" />
     <Compile Include="MusicDrawing\MusicDrawingBuilder.cs" />
     <Compile Include="MusicDrawing\MusicSymbolToFontText.cs" />
-    <Compile Include="Input\NoteInput.cs" />
+    <Compile Include="Input\NoteSink.cs" />
     <Compile Include="Music\Clef.cs" />
     <Compile Include="Music\Const.cs" />
     <Compile Include="Music\Note.cs" />

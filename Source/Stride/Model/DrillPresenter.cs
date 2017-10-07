@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using Stride.Music;
 using Stride.Utility;
 
@@ -8,24 +7,25 @@ namespace Stride.Model
     public class DrillPresenter
     {
         readonly Random Random;
-        readonly Stopwatch Timer;
-        int WrongAnswerCount;
+        readonly AnswerTracker AnswerTracker;
+        readonly PerformanceFeedback PerformanceFeedback;
 
-        public DrillPresenter()
+        public DrillPresenter(AnswerTracker answerTracker, PerformanceFeedback performanceFeedback)
         {
             Random = new Random();
-            Timer = new Stopwatch();
+            AnswerTracker = answerTracker;
+            PerformanceFeedback = performanceFeedback;
         }
 
         DrillSession Session;
+        public Pitch TestPitch { get; private set; }
+        public Pitch PlayedPitch { get; private set; }
 
         public void Start(DrillSession session)
         {
             Session = session;
             SwitchToNextQuestion();
         }
-
-        public DrillStaff Staff { get; private set; }
 
         Pitch ComputeNextPitch()
         {
@@ -36,40 +36,27 @@ namespace Stride.Model
 
         public void SwitchToNextQuestion()
         {
-            var nextPitch = ComputeNextPitch();
-            Staff = new DrillStaff(nextPitch);
-            WrongAnswerCount = 0;
-            Timer.Restart();
+            TestPitch = ComputeNextPitch();
+            AnswerTracker.Reset();
         }
 
         public void SetPlayedPitch(Pitch pitch)
         {
             if (pitch == null)
             {
-                var index = Session.Pitches.FindIndex(Staff.TestPitch);
-                if (Staff.TestPitch == Staff.PlayedPitch)
+                if (TestPitch == PlayedPitch)
                 {
-                    Timer.Stop();
-                    var wrongAnswerPenalty = 3 * WrongAnswerCount.LimitFromTop(3);
-                    var timePenalty = (Timer.Elapsed.Seconds - 1).Limit(0, 5);
-                    var penalty = wrongAnswerPenalty + timePenalty;
-                    if (penalty == 0)
-                    {
-                        if (Session.PitchWeights[index] > 1)
-                            Session.PitchWeights[index] -= 1;
-                    }
-                    else
-                    {
-                        Session.PitchWeights[index] += penalty;
-                    }
+                    var index = Session.Pitches.FindIndex(TestPitch);
+                    var performance = AnswerTracker.AnswerPerformance;
+                    PerformanceFeedback.UpdateWeight(ref Session.PitchWeights[index], performance);
                     SwitchToNextQuestion();
                 }
                 else
                 {
-                    ++WrongAnswerCount;
+                    AnswerTracker.OnWrongAnswer();
                 }
             }
-            Staff = Staff.WithPlayedPitch(pitch);
+            PlayedPitch = pitch;
         }
     }
 }

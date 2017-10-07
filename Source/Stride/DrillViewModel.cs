@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Windows.Media;
+using Stride.Input;
 using Stride.Model;
 using Stride.Music;
 using Stride.MusicDrawing;
 
 namespace Stride
 {
-    public class DrillViewModel
+    public class DrillViewModel : NoteSink
     {
         readonly MusicDrawingBuilder MusicDrawingBuilder;
         readonly DrillPresenter DrillPresenter;
@@ -21,13 +22,12 @@ namespace Stride
         public event EventHandler MusicDrawingChanged;
         void RaiseMusicDrawingChanged() => MusicDrawingChanged?.Invoke(this, EventArgs.Empty);
 
-        public void InitializeDrillDrawing() => UpdatePlayedPitch(null);
+        public void InitializeDrillDrawing() => Update();
 
-        public void UpdatePlayedPitch(Pitch pitch)
+        void Update()
         {
-            DrillPresenter.SetPlayedPitch(pitch);
-            var testNoteStaffPosition = ComputeStaffPosition(DrillPresenter.Staff.TestPitch);
-            var playedNoteStaffPosition = ComputeStaffPosition(DrillPresenter.Staff.PlayedPitch);
+            var testNoteStaffPosition = ComputeStaffPosition(DrillPresenter.TestPitch);
+            var playedNoteStaffPosition = ComputeStaffPosition(DrillPresenter.PlayedPitch);
             MusicDrawingBuilder.UpdateDrawing(testNoteStaffPosition, playedNoteStaffPosition);
             RaiseMusicDrawingChanged();
         }
@@ -39,6 +39,18 @@ namespace Stride
             return pitch >= Pitch.C4
                 ? StaffPosition.InTreebleClef(-pitch.DiatonicDistanceTo(Pitch.B4))
                 : StaffPosition.InBassClef(-pitch.DiatonicDistanceTo(Pitch.D3));
+        }
+
+        public void NoteOn(Pitch pitch)
+        {
+            DrillPresenter.SetPlayedPitch(pitch);
+            Update();
+        }
+
+        public void NoteOff(Pitch pitch)
+        {
+            DrillPresenter.SetPlayedPitch(null);
+            Update();
         }
     }
 }
