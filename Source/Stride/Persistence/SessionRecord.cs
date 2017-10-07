@@ -17,8 +17,8 @@ namespace Stride.Persistence
         }
 
         public static string Serialize(SessionRecord record) => 
-            record.Time.Ticks + 
-            ' ' + 
+            record.Time.Ticks.ToString() + 
+            " " + 
             record.Weights.Select(w => w.ToString()).ConcatSpaceSeparated();
 
         public static SessionRecord Parse(string str)
