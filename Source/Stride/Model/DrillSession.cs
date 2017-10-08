@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Stride.Music;
 
 namespace Stride.Model
 {
     public class DrillSession
     {
-        public readonly IReadOnlyList<Pitch> Pitches;
+        public readonly Drill Drill;
         public readonly int[] PitchWeights;
         
-        public DrillSession(IReadOnlyList<Pitch> pitches, IEnumerable<int> initialPitchWeights)
+        public DrillSession(Drill drill, IEnumerable<int> initialPitchWeights)
         {
-            Pitches = pitches;
+            Drill = drill;
             PitchWeights = initialPitchWeights.ToArray();
         }
     }

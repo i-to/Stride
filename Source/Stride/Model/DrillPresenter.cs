@@ -20,6 +20,7 @@ namespace Stride.Model
         DrillSession Session;
         public Pitch TestPitch { get; private set; }
         public Pitch PlayedPitch { get; private set; }
+        public Pitch LowestTreebleStaffPitch => Session.Drill.LowestTreebleSaffPitch;
 
         public void Start(DrillSession session)
         {
@@ -31,7 +32,7 @@ namespace Stride.Model
         {
             var random = Random.NextDouble();
             var index = WeighedDistribution.BucketIndexOfValue(Session.PitchWeights, random);
-            return Session.Pitches[index];
+            return Session.Drill.Pitches[index];
         }
 
         public void SwitchToNextQuestion()
@@ -46,7 +47,7 @@ namespace Stride.Model
             {
                 if (TestPitch == PlayedPitch)
                 {
-                    var index = Session.Pitches.FindIndex(TestPitch);
+                    var index = Session.Drill.Pitches.FindIndex(TestPitch);
                     var performance = AnswerTracker.AnswerPerformance;
                     PerformanceFeedback.UpdateWeight(ref Session.PitchWeights[index], performance);
                     SwitchToNextQuestion();

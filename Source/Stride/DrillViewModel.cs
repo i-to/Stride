@@ -36,7 +36,7 @@ namespace Stride
         {
             if (pitch is null)
                 return null;
-            return pitch >= Pitch.C4
+            return pitch >= DrillPresenter.LowestTreebleStaffPitch
                 ? StaffPosition.InTreebleClef(-pitch.DiatonicDistanceTo(Pitch.B4))
                 : StaffPosition.InBassClef(-pitch.DiatonicDistanceTo(Pitch.D3));
         }

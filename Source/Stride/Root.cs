@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Stride.Input;
 using Stride.Model;
-using Stride.Music;
 using Stride.MusicDrawing;
 using Stride.Persistence;
-using Stride.Utility;
 
 namespace Stride
 {
     public class Root
     {
         readonly NoteInputMode NoteInputMode = NoteInputMode.Midi;
+        readonly DrillId CurrentDrill = DrillId.DiatonicTwoOctavesC3;
 
         public readonly App Application;
         public readonly MainWindow MainWindow;
@@ -20,6 +19,7 @@ namespace Stride
         public readonly DrillViewModel DrillViewModel;
         public readonly DrillPresenter DrillPresenter;
         public readonly Database Database;
+        public readonly Drills Drills;
 
         public Root()
         {
@@ -49,26 +49,27 @@ namespace Stride
             DrillControl = new DrillControl(DrillViewModel);
             MainWindow = new MainWindow(noteInputConverter, noteInputConverter) {Content = DrillControl};
             Database = new Database();
+            Drills = new Drills();
         }
         
-        DrillSession CreateDrillSession(IReadOnlyList<int> lastSessionWeights)
+        DrillSession CreateDrillSession(DrillId drillId, IReadOnlyList<int> lastSessionWeights)
         {
-            var pitches = Pitches.DiatonicRange(Pitch.C4, 15).ToArray().ToReadOnlyList();
-            var pitchWeights = lastSessionWeights ?? Enumerable.Range(0, pitches.Count).Select(_ => 10);
-            return new DrillSession(pitches, pitchWeights);
+            var drill = Drills[drillId];
+            var pitchWeights = lastSessionWeights ?? Enumerable.Range(0, drill.Pitches.Count).Select(_ => 10);
+            return new DrillSession(drill, pitchWeights);
         }
 
         public void Run()
         {
-            var database = Database.Load();
+            var database = Database.Load(CurrentDrill);
             var lastSessionWeights = database.LastOrDefault()?.Weights;
-            var session = CreateDrillSession(lastSessionWeights);
+            var session = CreateDrillSession(CurrentDrill, lastSessionWeights);
             DrillPresenter.Start(session);
             DrillViewModel.InitializeDrillDrawing();
             Application.Run(MainWindow);
             var sessionResult = new SessionRecord(DateTime.Now, session.PitchWeights);
             database.Add(sessionResult);
-            Database.Save(database);
+            Database.Save(CurrentDrill, database);
             MainWindow.Dispose();
         }
     }

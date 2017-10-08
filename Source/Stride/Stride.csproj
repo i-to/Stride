@@ -64,8 +64,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\Drill.cs" />
+    <Compile Include="Model\DrillId.cs" />
     <Compile Include="Model\AnswerPerformance.cs" />
     <Compile Include="Model\AnswerTracker.cs" />
+    <Compile Include="Model\Drills.cs" />
     <Compile Include="Model\DrillSession.cs" />
     <Compile Include="Model\PerformanceFeedback.cs" />
     <Compile Include="MusicDrawing\LedgerLinesComputation.cs" />
