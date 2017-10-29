@@ -1,6 +1,6 @@
 ﻿using System;
 using NAudio.Midi;
-using Stride.Music;
+using Stride.Music.Theory;
 
 namespace Stride.Gui.Input
 {

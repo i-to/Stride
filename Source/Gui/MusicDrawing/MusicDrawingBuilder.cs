@@ -2,7 +2,9 @@
 using System.Windows;
 using System.Windows.Media;
 using MoreLinq;
-using Stride.Music;
+using Stride.Music.Layout;
+using Stride.Music.Presentation;
+using Stride.Music.Theory;
 
 namespace Stride.Gui.MusicDrawing
 {
@@ -48,7 +50,7 @@ namespace Stride.Gui.MusicDrawing
             return middleLinePosition + cleffOffset - offset;
         }
 
-        public void UpdateDrawing(StaffPosition testNotePosition, IEnumerable<StaffPosition> soundingNotePositions)
+        public void BuildDrawing(StaffPosition testNotePosition, IEnumerable<StaffPosition> soundingNotePositions)
         {
             BuildCleffDrawing(MusicSymbolToFontText.TreebleClef, DrawingContainer.TreebleClef, TreebleClefOrigin);
             BuildCleffDrawing(MusicSymbolToFontText.BassClef, DrawingContainer.BassClef, BassClefOrigin);

@@ -1,4 +1,4 @@
-﻿namespace Stride.Music
+﻿namespace Stride.Music.Theory
 {
     public partial class Pitch
     {

@@ -1,6 +1,6 @@
-﻿using Stride.Music;
+﻿using Stride.Music.Theory;
 
-namespace Stride.Gui.MusicDrawing
+namespace Stride.Music.Presentation
 {
     /// <summary>
     /// Identifies position of the note at a particular tick within the staff.

@@ -1,7 +1,7 @@
 ﻿using System;
 using Stride.Utility;
 
-namespace Stride.Music
+namespace Stride.Music.Theory
 {
     public class Note : IEquatable<Note>
     {

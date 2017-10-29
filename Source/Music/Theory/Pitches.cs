@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Stride.Music
+namespace Stride.Music.Theory
 {
     public class Pitches
     {

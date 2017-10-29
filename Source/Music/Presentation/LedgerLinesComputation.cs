@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using Stride.Music;
+using Stride.Music.Theory;
 using Stride.Utility;
 
-namespace Stride.Gui.MusicDrawing
+namespace Stride.Music.Presentation
 {
     public static class LedgerLinesComputation
     {

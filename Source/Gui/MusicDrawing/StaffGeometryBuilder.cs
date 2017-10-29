@@ -1,6 +1,8 @@
 using System.Windows;
 using System.Windows.Media;
-using Stride.Music;
+using Stride.Music.Layout;
+using Stride.Music.Presentation;
+using Stride.Music.Theory;
 
 namespace Stride.Gui.MusicDrawing
 {

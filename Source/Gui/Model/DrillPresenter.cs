@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Stride.Music;
+using Stride.Music.Theory;
 using Stride.Utility;
 
 namespace Stride.Gui.Model

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using Stride.Music;
+using Stride.Music.Theory;
 
-namespace Stride.Gui.MusicDrawing
+namespace Stride.Music.Layout
 {
     public class StavesMetrics
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stride.Music
+namespace Stride.Music.Theory
 {
     public class Octave : IEquatable<Octave>, IComparable<Octave>
     {

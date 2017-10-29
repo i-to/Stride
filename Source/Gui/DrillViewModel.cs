@@ -4,7 +4,8 @@ using System.Windows.Media;
 using Stride.Gui.Input;
 using Stride.Gui.Model;
 using Stride.Gui.MusicDrawing;
-using Stride.Music;
+using Stride.Music.Presentation;
+using Stride.Music.Theory;
 using Stride.Utility;
 
 namespace Stride.Gui
@@ -31,7 +32,7 @@ namespace Stride.Gui
             var testNoteStaffPosition = ComputeStaffPosition(DrillPresenter.TestPitch);
             var soundingPitches = DrillPresenter.SoundingPitches.OrderDescending().ToReadOnlyList();
             var soundingNotesStaffPositions = ComputeStaffPositions(soundingPitches);
-            MusicDrawingBuilder.UpdateDrawing(testNoteStaffPosition, soundingNotesStaffPositions);
+            MusicDrawingBuilder.BuildDrawing(testNoteStaffPosition, soundingNotesStaffPositions);
             RaiseMusicDrawingChanged();
         }
 

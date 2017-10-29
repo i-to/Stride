@@ -1,4 +1,4 @@
-namespace Stride.Gui.MusicDrawing
+namespace Stride.Music.Presentation
 {
     /// <summary>
     /// Ledger lines at a given position of the grand staff.

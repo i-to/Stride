@@ -5,6 +5,7 @@ using Stride.Gui.Input;
 using Stride.Gui.Model;
 using Stride.Gui.MusicDrawing;
 using Stride.Gui.Persistence;
+using Stride.Music.Layout;
 
 namespace Stride.Gui
 {

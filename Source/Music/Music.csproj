@@ -32,15 +32,21 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Clef.cs" />
-    <Compile Include="Const.cs" />
-    <Compile Include="Note.cs" />
-    <Compile Include="Octave.cs" />
-    <Compile Include="Pitch.cs" />
-    <Compile Include="Pitches.cs" />
-    <Compile Include="PitchLiterals.cs" />
+    <Compile Include="Presentation\GrandStaffLedgerLines.cs" />
+    <Compile Include="Presentation\LedgerLines.cs" />
+    <Compile Include="Presentation\LedgerLinesComputation.cs" />
+    <Compile Include="Presentation\StaffPosition.cs" />
+    <Compile Include="Layout\StavesMetrics.cs" />
+    <Compile Include="Theory\Clef.cs" />
+    <Compile Include="Theory\Const.cs" />
+    <Compile Include="Theory\Note.cs" />
+    <Compile Include="Theory\Octave.cs" />
+    <Compile Include="Theory\Pitch.cs" />
+    <Compile Include="Theory\Pitches.cs" />
+    <Compile Include="Theory\PitchLiterals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
