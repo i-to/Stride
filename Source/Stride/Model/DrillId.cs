@@ -5,6 +5,7 @@ namespace Stride.Model
         DiatonicOneOctaveC3,
         DiatonicOneOctaveC4,
         DiatonicTwoOctavesC3,
-        DiatonicTwoOctavesC4
+        DiatonicTwoOctavesC4,
+        Testing
     }
 }

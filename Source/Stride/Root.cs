@@ -11,7 +11,7 @@ namespace Stride
     public class Root
     {
         readonly NoteInputMode NoteInputMode = NoteInputMode.Midi;
-        readonly DrillId CurrentDrill = DrillId.DiatonicTwoOctavesC3;
+        readonly DrillId CurrentDrill = DrillId.Testing;
 
         public readonly App Application;
         public readonly MainWindow MainWindow;

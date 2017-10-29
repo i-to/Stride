@@ -15,7 +15,8 @@ namespace Stride.Persistence
                 {DrillId.DiatonicOneOctaveC3, "c3-c4_diatonic"},
                 {DrillId.DiatonicOneOctaveC4, "c4-c5_diatonic"},
                 {DrillId.DiatonicTwoOctavesC3, "c3-c5_diatonic"},
-                {DrillId.DiatonicTwoOctavesC4, "c4-c6_diatonic"}
+                {DrillId.DiatonicTwoOctavesC4, "c4-c6_diatonic"},
+                {DrillId.Testing, "testing"}
             };
 
         string GetStorageFullPath(DrillId drill)

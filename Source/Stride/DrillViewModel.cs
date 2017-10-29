@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Media;
 using Stride.Input;
 using Stride.Model;
@@ -27,8 +28,8 @@ namespace Stride
         void Update()
         {
             var testNoteStaffPosition = ComputeStaffPosition(DrillPresenter.TestPitch);
-            var playedNoteStaffPosition = ComputeStaffPosition(DrillPresenter.PlayedPitch);
-            MusicDrawingBuilder.UpdateDrawing(testNoteStaffPosition, playedNoteStaffPosition);
+            var soundingNotesStaffPositions = DrillPresenter.SoundingPitches.Select(ComputeStaffPosition);
+            MusicDrawingBuilder.UpdateDrawing(testNoteStaffPosition, soundingNotesStaffPositions);
             RaiseMusicDrawingChanged();
         }
 
@@ -43,13 +44,13 @@ namespace Stride
 
         public void NoteOn(Pitch pitch)
         {
-            DrillPresenter.SetPlayedPitch(pitch);
+            DrillPresenter.PitchOn(pitch);
             Update();
         }
 
         public void NoteOff(Pitch pitch)
         {
-            DrillPresenter.SetPlayedPitch(null);
+            DrillPresenter.PitchOff(pitch);
             Update();
         }
     }

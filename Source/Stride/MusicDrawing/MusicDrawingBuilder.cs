@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
+using MoreLinq;
 using Stride.Music;
 using Stride.Utility;
 
@@ -116,13 +118,13 @@ namespace Stride.MusicDrawing
             return middleLinePosition + cleffOffset - offset;
         }
 
-        public void UpdateDrawing(StaffPosition testNotePosition, StaffPosition playedNotePosition)
+        public void UpdateDrawing(StaffPosition testNotePosition, IEnumerable<StaffPosition> soundingNotePositions)
         {
             BuildCleffDrawing(MusicSymbolToFontText.TreebleClef, DrawingContainer.TreebleClef, TreebleClefOrigin);
             BuildCleffDrawing(MusicSymbolToFontText.BassClef, DrawingContainer.BassClef, BassClefOrigin);
             BuildNoteDrawing(DrawingContainer.TestNote, testNotePosition, Brushes.Black);
-            BuildNoteDrawing(DrawingContainer.PlayedNote, playedNotePosition, Brushes.Red);
-            var ledgerLines = LedgerLinesComputation.ComputeLedgerLines(testNotePosition, playedNotePosition);
+            BuildSoundingNotesDrawing(DrawingContainer.SoundingNotes, soundingNotePositions, Brushes.Red);
+            var ledgerLines = LedgerLinesComputation.ComputeLedgerLines(testNotePosition.Concat(soundingNotePositions));
             BuildStaffDrawing(DrawingContainer.StaffLines, ledgerLines);
         }
 
@@ -134,6 +136,21 @@ namespace Stride.MusicDrawing
                 origin,
                 Metrics.GlyphSize);
             drawing.ForegroundBrush = Brushes.Black;
+        }
+
+        void BuildSoundingNotesDrawing(
+            DrawingGroup drawingGroup,
+            IEnumerable<StaffPosition> notePositions,
+            SolidColorBrush brush)
+        {
+            var drawings = drawingGroup.Children;
+            drawings.Clear();
+            foreach (var notePosition in notePositions)
+            {
+                var drawing = new GlyphRunDrawing();
+                BuildNoteDrawing(drawing, notePosition, brush);
+                drawings.Add(drawing);
+            }
         }
 
         void BuildNoteDrawing(GlyphRunDrawing drawing, StaffPosition notePosition, Brush brush)

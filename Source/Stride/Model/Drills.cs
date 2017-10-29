@@ -26,7 +26,11 @@ namespace Stride.Model
                 new Drill(
                     DrillId.DiatonicTwoOctavesC4,
                     CreatePitches(Pitch.C4, 15),
-                    Pitch.C4) 
+                    Pitch.C4),
+                new Drill(
+                    DrillId.Testing,
+                    CreatePitches(Pitch.C4, 7),
+                    Pitch.C4), 
             };
 
         static IReadOnlyList<Pitch> CreatePitches(Pitch first, int count) =>
