@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stride", "Stride\Stride.csproj", "{4D8D8A97-BCEF-43C9-9203-11BFD66F3400}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gui", "Gui\Gui.csproj", "{4D8D8A97-BCEF-43C9-9203-11BFD66F3400}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Utility\Utility.csproj", "{9D3D1A04-F04C-4FCC-8F17-5317E56CA863}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Music", "Music\Music.csproj", "{3B36A966-C58E-4F71-A870-336C9DAAA358}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{4D8D8A97-BCEF-43C9-9203-11BFD66F3400}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D8D8A97-BCEF-43C9-9203-11BFD66F3400}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D8D8A97-BCEF-43C9-9203-11BFD66F3400}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D3D1A04-F04C-4FCC-8F17-5317E56CA863}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D3D1A04-F04C-4FCC-8F17-5317E56CA863}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D3D1A04-F04C-4FCC-8F17-5317E56CA863}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D3D1A04-F04C-4FCC-8F17-5317E56CA863}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B36A966-C58E-4F71-A870-336C9DAAA358}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B36A966-C58E-4F71-A870-336C9DAAA358}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B36A966-C58E-4F71-A870-336C9DAAA358}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B36A966-C58E-4F71-A870-336C9DAAA358}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,4 +3,6 @@ Source/packages/*
 
 Binary/Debug/*
 Binary/Release/*
-Source/Stride/obj/*
+Source/Gui/obj/*
+Source/Utility/obj/*
+Source/Music/obj/*
