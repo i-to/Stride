@@ -11,7 +11,7 @@ namespace Stride.Gui
 {
     public class Root
     {
-        readonly NoteInputMode NoteInputMode = NoteInputMode.Midi;
+        readonly NoteInputMode NoteInputMode;
         readonly DrillId CurrentDrill = DrillId.Testing;
 
         public readonly App Application;
@@ -24,6 +24,7 @@ namespace Stride.Gui
 
         public Root()
         {
+            NoteInputMode = Properties.Settings.Default.NoteInputMode;
             Application = new App();
             var glyphRunBuilder = new GlyphRunBuilder();
             var staffLinesGeometryBuilder = new StaffGeometryBuilder();
@@ -48,7 +49,8 @@ namespace Stride.Gui
                 DrillViewModel,
                 NoteInputMode);
             DrillControl = new DrillControl(DrillViewModel);
-            MainWindow = new MainWindow(noteInputConverter, noteInputConverter) {Content = DrillControl};
+            var midiSink = NoteInputMode == NoteInputMode.Midi ? noteInputConverter : null;
+            MainWindow = new MainWindow(noteInputConverter, midiSink) {Content = DrillControl};
             Database = new Database();
             Drills = new Drills();
         }

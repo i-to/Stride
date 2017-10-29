@@ -17,7 +17,8 @@ namespace Stride.Gui.Input
         {
             KeyboardSink = keyboardSink;
             MidiSink = midiSink;
-            InitMidi();
+            if (midiSink != null)
+                InitMidi();
         }
 
         void OnMidiMessageAsync(object sender, MidiInMessageEventArgs args)
