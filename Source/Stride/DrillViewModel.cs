@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media;
 using Stride.Input;
 using Stride.Model;
 using Stride.Music;
 using Stride.MusicDrawing;
+using Stride.Utility;
 
 namespace Stride
 {
@@ -28,7 +30,8 @@ namespace Stride
         void Update()
         {
             var testNoteStaffPosition = ComputeStaffPosition(DrillPresenter.TestPitch);
-            var soundingNotesStaffPositions = DrillPresenter.SoundingPitches.Select(ComputeStaffPosition);
+            var soundingPitches = DrillPresenter.SoundingPitches.OrderDescending().ToReadOnlyList();
+            var soundingNotesStaffPositions = ComputeStaffPositions(soundingPitches);
             MusicDrawingBuilder.UpdateDrawing(testNoteStaffPosition, soundingNotesStaffPositions);
             RaiseMusicDrawingChanged();
         }
@@ -40,6 +43,29 @@ namespace Stride
             return pitch >= DrillPresenter.LowestTreebleStaffPitch
                 ? StaffPosition.InTreebleClef(-pitch.DiatonicDistanceTo(Pitch.B4))
                 : StaffPosition.InBassClef(-pitch.DiatonicDistanceTo(Pitch.D3));
+        }
+
+        IReadOnlyList<StaffPosition> ComputeStaffPositions(IReadOnlyList<Pitch> pitches)
+        {
+            var count = pitches.Count;
+            var result = new StaffPosition[count];
+            for (int i = 0; i != count; ++i)
+            {
+                var pitch = pitches[i];
+                var position = ComputeStaffPosition(pitch);
+                if (i > 0)
+                {
+                    var previousPosition = result[i - 1];
+                    if (!previousPosition.HorisontalOffset
+                        && previousPosition.Clef == position.Clef
+                        && previousPosition.VerticalOffset - position.VerticalOffset == 1)
+                    {
+                        position = position.WithHorizontalOffset(true);
+                    }
+                }
+                result[i] = position;
+            }
+            return result;
         }
 
         public void NoteOn(Pitch pitch)

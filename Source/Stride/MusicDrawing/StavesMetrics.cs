@@ -21,5 +21,6 @@ namespace Stride.MusicDrawing
         public double StaffLinesThickness => 1;
         public double GrandStaffOffset => 2.0 * StaffLinesDistance * Const.LinesInStaff;
         public double LedgerLineLength => 3.0 * BaseSize;
+        public double SecondNoteOffset => 3.0 * BaseSize;
     }
 }

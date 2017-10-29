@@ -3,7 +3,7 @@ using Stride.Utility;
 
 namespace Stride.Music
 {
-    public partial class Pitch : IEquatable<Pitch>
+    public partial class Pitch : IEquatable<Pitch>, IComparable<Pitch>
     {
         public readonly Octave Octave;
         public readonly Note Note;
@@ -48,6 +48,15 @@ namespace Stride.Music
 
         public static bool operator >=(Pitch left, Pitch right) => !(left < right);
         public static bool operator <=(Pitch left, Pitch right) => !(left > right);
+
+        public int CompareTo(Pitch other)
+        {
+            if (this < other)
+                return -1;
+            if (this > other)
+                return 1;
+            return 0;
+        }
 
         public static bool operator !=(Pitch left, Pitch right) => !(left == right);
         public bool Equals(Pitch other) => other == this;

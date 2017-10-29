@@ -2,7 +2,7 @@
 
 namespace Stride.Music
 {
-    public class Octave
+    public class Octave : IEquatable<Octave>, IComparable<Octave>
     {
         public readonly int Number;
 
@@ -50,6 +50,16 @@ namespace Stride.Music
         public static bool operator >=(Octave left, Octave right) => left.Number >= right.Number;
         public static bool operator <=(Octave left, Octave right) => left.Number <= right.Number;
 
+        public int CompareTo(Octave other)
+        {
+            if (this < other)
+                return -1;
+            if (this > other)
+                return 1;
+            return 0;
+        }
+
+        public bool Equals(Octave other) => this == other;
         public override bool Equals(object obj) => obj as Octave == this;
         public override int GetHashCode() => Number.GetHashCode();
     }

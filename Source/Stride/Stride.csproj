@@ -71,6 +71,8 @@
     <Compile Include="Model\Drills.cs" />
     <Compile Include="Model\DrillSession.cs" />
     <Compile Include="Model\PerformanceFeedback.cs" />
+    <Compile Include="MusicDrawing\GrandStaffLedgerLines.cs" />
+    <Compile Include="MusicDrawing\LedgerLines.cs" />
     <Compile Include="MusicDrawing\LedgerLinesComputation.cs" />
     <Compile Include="MusicDrawing\StaffPosition.cs" />
     <Compile Include="MusicDrawing\StavesMetrics.cs" />

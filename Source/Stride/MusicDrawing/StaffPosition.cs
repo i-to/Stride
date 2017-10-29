@@ -3,7 +3,7 @@
 namespace Stride.MusicDrawing
 {
     /// <summary>
-    /// Identifies vertical position of the note within the staff.
+    /// Identifies position of the note at a particular tick within the staff.
     /// </summary>
     public class StaffPosition
     {
@@ -13,23 +13,32 @@ namespace Stride.MusicDrawing
         public readonly Clef Clef;
 
         /// <summary>
-        /// Offset relative to the middle (the third) staff line.
+        /// Vertical offset relative to the middle (the third) staff line.
         /// Positive direction is up, negative is down.
         /// One step is between the position on line and the next position
         /// between the two lines and vice versa.
         /// </summary>
-        public readonly int Offset;
+        public readonly int VerticalOffset;
 
-        public StaffPosition(Clef clef, int offset)
+        /// <summary>
+        /// Horizontal offset used when drawing harmonic seconds.
+        /// </summary>
+        public readonly bool HorisontalOffset;
+
+        public StaffPosition(Clef clef, int verticalOffset, bool horisontalOffset)
         {
             Clef = clef;
-            Offset = offset;
+            VerticalOffset = verticalOffset;
+            HorisontalOffset = horisontalOffset;
         }
 
+        public StaffPosition WithHorizontalOffset(bool offset) =>
+            new StaffPosition(Clef, VerticalOffset, offset);
+
         public static StaffPosition InTreebleClef(int offset) =>
-            new StaffPosition(Clef.Treeble, offset);
+            new StaffPosition(Clef.Treeble, offset, false);
 
         public static StaffPosition InBassClef(int offset) =>
-            new StaffPosition(Clef.Bass, offset);
+            new StaffPosition(Clef.Bass, offset, false);
     }
 }

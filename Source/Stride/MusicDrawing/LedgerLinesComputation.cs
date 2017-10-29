@@ -11,7 +11,7 @@ namespace Stride.MusicDrawing
         {
             if (notePosition == null)
                 return GrandStaffLedgerLines.Absent;
-            var offset = notePosition.Offset;
+            var offset = notePosition.VerticalOffset;
             var lines = (offset.Abs() / 2 - 2).LimitFromBottom(0);
             var ledgerLines = LedgerLines.CreateSingle(lines, top: offset > 0);
             return GrandStaffLedgerLines.CreateSingle(ledgerLines, treeble: notePosition.Clef == Clef.Treeble);

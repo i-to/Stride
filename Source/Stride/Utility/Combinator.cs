@@ -2,7 +2,8 @@
 {
     public static class Combinator
     {
-        public static double SumTwoDoubles(double a, double b) =>
-            a + b;
+        public static T Identity<T>(T t) => t;
+
+        public static double SumTwoDoubles(double a, double b) => a + b;
     }
 }

@@ -6,6 +6,12 @@ namespace Stride.Utility
 {
     public static class EnumerableExtensions
     {
+        public static IEnumerable<T> OrderAscending<T>(this IEnumerable<T> enumerable) =>
+            enumerable.OrderBy(Combinator.Identity);
+
+        public static IEnumerable<T> OrderDescending<T>(this IEnumerable<T> enumerable) =>
+            enumerable.OrderByDescending(Combinator.Identity);
+
         public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> enumerable) =>
             enumerable.ToArray();
 
