@@ -28,6 +28,10 @@ namespace Stride.Gui.Model
                     CreatePitches(Pitch.C4, 15),
                     Pitch.C4),
                 new Drill(
+                    DrillId.DiatonicThreeOctavesC3,
+                    CreatePitches(Pitch.C3, 22),
+                    Pitch.D4),
+                new Drill(
                     DrillId.Testing,
                     CreatePitches(Pitch.C4, 7),
                     Pitch.C4), 

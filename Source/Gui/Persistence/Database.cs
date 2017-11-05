@@ -15,6 +15,7 @@ namespace Stride.Gui.Persistence
                 {DrillId.DiatonicOneOctaveC4, "c4-c5_diatonic"},
                 {DrillId.DiatonicTwoOctavesC3, "c3-c5_diatonic"},
                 {DrillId.DiatonicTwoOctavesC4, "c4-c6_diatonic"},
+                {DrillId.DiatonicThreeOctavesC3, "c3-c6_diatonic"},
                 {DrillId.Testing, "testing"}
             };
 
