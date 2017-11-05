@@ -35,10 +35,9 @@ namespace Stride.Gui
             var musicDrawingBuilder = new MusicDrawingBuilder(
                 glyphRunBuilder,
                 musicSymbolToFontText,
-                typefaceProvider,
-                layoutEngine);
+                typefaceProvider);
             DrillPresenter = new DrillPresenter(new AnswerTracker(), new PerformanceFeedback());
-            DrillViewModel = new DrillViewModel(musicDrawingBuilder, DrillPresenter);
+            DrillViewModel = new DrillViewModel(musicDrawingBuilder, DrillPresenter, layoutEngine);
             var keyboardPitchMapping = new KeyboardPitchMapping();
             var midiPitchMapping = new MidiPitchMapping();
             var noteInputConverter = new NoteInputConverter(

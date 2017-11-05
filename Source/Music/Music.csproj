@@ -31,7 +31,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MoreLinq, Version=2.8.21218.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\packages\morelinq.2.8.0\lib\net40\MoreLinq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +55,7 @@
     <Compile Include="Presentation\LedgerLinesComputation.cs" />
     <Compile Include="Presentation\StaffPosition.cs" />
     <Compile Include="Layout\StavesMetrics.cs" />
+    <Compile Include="Presentation\StaffPositionComputation.cs" />
     <Compile Include="Presentation\Symbol.cs" />
     <Compile Include="Theory\Clef.cs" />
     <Compile Include="Theory\Const.cs" />
@@ -61,6 +71,9 @@
       <Project>{9d3d1a04-f04c-4fcc-8f17-5317e56ca863}</Project>
       <Name>Utility</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

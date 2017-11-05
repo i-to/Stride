@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Media;
 using Stride.Gui.Input;
 using Stride.Gui.Model;
 using Stride.Gui.MusicDrawing;
-using Stride.Music.Presentation;
+using Stride.Music.Layout;
 using Stride.Music.Theory;
-using Stride.Utility;
 
 namespace Stride.Gui
 {
@@ -14,11 +12,16 @@ namespace Stride.Gui
     {
         readonly MusicDrawingBuilder MusicDrawingBuilder;
         readonly DrillPresenter DrillPresenter;
+        readonly LayoutEngine LayoutEngine;
 
-        public DrillViewModel(MusicDrawingBuilder musicDrawingBuilder, DrillPresenter drillPresenter)
+        public DrillViewModel(
+            MusicDrawingBuilder musicDrawingBuilder,
+            DrillPresenter drillPresenter,
+            LayoutEngine layoutEngine)
         {
             MusicDrawingBuilder = musicDrawingBuilder;
             DrillPresenter = drillPresenter;
+            LayoutEngine = layoutEngine;
         }
 
         public Drawing MusicDrawing => MusicDrawingBuilder.Drawing;
@@ -29,43 +32,12 @@ namespace Stride.Gui
 
         void Update()
         {
-            var testNoteStaffPosition = ComputeStaffPosition(DrillPresenter.TestPitch);
-            var soundingPitches = DrillPresenter.SoundingPitches.OrderDescending().ToReadOnlyList();
-            var soundingNotesStaffPositions = ComputeStaffPositions(soundingPitches);
-            MusicDrawingBuilder.BuildDrawing(testNoteStaffPosition, soundingNotesStaffPositions);
+            var layout = LayoutEngine.CreateLayout(
+                DrillPresenter.LowestTreebleStaffPitch,
+                DrillPresenter.TestPitch,
+                DrillPresenter.SoundingPitches);
+            MusicDrawingBuilder.BuildDrawing(layout);
             RaiseMusicDrawingChanged();
-        }
-
-        StaffPosition ComputeStaffPosition(Pitch pitch)
-        {
-            if (pitch is null)
-                return null;
-            return pitch >= DrillPresenter.LowestTreebleStaffPitch
-                ? StaffPosition.InTreebleClef(-pitch.DiatonicDistanceTo(Pitch.B4))
-                : StaffPosition.InBassClef(-pitch.DiatonicDistanceTo(Pitch.D3));
-        }
-
-        IReadOnlyList<StaffPosition> ComputeStaffPositions(IReadOnlyList<Pitch> pitches)
-        {
-            var count = pitches.Count;
-            var result = new StaffPosition[count];
-            for (int i = 0; i != count; ++i)
-            {
-                var pitch = pitches[i];
-                var position = ComputeStaffPosition(pitch);
-                if (i > 0)
-                {
-                    var previousPosition = result[i - 1];
-                    if (!previousPosition.HorisontalOffset
-                        && previousPosition.Clef == position.Clef
-                        && previousPosition.VerticalOffset - position.VerticalOffset == 1)
-                    {
-                        position = position.WithHorizontalOffset(true);
-                    }
-                }
-                result[i] = position;
-            }
-            return result;
         }
 
         public void NoteOn(Pitch pitch)

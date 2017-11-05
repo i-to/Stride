@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows.Media;
 using MoreLinq;
 using Stride.Music.Layout;
-using Stride.Music.Presentation;
 
 namespace Stride.Gui.MusicDrawing
 {
@@ -12,18 +11,15 @@ namespace Stride.Gui.MusicDrawing
         readonly GlyphRunBuilder GlyphRunBuilder;
         readonly FontSymbolMapping FontSymbolMapping;
         readonly MusicTypefaceProvider MusicTypefaceProvider;
-        readonly LayoutEngine LayoutEngine;
         readonly DrawingCollection DrawingChildren;
 
         public MusicDrawingBuilder(
             GlyphRunBuilder glyphRunBuilder,
             FontSymbolMapping fontSymbolMapping,
-            MusicTypefaceProvider musicTypefaceProvider,
-            LayoutEngine layoutEngine)
+            MusicTypefaceProvider musicTypefaceProvider)
         {
             GlyphRunBuilder = glyphRunBuilder;
             MusicTypefaceProvider = musicTypefaceProvider;
-            LayoutEngine = layoutEngine;
             FontSymbolMapping = fontSymbolMapping;
             var drawing = new DrawingGroup();
             DrawingChildren = drawing.Children;
@@ -32,15 +28,14 @@ namespace Stride.Gui.MusicDrawing
 
         public Drawing Drawing { get; }
 
-        public void BuildDrawing(StaffPosition testNotePosition, IEnumerable<StaffPosition> soundingNotePositions)
+        public void BuildDrawing(Layout layout)
         {
             DrawingChildren.Clear();
-            var layout = LayoutEngine.CreateLayout(testNotePosition.Concat(soundingNotePositions));
-            var soundingNoteDrawings = BuildGlyphDrawings(layout.Notes.Skip(1), Brushes.Red, layout.GlyphSize);
+            var soundingNoteDrawings = BuildGlyphDrawings(layout.SoundingNotes, Brushes.Red, layout.GlyphSize);
             var treebleClefDrawing = BuildGlyphDrawing(layout.TreebleClef, Brushes.Black, layout.GlyphSize);
             var bassClefDrawing = BuildGlyphDrawing(layout.BassClef, Brushes.Black, layout.GlyphSize);
             var staffDrawing = BuildLinesDrawing(layout.StaffLines, layout.LineThickness);
-            var testNoteDrawing = BuildGlyphDrawing(layout.Notes.First(), Brushes.Black, layout.GlyphSize);
+            var testNoteDrawing = BuildGlyphDrawing(layout.TestNote, Brushes.Black, layout.GlyphSize);
             DrawingChildren.Add(testNoteDrawing);
             new Drawing[] {treebleClefDrawing, bassClefDrawing, staffDrawing}
                 .Concat(soundingNoteDrawings)

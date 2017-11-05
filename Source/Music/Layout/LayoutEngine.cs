@@ -4,6 +4,7 @@ using System.Windows;
 using Stride.Music.Presentation;
 using Stride.Music.Theory;
 using Stride.Utility;
+using MoreLinq;
 
 namespace Stride.Music.Layout
 {
@@ -42,14 +43,34 @@ namespace Stride.Music.Layout
             return new SymbolObject(noteOrigin, Symbol.WholeNote);
         }
 
-        public Layout CreateLayout(IEnumerable<StaffPosition> notes)
+        Layout CreateLayout(StaffPosition testNote, IEnumerable<StaffPosition> soundingNotes)
         {
             var bassClef = PlaceBassClef();
             var treebleClef = PlaceTreebleClef();
-            var ledgerLines = LedgerLinesComputation.ComputeLedgerLines(notes);
+            var ledgerLines = LedgerLinesComputation.ComputeLedgerLines(testNote.Concat(soundingNotes));
             var lines = StaffLinesBuilder.CreateGrandStaffGeometry(Metrics, StaffLinesLength, ledgerLines, NoteX);
-            var noteSymbols = notes.Select(BuildNoteSymbol).ToReadOnlyList();
-            return new Layout(lines, bassClef, treebleClef, noteSymbols, Metrics.LineThickness, Metrics.GlyphSize);
+            var testNoteSymbol = BuildNoteSymbol(testNote);
+            var soundingNoteSymbols = soundingNotes.Select(BuildNoteSymbol).ToReadOnlyList();
+            return new Layout(
+                lines,
+                bassClef,
+                treebleClef,
+                testNoteSymbol,
+                soundingNoteSymbols,
+                Metrics.LineThickness,
+                Metrics.GlyphSize);
+        }
+
+        public Layout CreateLayout(
+            Pitch lowestTreebleStaffPitch,
+            Pitch testPitch,
+            IEnumerable<Pitch> soundingPitches)
+        {
+            var testNoteStaffPosition = StaffPositionComputation.ComputeStaffPosition(
+                lowestTreebleStaffPitch, testPitch);
+            var soundingNotesStaffPositions = StaffPositionComputation.ComputeStaffPositions(
+                lowestTreebleStaffPitch, soundingPitches);
+            return CreateLayout(testNoteStaffPosition, soundingNotesStaffPositions);
         }
     }
 }
