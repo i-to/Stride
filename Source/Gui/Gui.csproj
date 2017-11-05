@@ -77,7 +77,6 @@
     <Compile Include="Input\NoteInputMode.cs" />
     <Compile Include="Input\MidiEventExtensions.cs" />
     <Compile Include="Model\DrillPresenter.cs" />
-    <Compile Include="MusicDrawing\DrillMusicDrawingContainer.cs" />
     <Compile Include="DrillViewModel.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Input\NoteInputConverter.cs" />
@@ -85,11 +84,10 @@
     <Compile Include="Input\KeyboardSink.cs" />
     <Compile Include="Input\MainWindow.cs" />
     <Compile Include="MusicDrawing\MusicDrawingBuilder.cs" />
-    <Compile Include="MusicDrawing\MusicSymbolToFontText.cs" />
+    <Compile Include="MusicDrawing\FontSymbolMapping.cs" />
     <Compile Include="Input\NoteSink.cs" />
     <Compile Include="Persistence\Database.cs" />
     <Compile Include="Root.cs" />
-    <Compile Include="MusicDrawing\StaffGeometryBuilder.cs" />
     <Compile Include="DrillControl.xaml.cs">
       <DependentUpon>DrillControl.xaml</DependentUpon>
     </Compile>

@@ -1,110 +1,86 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
+using System.Linq;
 using System.Windows.Media;
 using MoreLinq;
 using Stride.Music.Layout;
 using Stride.Music.Presentation;
-using Stride.Music.Theory;
 
 namespace Stride.Gui.MusicDrawing
 {
     public class MusicDrawingBuilder
     {
-        readonly StavesMetrics Metrics;
         readonly GlyphRunBuilder GlyphRunBuilder;
-        readonly MusicSymbolToFontText MusicSymbolToFontText;
-        readonly StaffGeometryBuilder StaffGeometryBuilder;
+        readonly FontSymbolMapping FontSymbolMapping;
         readonly MusicTypefaceProvider MusicTypefaceProvider;
-        readonly DrillMusicDrawingContainer DrawingContainer;
+        readonly LayoutEngine LayoutEngine;
+        readonly DrawingCollection DrawingChildren;
 
         public MusicDrawingBuilder(
-            StavesMetrics metrics,
             GlyphRunBuilder glyphRunBuilder,
-            MusicSymbolToFontText musicSymbolToFontText,
-            StaffGeometryBuilder staffGeometryBuilder,
+            FontSymbolMapping fontSymbolMapping,
             MusicTypefaceProvider musicTypefaceProvider,
-            DrillMusicDrawingContainer drawingContainer)
+            LayoutEngine layoutEngine)
         {
             GlyphRunBuilder = glyphRunBuilder;
-            StaffGeometryBuilder = staffGeometryBuilder;
             MusicTypefaceProvider = musicTypefaceProvider;
-            DrawingContainer = drawingContainer;
-            MusicSymbolToFontText = musicSymbolToFontText;
-            Metrics = metrics;
+            LayoutEngine = layoutEngine;
+            FontSymbolMapping = fontSymbolMapping;
+            var drawing = new DrawingGroup();
+            DrawingChildren = drawing.Children;
+            Drawing = drawing;
         }
 
-        public Drawing Drawing => DrawingContainer.Drawing;
-
-        public double StaffLinesLength => 20.0 * Metrics.BaseSize;
-        public Point TreebleClefOrigin => new Point(0, 4.0 * Metrics.BaseSize);
-        public Point BassClefOrigin => new Point(0, 2.0 * Metrics.BaseSize + Metrics.GrandStaffOffset);
-        public double NoteX => 10.0 * Metrics.BaseSize;
-
-        double? StaffPositionToYOffset(StaffPosition position)
-        {
-            if (position == null)
-                return null;
-            var middleLinePosition = 4 * Metrics.BaseSize;
-            var offset = position.VerticalOffset * Metrics.BaseSize;
-            var cleffOffset = position.Clef == Clef.Bass ? Metrics.GrandStaffOffset : 0.0;
-            return middleLinePosition + cleffOffset - offset;
-        }
+        public Drawing Drawing { get; }
 
         public void BuildDrawing(StaffPosition testNotePosition, IEnumerable<StaffPosition> soundingNotePositions)
         {
-            BuildCleffDrawing(MusicSymbolToFontText.TreebleClef, DrawingContainer.TreebleClef, TreebleClefOrigin);
-            BuildCleffDrawing(MusicSymbolToFontText.BassClef, DrawingContainer.BassClef, BassClefOrigin);
-            BuildNoteDrawing(DrawingContainer.TestNote, testNotePosition, Brushes.Black);
-            BuildSoundingNotesDrawing(DrawingContainer.SoundingNotes, soundingNotePositions, Brushes.Red);
-            var ledgerLines = LedgerLinesComputation.ComputeLedgerLines(testNotePosition.Concat(soundingNotePositions));
-            BuildStaffDrawing(DrawingContainer.StaffLines, ledgerLines);
+            DrawingChildren.Clear();
+            var layout = LayoutEngine.CreateLayout(testNotePosition.Concat(soundingNotePositions));
+            var soundingNoteDrawings = BuildGlyphDrawings(layout.Notes.Skip(1), Brushes.Red, layout.GlyphSize);
+            var treebleClefDrawing = BuildGlyphDrawing(layout.TreebleClef, Brushes.Black, layout.GlyphSize);
+            var bassClefDrawing = BuildGlyphDrawing(layout.BassClef, Brushes.Black, layout.GlyphSize);
+            var staffDrawing = BuildLinesDrawing(layout.StaffLines, layout.LineThickness);
+            var testNoteDrawing = BuildGlyphDrawing(layout.Notes.First(), Brushes.Black, layout.GlyphSize);
+            DrawingChildren.Add(testNoteDrawing);
+            new Drawing[] {treebleClefDrawing, bassClefDrawing, staffDrawing}
+                .Concat(soundingNoteDrawings)
+                .ForEach(DrawingChildren.Add);
         }
 
-        void BuildCleffDrawing(char symbol, GlyphRunDrawing drawing, Point origin)
+        Geometry BuildLinesGeometry(IEnumerable<LineObject> lines)
         {
-            drawing.GlyphRun = GlyphRunBuilder.CreateGlyphRun(
-                MusicTypefaceProvider.Typeface,
-                symbol.ToString(),
-                origin,
-                Metrics.GlyphSize);
-            drawing.ForegroundBrush = Brushes.Black;
+            var geometry = new GeometryGroup();
+            foreach (var line in lines)
+                geometry.Children.Add(
+                    new LineGeometry
+                    {
+                        StartPoint = line.Origin,
+                        EndPoint = line.End
+                    });
+            return geometry;
         }
 
-        void BuildSoundingNotesDrawing(
-            DrawingGroup drawingGroup,
-            IEnumerable<StaffPosition> notePositions,
-            SolidColorBrush brush)
-        {
-            var drawings = drawingGroup.Children;
-            drawings.Clear();
-            foreach (var notePosition in notePositions)
+        GeometryDrawing BuildLinesDrawing(IReadOnlyList<LineObject> lines, double thickness) => 
+            new GeometryDrawing
             {
-                var drawing = new GlyphRunDrawing();
-                BuildNoteDrawing(drawing, notePosition, brush);
-                drawings.Add(drawing);
-            }
-        }
+                Geometry = BuildLinesGeometry(lines),
+                Pen = new Pen {Brush = Brushes.Black, Thickness = thickness}
+            };
 
-        void BuildNoteDrawing(GlyphRunDrawing drawing, StaffPosition notePosition, Brush brush)
+        GlyphRunDrawing BuildGlyphDrawing(SymbolObject symbolObject, Brush brush, double glyphSize)
         {
-            var testNoteY = StaffPositionToYOffset(notePosition);
-            if (!testNoteY.HasValue)
+            return new GlyphRunDrawing
             {
-                drawing.GlyphRun = null;
-                return;
-            }
-            var xOffset = notePosition.HorisontalOffset ? Metrics.SecondNoteOffset : 0.0;
-            var noteOrigin = new Point(NoteX + xOffset, testNoteY.Value);
-            var noteText = MusicSymbolToFontText.WholeNote.ToString();
-            drawing.GlyphRun = GlyphRunBuilder.CreateGlyphRun(
-                MusicTypefaceProvider.Typeface, noteText, noteOrigin, Metrics.GlyphSize);
-            drawing.ForegroundBrush = brush;
+                GlyphRun = GlyphRunBuilder.CreateGlyphRun(
+                    MusicTypefaceProvider.Typeface,
+                    FontSymbolMapping[symbolObject.Symbol].ToString(),
+                    symbolObject.Origin,
+                    glyphSize),
+                ForegroundBrush = brush
+            };
         }
 
-        void BuildStaffDrawing(GeometryDrawing drawing, GrandStaffLedgerLines ledgerLines)
-        {
-            drawing.Geometry = StaffGeometryBuilder.CreateGrandStaffGeometry(Metrics, StaffLinesLength, ledgerLines, NoteX);
-            drawing.Pen = new Pen { Brush = Brushes.Black, Thickness = Metrics.StaffLinesThickness };
-        }
+        IEnumerable<GlyphRunDrawing> BuildGlyphDrawings(IEnumerable<SymbolObject> symbolObjects, Brush brush, double glyphSize) =>
+            symbolObjects.Select(symbol => BuildGlyphDrawing(symbol, brush, glyphSize));
     }
 }

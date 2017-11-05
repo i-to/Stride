@@ -1,42 +1,43 @@
+using System;
+using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Media;
-using Stride.Music.Layout;
 using Stride.Music.Presentation;
 using Stride.Music.Theory;
 
-namespace Stride.Gui.MusicDrawing
+namespace Stride.Music.Layout
 {
-    public class StaffGeometryBuilder
+    public class StaffLinesBuilder
     {
-        public Geometry CreateGrandStaffGeometry(
+        public IReadOnlyList<LineObject> CreateGrandStaffGeometry(
             StavesMetrics metrics,
             double length,
             GrandStaffLedgerLines ledgerLines,
             double noteX)
         {
-            var geometry = new GeometryGroup();
-            AddGrandStaffLines(metrics, length, geometry);
+            var lines = new List<LineObject>();
+            void AddLine(Point begin, Point end) => lines.Add(new LineObject(begin, end));
+            AddGrandStaffLines(metrics, length, AddLine);
             AddLedgerLines(
-                geometry,
+                AddLine,
                 ledgerLines,
                 noteX,
                 metrics.LedgerLineLength,
                 metrics.Origin.Y,
                 metrics.StaffLinesDistance,
                 metrics.GrandStaffOffset);
-            return geometry;
+            return lines;
         }
 
-        void AddGrandStaffLines(StavesMetrics metrics, double length, GeometryGroup geometry)
+        void AddGrandStaffLines(StavesMetrics metrics, double length, Action<Point, Point> addLine)
         {
             var treebleStaffOrigin = metrics.Origin;
-            AddLines(geometry, treebleStaffOrigin, metrics.StaffLinesDistance, length, Const.LinesInStaff);
+            AddLines(addLine, treebleStaffOrigin, metrics.StaffLinesDistance, length, Const.LinesInStaff);
             var bassStaffOrigin = treebleStaffOrigin + new Vector(0.0, metrics.GrandStaffOffset);
-            AddLines(geometry, bassStaffOrigin, metrics.StaffLinesDistance, length, Const.LinesInStaff);
+            AddLines(addLine, bassStaffOrigin, metrics.StaffLinesDistance, length, Const.LinesInStaff);
         }
 
         void AddLedgerLines(
-            GeometryGroup geometry,
+            Action<Point, Point> addLine,
             GrandStaffLedgerLines ledgerLines,
             double noteX,
             double length,
@@ -49,7 +50,7 @@ namespace Stride.Gui.MusicDrawing
             {
                 var y = staffOriginY - treebleClefTop * distanceBetweenLines;
                 var origin = new Point(noteX, y);
-                AddLines(geometry, origin, distanceBetweenLines, length, treebleClefTop);
+                AddLines(addLine, origin, distanceBetweenLines, length, treebleClefTop);
             }
 
             var treebleClefBottom = ledgerLines.TreebleClef.Bottom;
@@ -57,7 +58,7 @@ namespace Stride.Gui.MusicDrawing
             {
                 var y = staffOriginY + Const.LinesInStaff * distanceBetweenLines;
                 var origin = new Point(noteX, y);
-                AddLines(geometry, origin, distanceBetweenLines, length, treebleClefBottom);
+                AddLines(addLine, origin, distanceBetweenLines, length, treebleClefBottom);
             }
 
             var bassClefTop = ledgerLines.BassClef.Top;
@@ -65,7 +66,7 @@ namespace Stride.Gui.MusicDrawing
             {
                 var y = staffOriginY - bassClefTop * distanceBetweenLines + grandStaffOffset;
                 var origin = new Point(noteX, y);
-                AddLines(geometry, origin, distanceBetweenLines, length, bassClefTop);
+                AddLines(addLine, origin, distanceBetweenLines, length, bassClefTop);
             }
 
             var bassClefBottom = ledgerLines.BassClef.Bottom;
@@ -73,21 +74,18 @@ namespace Stride.Gui.MusicDrawing
             {
                 var y = staffOriginY + Const.LinesInStaff * distanceBetweenLines + grandStaffOffset;
                 var origin = new Point(noteX, y);
-                AddLines(geometry, origin, distanceBetweenLines, length, bassClefBottom);
+                AddLines(addLine, origin, distanceBetweenLines, length, bassClefBottom);
             }
         }
 
-        void AddLines(GeometryGroup geometry, Point origin, double distanceBetweenLines, double length, int count)
+        void AddLines(Action<Point, Point> addLine, Point origin, double distanceBetweenLines, double length, int count)
         {
             for (int i = 0; i != count; ++i)
             {
                 var offset = distanceBetweenLines * i;
-                var line = new LineGeometry
-                {
-                    StartPoint = origin + new Vector(0.0, offset),
-                    EndPoint = origin + new Vector(length, offset)
-                };
-                geometry.Children.Add(line);
+                var begin = origin + new Vector(0.0, offset);
+                var end = origin + new Vector(length, offset);
+                addLine(begin, end);
             }
         }
     }

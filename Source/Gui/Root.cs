@@ -27,18 +27,16 @@ namespace Stride.Gui
             NoteInputMode = Properties.Settings.Default.NoteInputMode;
             Application = new App();
             var glyphRunBuilder = new GlyphRunBuilder();
-            var staffLinesGeometryBuilder = new StaffGeometryBuilder();
+            var staffLinesGeometryBuilder = new StaffLinesBuilder();
             var typefaceProvider = new MusicTypefaceProvider();
-            var musicSymbolToFontText = new MusicSymbolToFontText();
-            var drawingContainer = new DrillMusicDrawingContainer();
+            var musicSymbolToFontText = new FontSymbolMapping();
             var drawingMetrics = new StavesMetrics(baseSize: 8);
+            var layoutEngine = new LayoutEngine(drawingMetrics, staffLinesGeometryBuilder);
             var musicDrawingBuilder = new MusicDrawingBuilder(
-                drawingMetrics,
                 glyphRunBuilder,
                 musicSymbolToFontText,
-                staffLinesGeometryBuilder,
                 typefaceProvider,
-                drawingContainer);
+                layoutEngine);
             DrillPresenter = new DrillPresenter(new AnswerTracker(), new PerformanceFeedback());
             DrillViewModel = new DrillViewModel(musicDrawingBuilder, DrillPresenter);
             var keyboardPitchMapping = new KeyboardPitchMapping();
