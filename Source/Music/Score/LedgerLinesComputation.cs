@@ -3,11 +3,11 @@ using System.Linq;
 using Stride.Music.Theory;
 using Stride.Utility;
 
-namespace Stride.Music.Presentation
+namespace Stride.Music.Score
 {
-    public static class LedgerLinesComputation
+    public class LedgerLinesComputation
     {
-        public static GrandStaffLedgerLines ComputeLedgerLines(StaffPosition notePosition)
+        public GrandStaffLedgerLines ComputeLedgerLines(StaffPosition notePosition)
         {
             if (notePosition == null)
                 return GrandStaffLedgerLines.Absent;
@@ -17,19 +17,22 @@ namespace Stride.Music.Presentation
             return GrandStaffLedgerLines.CreateSingle(ledgerLines, treeble: notePosition.Clef == Clef.Treeble);
         }
 
-        static GrandStaffLedgerLines Combine(GrandStaffLedgerLines ledgerLines, StaffPosition position)
+        GrandStaffLedgerLines Combine(GrandStaffLedgerLines ledgerLines, StaffPosition position)
         {
             var otherLedgerLines = ComputeLedgerLines(position);
             return ledgerLines.Combine(otherLedgerLines);
         }
 
-        public static GrandStaffLedgerLines ComputeLedgerLines(StaffPosition testNotePosition, StaffPosition playedNotePosition)
+        public GrandStaffLedgerLines ComputeLedgerLines(StaffPosition testNotePosition, StaffPosition playedNotePosition)
         {
             var testLedgerLines = ComputeLedgerLines(testNotePosition);
             return Combine(testLedgerLines, playedNotePosition);
         }
 
-        public static GrandStaffLedgerLines ComputeLedgerLines(IEnumerable<StaffPosition> notePositions) => 
+        public GrandStaffLedgerLines ComputeLedgerLines(IEnumerable<NoteOnPage> notes) =>
+            ComputeLedgerLines(notes.Select(note => note.StaffPosition));
+
+        public GrandStaffLedgerLines ComputeLedgerLines(IEnumerable<StaffPosition> notePositions) => 
             notePositions.Aggregate(GrandStaffLedgerLines.Absent, Combine);
     }
 }

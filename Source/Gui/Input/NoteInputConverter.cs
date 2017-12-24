@@ -1,22 +1,23 @@
 ﻿using System.Windows.Input;
 using NAudio.Midi;
+using Stride.Music.Theory;
 using Stride.Utility;
 
 namespace Stride.Gui.Input
 {
     public class NoteInputConverter : KeyboardSink, MidiSink
     {
-        readonly KeyboardPitchMapping KeyboardPitchMapping;
+        readonly KeyboardPitchMappings KeyboardPitchMappings;
         readonly MidiPitchMapping MidiPitchMapping;
         readonly NoteSink NoteSink;
 
         public NoteInputConverter(
-            KeyboardPitchMapping keyboardPitchMapping,
+            KeyboardPitchMappings keyboardPitchMappings,
             MidiPitchMapping midiPitchMapping,
             NoteSink noteSink,
             NoteInputMode noteInputMode)
         {
-            KeyboardPitchMapping = keyboardPitchMapping;
+            KeyboardPitchMappings = keyboardPitchMappings;
             NoteSink = noteSink;
             NoteInputMode = noteInputMode;
             MidiPitchMapping = midiPitchMapping;
@@ -24,25 +25,28 @@ namespace Stride.Gui.Input
 
         public NoteInputMode NoteInputMode { get; }
 
+        Pitch TryMapKey(Key key) =>
+            KeyboardPitchMappings[NoteInputMode]
+            .TryGetValue(key, out Pitch pitch)
+            ? pitch : null;
+
         public void KeyDown(KeyEventArgs args)
         {
-            if (NoteInputMode != NoteInputMode.Keyboard)
+            if (!NoteInputMode.IsKeyboardMode())
                 return;
-            var pitch = KeyboardPitchMapping.Map(args.Key);
-            NoteSink.NoteOn(pitch);
+            TryMapKey(args.Key).IfNotNull(NoteSink.NoteOn);
         }
 
         public void KeyUp(KeyEventArgs args)
         {
-            if (NoteInputMode != NoteInputMode.Keyboard)
+            if (!NoteInputMode.IsKeyboardMode())
                 return;
-            var pitch = KeyboardPitchMapping.Map(args.Key);
-            NoteSink.NoteOff(pitch);
+            TryMapKey(args.Key).IfNotNull(NoteSink.NoteOff);
         }
 
         public void MidiEvent(MidiEvent midiEvent)
         {
-            if (NoteInputMode != NoteInputMode.Midi)
+            if (!NoteInputMode.IsMidi())
                 return;
             if (midiEvent.IsNoteOn())
             {

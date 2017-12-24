@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Stride.Music.Presentation;
 
 namespace Stride.Music.Layout
 {

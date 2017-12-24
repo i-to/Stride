@@ -1,4 +1,4 @@
-namespace Stride.Music.Presentation
+namespace Stride.Music.Score
 {
     /// <summary>
     /// Ledger lines at a given position of the grand staff.

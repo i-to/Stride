@@ -44,22 +44,27 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Layout\BarLineObject.cs" />
     <Compile Include="Layout\Layout.cs" />
     <Compile Include="Layout\LayoutEngine.cs" />
     <Compile Include="Layout\LayoutObject.cs" />
     <Compile Include="Layout\LineObject.cs" />
-    <Compile Include="Layout\StaffLinesBuilder.cs" />
+    <Compile Include="Layout\StaffLinesLayout.cs" />
     <Compile Include="Layout\SymbolObject.cs" />
-    <Compile Include="Presentation\GrandStaffLedgerLines.cs" />
-    <Compile Include="Presentation\LedgerLines.cs" />
-    <Compile Include="Presentation\LedgerLinesComputation.cs" />
-    <Compile Include="Presentation\StaffPosition.cs" />
+    <Compile Include="Score\GrandStaffLedgerLines.cs" />
+    <Compile Include="Score\LedgerLines.cs" />
+    <Compile Include="Score\LedgerLinesComputation.cs" />
+    <Compile Include="Score\StaffPosition.cs" />
     <Compile Include="Layout\StavesMetrics.cs" />
-    <Compile Include="Presentation\StaffPositionComputation.cs" />
-    <Compile Include="Presentation\Symbol.cs" />
+    <Compile Include="Score\StaffPositionComputation.cs" />
+    <Compile Include="Layout\Symbol.cs" />
+    <Compile Include="Score\Page.cs" />
+    <Compile Include="Score\Tick.cs" />
+    <Compile Include="Theory\Duration.cs" />
     <Compile Include="Theory\Clef.cs" />
     <Compile Include="Theory\Const.cs" />
     <Compile Include="Theory\Note.cs" />
+    <Compile Include="Theory\PitchClass.cs" />
     <Compile Include="Theory\Octave.cs" />
     <Compile Include="Theory\Pitch.cs" />
     <Compile Include="Theory\Pitches.cs" />

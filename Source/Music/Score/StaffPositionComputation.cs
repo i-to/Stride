@@ -1,17 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Stride.Music.Theory;
 using Stride.Utility;
 
-namespace Stride.Music.Presentation
+namespace Stride.Music.Score
 {
-    public static class StaffPositionComputation
+    public class StaffPositionComputation
     {
-        public static StaffPosition ComputeStaffPosition(Pitch lowestTreebleStaffPitch, Pitch pitch) =>
+        public StaffPosition ComputeStaffPosition(Pitch lowestTreebleStaffPitch, Pitch pitch) =>
             pitch >= lowestTreebleStaffPitch
                 ? StaffPosition.InTreebleClef(-pitch.DiatonicDistanceTo(Pitch.B4))
                 : StaffPosition.InBassClef(-pitch.DiatonicDistanceTo(Pitch.D3));
 
-        public static IReadOnlyList<StaffPosition> ComputeStaffPositions(
+        public IReadOnlyList<StaffPosition> ComputeStaffPositions(
+            Pitch lowestTreebleStaffPitch,
+            IEnumerable<Pitch> pitches) =>
+            pitches.Select(p => ComputeStaffPosition(lowestTreebleStaffPitch, p)).ToReadOnlyList();
+
+        public IReadOnlyList<StaffPosition> ComputeStaffPositionsHarmonic(
             Pitch lowestTreebleStaffPitch,
             IEnumerable<Pitch> pitches)
         {

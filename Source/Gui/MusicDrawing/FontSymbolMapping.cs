@@ -1,5 +1,6 @@
 ﻿using System;
-using Stride.Music.Presentation;
+using Stride.Music.Layout;
+using Stride.Music.Score;
 
 namespace Stride.Gui.MusicDrawing
 {

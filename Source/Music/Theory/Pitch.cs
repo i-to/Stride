@@ -6,22 +6,22 @@ namespace Stride.Music.Theory
     public partial class Pitch : IEquatable<Pitch>, IComparable<Pitch>
     {
         public readonly Octave Octave;
-        public readonly Note Note;
+        public readonly PitchClass PitchClass;
 
-        public Pitch(Octave octave, Note note)
+        public Pitch(Octave octave, PitchClass pitchClass)
         {
             Octave = octave;
-            Note = note;
+            PitchClass = pitchClass;
         }
 
-        public static Pitch Create(Octave octave, Note note) => new Pitch(octave, note);
+        public static Pitch Create(Octave octave, PitchClass pitchClass) => new Pitch(octave, pitchClass);
 
-        public Pitch NextDiatonic => Create(Note == Note.B ? Octave.Next : Octave, Note.Next);
+        public Pitch NextDiatonic => Create(PitchClass == PitchClass.B ? Octave.Next : Octave, PitchClass.Next);
 
         public int DiatonicDistanceTo(Pitch pitch)
         {
             var octaveDistance = pitch.Octave - Octave;
-            var pitchDistance = pitch.Note.Number - Note.Number;
+            var pitchDistance = pitch.PitchClass.Number - PitchClass.Number;
             return Const.NotesInOctave * octaveDistance + pitchDistance;
         }
 
@@ -33,17 +33,17 @@ namespace Stride.Music.Theory
                 return right is null;
             if (right is null)
                 return false;
-            return left.Note == right.Note && left.Octave == right.Octave;
+            return left.PitchClass == right.PitchClass && left.Octave == right.Octave;
         }
 
         public static bool operator >(Pitch left, Pitch right) => 
             left.Octave == right.Octave
-                ? left.Note.Number > right.Note.Number
+                ? left.PitchClass.Number > right.PitchClass.Number
                 : left.Octave > right.Octave;
 
         public static bool operator <(Pitch left, Pitch right) =>
             left.Octave == right.Octave
-                ? left.Note.Number < right.Note.Number
+                ? left.PitchClass.Number < right.PitchClass.Number
                 : left.Octave < right.Octave;
 
         public static bool operator >=(Pitch left, Pitch right) => !(left < right);
@@ -61,8 +61,8 @@ namespace Stride.Music.Theory
         public static bool operator !=(Pitch left, Pitch right) => !(left == right);
         public bool Equals(Pitch other) => other == this;
         public override bool Equals(object obj) => obj as Pitch == this;
-        public override int GetHashCode() => Hash.Compute(Octave.GetHashCode(), Note.GetHashCode());
+        public override int GetHashCode() => Hash.Compute(Octave.GetHashCode(), PitchClass.GetHashCode());
 
-        public override string ToString() => $"{Note}{Octave.Number}";
+        public override string ToString() => $"{PitchClass}{Octave.Number}";
     }
 }

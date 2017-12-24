@@ -8,8 +8,7 @@ namespace Stride.Gui.MusicDrawing
     {
         public GlyphRun CreateGlyphRun(Typeface typeface, string text, Point origin, double size)
         {
-            GlyphTypeface glyphTypeface;
-            if (!typeface.TryGetGlyphTypeface(out glyphTypeface))
+            if (!typeface.TryGetGlyphTypeface(out GlyphTypeface glyphTypeface))
                 throw new InvalidOperationException("No glyph typeface found");
 
             var glyphIndexes = new ushort[text.Length];

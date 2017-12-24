@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Media;
 using MoreLinq;
 using Stride.Music.Layout;
+using Stride.Utility;
 
 namespace Stride.Gui.MusicDrawing
 {
@@ -32,39 +33,45 @@ namespace Stride.Gui.MusicDrawing
         {
             DrawingChildren.Clear();
             var soundingNoteDrawings = BuildGlyphDrawings(layout.SoundingNotes, Brushes.Red, layout.GlyphSize);
-            var treebleClefDrawing = BuildGlyphDrawing(layout.TreebleClef, Brushes.Black, layout.GlyphSize);
-            var bassClefDrawing = BuildGlyphDrawing(layout.BassClef, Brushes.Black, layout.GlyphSize);
-            var staffDrawing = BuildLinesDrawing(layout.StaffLines, layout.LineThickness);
-            var testNoteDrawing = BuildGlyphDrawing(layout.TestNote, Brushes.Black, layout.GlyphSize);
-            DrawingChildren.Add(testNoteDrawing);
-            new Drawing[] {treebleClefDrawing, bassClefDrawing, staffDrawing}
+            var clefDrawings = BuildGlyphDrawings(layout.Clefs, Brushes.Black, layout.GlyphSize);
+            var lines = layout.StaffLines.Concat(layout.LedgerLines).ToReadOnlyList();
+            var staffDrawing = BuildLinesDrawing(lines, CreateSolidBlackLinePen(layout.StaffLineThickness));
+            var barlinesDrawing = BuildLinesDrawing(layout.BarLines, CreateSolidBlackLinePen(layout.BarLineThickness));
+            var testPhraseDrawing = BuildGlyphDrawings(layout.TestPhrase, Brushes.Black, layout.GlyphSize);
+            new Drawing[] { staffDrawing, barlinesDrawing}
+                .Concat(clefDrawings)
+                .Concat(testPhraseDrawing)
                 .Concat(soundingNoteDrawings)
                 .ForEach(DrawingChildren.Add);
         }
+
+        Pen CreateSolidBlackLinePen(double thickness) =>
+            new Pen {Brush = Brushes.Black, Thickness = thickness};
+
+        LineGeometry BuildLineGeometry(LineObject line) =>
+            new LineGeometry
+            {
+                StartPoint = line.Origin,
+                EndPoint = line.End
+            };
 
         Geometry BuildLinesGeometry(IEnumerable<LineObject> lines)
         {
             var geometry = new GeometryGroup();
             foreach (var line in lines)
-                geometry.Children.Add(
-                    new LineGeometry
-                    {
-                        StartPoint = line.Origin,
-                        EndPoint = line.End
-                    });
+                geometry.Children.Add(BuildLineGeometry(line));
             return geometry;
         }
 
-        GeometryDrawing BuildLinesDrawing(IReadOnlyList<LineObject> lines, double thickness) => 
+        GeometryDrawing BuildLinesDrawing(IReadOnlyList<LineObject> lines, Pen pen) => 
             new GeometryDrawing
             {
                 Geometry = BuildLinesGeometry(lines),
-                Pen = new Pen {Brush = Brushes.Black, Thickness = thickness}
+                Pen = pen
             };
 
-        GlyphRunDrawing BuildGlyphDrawing(SymbolObject symbolObject, Brush brush, double glyphSize)
-        {
-            return new GlyphRunDrawing
+        GlyphRunDrawing BuildGlyphDrawing(SymbolObject symbolObject, Brush brush, double glyphSize) => 
+            new GlyphRunDrawing
             {
                 GlyphRun = GlyphRunBuilder.CreateGlyphRun(
                     MusicTypefaceProvider.Typeface,
@@ -73,7 +80,6 @@ namespace Stride.Gui.MusicDrawing
                     glyphSize),
                 ForegroundBrush = brush
             };
-        }
 
         IEnumerable<GlyphRunDrawing> BuildGlyphDrawings(IEnumerable<SymbolObject> symbolObjects, Brush brush, double glyphSize) =>
             symbolObjects.Select(symbol => BuildGlyphDrawing(symbol, brush, glyphSize));

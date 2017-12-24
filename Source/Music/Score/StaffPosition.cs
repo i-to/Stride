@@ -1,6 +1,6 @@
 ﻿using Stride.Music.Theory;
 
-namespace Stride.Music.Presentation
+namespace Stride.Music.Score
 {
     /// <summary>
     /// Identifies position of the note at a particular tick within the staff.
@@ -40,5 +40,11 @@ namespace Stride.Music.Presentation
 
         public static StaffPosition InBassClef(int offset) =>
             new StaffPosition(Clef.Bass, offset, false);
+
+        public override string ToString()
+        {
+            var horisontalOffset = HorisontalOffset ? "->" : "";
+            return $"{Clef}:{VerticalOffset}{horisontalOffset}";
+        }
     }
 }

@@ -65,28 +65,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DrillPageLayout.cs" />
     <Compile Include="Model\Drill.cs" />
-    <Compile Include="Model\DrillId.cs" />
     <Compile Include="Model\AnswerPerformance.cs" />
-    <Compile Include="Model\AnswerTracker.cs" />
-    <Compile Include="Model\Drills.cs" />
-    <Compile Include="Model\DrillSession.cs" />
-    <Compile Include="Model\PerformanceFeedback.cs" />
     <Compile Include="Input\MidiPitchMapping.cs" />
     <Compile Include="Input\MidiSink.cs" />
     <Compile Include="Input\NoteInputMode.cs" />
     <Compile Include="Input\MidiEventExtensions.cs" />
-    <Compile Include="Model\DrillPresenter.cs" />
+    <Compile Include="Model\DrillQuiz.cs" />
     <Compile Include="DrillViewModel.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Input\NoteInputConverter.cs" />
-    <Compile Include="Input\KeyboardPitchMapping.cs" />
+    <Compile Include="Input\KeyboardPitchMappings.cs" />
     <Compile Include="Input\KeyboardSink.cs" />
     <Compile Include="Input\MainWindow.cs" />
     <Compile Include="MusicDrawing\MusicDrawingBuilder.cs" />
     <Compile Include="MusicDrawing\FontSymbolMapping.cs" />
     <Compile Include="Input\NoteSink.cs" />
-    <Compile Include="Persistence\Database.cs" />
     <Compile Include="Root.cs" />
     <Compile Include="DrillControl.xaml.cs">
       <DependentUpon>DrillControl.xaml</DependentUpon>
@@ -97,7 +92,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MusicDrawing\GlyphRunBuilder.cs" />
-    <Compile Include="Persistence\SessionRecord.cs" />
     <Page Include="DrillControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

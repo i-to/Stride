@@ -1,6 +1,6 @@
 using System;
 
-namespace Stride.Music.Presentation
+namespace Stride.Music.Score
 {
     /// <summary>
     /// Ledger lines at a given position of the single staff.

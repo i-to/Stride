@@ -1,4 +1,4 @@
-﻿namespace Stride.Music.Presentation
+﻿namespace Stride.Music.Layout
 {
     public enum Symbol
     {

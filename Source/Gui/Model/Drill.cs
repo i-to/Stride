@@ -5,14 +5,12 @@ namespace Stride.Gui.Model
 {
     public class Drill
     {
-        public readonly DrillId Id;
-        public readonly IReadOnlyList<Pitch> Pitches;
+        public readonly IReadOnlyList<Note> Notes;
         public readonly Pitch LowestTreebleSaffPitch;
 
-        public Drill(DrillId id, IReadOnlyList<Pitch> pitches, Pitch lowestTreebleSaffPitch)
+        public Drill(IReadOnlyList<Note> notes, Pitch lowestTreebleSaffPitch)
         {
-            Id = id;
-            Pitches = pitches;
+            Notes = notes;
             LowestTreebleSaffPitch = lowestTreebleSaffPitch;
         }
     }

@@ -11,17 +11,20 @@ namespace Stride.Gui
     public class DrillViewModel : NoteSink
     {
         readonly MusicDrawingBuilder MusicDrawingBuilder;
-        readonly DrillPresenter DrillPresenter;
+        readonly DrillQuiz DrillQuiz;
         readonly LayoutEngine LayoutEngine;
+        readonly DrillPageLayout DrillPageLayout;
 
         public DrillViewModel(
             MusicDrawingBuilder musicDrawingBuilder,
-            DrillPresenter drillPresenter,
-            LayoutEngine layoutEngine)
+            DrillQuiz drillQuiz,
+            LayoutEngine layoutEngine,
+            DrillPageLayout drillPageLayout)
         {
             MusicDrawingBuilder = musicDrawingBuilder;
-            DrillPresenter = drillPresenter;
+            DrillQuiz = drillQuiz;
             LayoutEngine = layoutEngine;
+            DrillPageLayout = drillPageLayout;
         }
 
         public Drawing MusicDrawing => MusicDrawingBuilder.Drawing;
@@ -32,23 +35,25 @@ namespace Stride.Gui
 
         void Update()
         {
-            var layout = LayoutEngine.CreateLayout(
-                DrillPresenter.LowestTreebleStaffPitch,
-                DrillPresenter.TestPitch,
-                DrillPresenter.SoundingPitches);
+            var page = DrillPageLayout.CreatePage(
+                DrillQuiz.LowestTreebleStaffPitch,
+                DrillQuiz.TestPhrase,
+                DrillQuiz.SoundingPitches,
+                DrillQuiz.CurrentPosition);
+            var layout = LayoutEngine.CreateLayout(page);
             MusicDrawingBuilder.BuildDrawing(layout);
             RaiseMusicDrawingChanged();
         }
 
         public void NoteOn(Pitch pitch)
         {
-            DrillPresenter.PitchOn(pitch);
+            DrillQuiz.PitchOn(pitch);
             Update();
         }
 
         public void NoteOff(Pitch pitch)
         {
-            DrillPresenter.PitchOff(pitch);
+            DrillQuiz.PitchOff(pitch);
             Update();
         }
     }
