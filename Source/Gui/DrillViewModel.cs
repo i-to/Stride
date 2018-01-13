@@ -12,18 +12,18 @@ namespace Stride.Gui
     {
         readonly MusicDrawingBuilder MusicDrawingBuilder;
         readonly DrillQuiz DrillQuiz;
-        readonly LayoutEngine LayoutEngine;
+        readonly Layout _layout;
         readonly DrillPageLayout DrillPageLayout;
 
         public DrillViewModel(
             MusicDrawingBuilder musicDrawingBuilder,
             DrillQuiz drillQuiz,
-            LayoutEngine layoutEngine,
+            Layout layout,
             DrillPageLayout drillPageLayout)
         {
             MusicDrawingBuilder = musicDrawingBuilder;
             DrillQuiz = drillQuiz;
-            LayoutEngine = layoutEngine;
+            _layout = layout;
             DrillPageLayout = drillPageLayout;
         }
 
@@ -40,7 +40,7 @@ namespace Stride.Gui
                 DrillQuiz.TestPhrase,
                 DrillQuiz.SoundingPitches,
                 DrillQuiz.CurrentPosition);
-            var layout = LayoutEngine.CreateLayout(page);
+            var layout = _layout.CreateLayout(page);
             MusicDrawingBuilder.BuildDrawing(layout);
             RaiseMusicDrawingChanged();
         }

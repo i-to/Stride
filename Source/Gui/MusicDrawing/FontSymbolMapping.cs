@@ -1,27 +1,18 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using Stride.Music.Layout;
-using Stride.Music.Score;
 
 namespace Stride.Gui.MusicDrawing
 {
     public class FontSymbolMapping
     {
-        readonly char TreebleClef = (char)0xE050;
-        readonly char BassClef = (char)0xE062;
-        readonly char WholeNote = (char)0xE0A2;
-
-        public char this[Symbol symbol]
-        {
-            get
+        public readonly IReadOnlyDictionary<Symbol, char> Map =
+            new Dictionary<Symbol, char>
             {
-                switch (symbol)
-                {
-                    case Symbol.TreebleClef: return TreebleClef;
-                    case Symbol.BassClef: return BassClef;
-                    case Symbol.WholeNote: return WholeNote;
-                }
-                throw new ArgumentOutOfRangeException($"Unrecognized symbol: {symbol}.");
-            }
-        }
+                {Symbol.TreebleClef, (char)0xE050},
+                {Symbol.BassClef, (char)0xE062},
+                {Symbol.NoteheadWhole, (char)0xE0A2},
+                {Symbol.NoteheadHalf, (char)0xE0A3},
+                {Symbol.NoteheadBlack, (char)0xE0A4},
+            };
     }
 }

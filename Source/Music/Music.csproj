@@ -34,6 +34,9 @@
     <Reference Include="MoreLinq, Version=2.8.21218.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>..\packages\morelinq.2.8.0\lib\net40\MoreLinq.dll</HintPath>
     </Reference>
+    <Reference Include="Rationals, Version=1.3.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rationals.1.3.1\lib\net46\Rationals.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,13 +47,15 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Layout\BarLineObject.cs" />
     <Compile Include="Layout\Layout.cs" />
-    <Compile Include="Layout\LayoutEngine.cs" />
+    <Compile Include="Layout\PageLayout.cs" />
     <Compile Include="Layout\LayoutObject.cs" />
     <Compile Include="Layout\LineObject.cs" />
     <Compile Include="Layout\StaffLinesLayout.cs" />
+    <Compile Include="Layout\StemLayout.cs" />
     <Compile Include="Layout\SymbolObject.cs" />
+    <Compile Include="Layout\TestLayout.cs" />
+    <Compile Include="Layout\VerticalLayout.cs" />
     <Compile Include="Score\GrandStaffLedgerLines.cs" />
     <Compile Include="Score\LedgerLines.cs" />
     <Compile Include="Score\LedgerLinesComputation.cs" />

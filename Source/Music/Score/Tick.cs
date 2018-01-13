@@ -1,4 +1,5 @@
 ﻿using System;
+using Rationals;
 using Stride.Utility;
 
 namespace Stride.Music.Score
@@ -6,10 +7,12 @@ namespace Stride.Music.Score
     public class Tick : IEquatable<Tick>, IComparable<Tick>
     {
         public readonly int Bar;
-        public readonly double Offset;
+        public readonly Rational Offset;
 
-        public Tick(int bar, double offset)
+        public Tick(int bar, Rational offset)
         {
+            if (offset < 0 || offset >= 1)
+                throw new InvalidOperationException($"{nameof(offset)} value outside of the bar.");
             Bar = bar;
             Offset = offset;
         }
@@ -37,7 +40,7 @@ namespace Stride.Music.Score
             int barDiff = Bar - other.Bar;
             if (barDiff != 0)
                 return barDiff;
-            return Math.Sign(Offset - other.Offset);
+            return (Offset - other.Offset).Sign;
         }
 
         public bool Equals(Tick other) => 

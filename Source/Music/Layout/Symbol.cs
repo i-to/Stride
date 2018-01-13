@@ -4,6 +4,8 @@
     {
         TreebleClef,
         BassClef,
-        WholeNote
+        NoteheadWhole,
+        NoteheadHalf,
+        NoteheadBlack
     }
 }

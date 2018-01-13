@@ -3,38 +3,52 @@ using System.Linq;
 using System.Windows;
 using Stride.Music.Score;
 using Stride.Music.Theory;
-using Stride.Utility;
 
 namespace Stride.Music.Layout
 {
     public class StaffLinesLayout
     {
-        public IReadOnlyList<LineObject> CreateGrandStaffLines(StavesMetrics metrics, double length)
+        public IEnumerable<LineObject> CreateGrandStaffLines(StavesMetrics metrics)
         {
             var treebleStaffOrigin = metrics.Origin;
-            var treebleLines = CreateLines(treebleStaffOrigin, metrics.StaffLinesDistance, length, Const.LinesInStaff);
+            var treebleLines = CreateLines(
+                treebleStaffOrigin,
+                metrics.StaffLinesDistance,
+                metrics.StaffLinesLength,
+                Const.LinesInStaff,
+                metrics.StaffLineThickness);
             var bassStaffOrigin = treebleStaffOrigin + new Vector(0.0, metrics.GrandStaffOffset);
-            var bassLines = CreateLines(bassStaffOrigin, metrics.StaffLinesDistance, length, Const.LinesInStaff);
-            return treebleLines.Concat(bassLines).ToReadOnlyList();
+            var bassLines = CreateLines(
+                bassStaffOrigin,
+                metrics.StaffLinesDistance,
+                metrics.StaffLinesLength,
+                Const.LinesInStaff,
+                metrics.StaffLineThickness);
+            return treebleLines.Concat(bassLines);
         }
 
         public IReadOnlyList<LineObject> CreateLedgerLines(
             StavesMetrics metrics,
-            IEnumerable<(Tick, GrandStaffLedgerLines)> ledgerLinesForTicks,
+            IEnumerable<(Tick, (GrandStaffLedgerLines, bool))> ledgerLinesForTicks,
             IReadOnlyDictionary<Tick, double> tickPositions)
         {
             var result = new List<LineObject>();
-            foreach (var (tick, ledgerLines) in ledgerLinesForTicks)
+            foreach (var (tick, (ledgerLines, isWholeNote)) in ledgerLinesForTicks)
             {
-                var x = tickPositions[tick];
+                var noteWidth = isWholeNote
+                    ? metrics.WholeNoteheadWidth
+                    : metrics.OtherNoteheadWidth;
+                var length = 2.0 * metrics.LedgerLineLip + noteWidth;
+                var x = tickPositions[tick] - metrics.LedgerLineLip;
                 AddLedgerLinesForNote(
                     result,
                     ledgerLines,
                     x,
-                    metrics.LedgerLineLength,
+                    length,
                     metrics.Origin.Y,
                     metrics.StaffLinesDistance,
-                    metrics.GrandStaffOffset);
+                    metrics.GrandStaffOffset,
+                    metrics.StaffLineThickness);
             }
             return result;
         }
@@ -42,54 +56,60 @@ namespace Stride.Music.Layout
         void AddLedgerLinesForNote(
             List<LineObject> lines,
             GrandStaffLedgerLines ledgerLines,
-            double noteX,
+            double originX,
             double length,
             double staffOriginY,
             double distanceBetweenLines,
-            double grandStaffOffset)
+            double grandStaffOffset,
+            double thickness)
         {
 
             var treebleClefTop = ledgerLines.TreebleClef.Top;
             if (treebleClefTop > 0)
             {
                 var y = staffOriginY - treebleClefTop * distanceBetweenLines;
-                var origin = new Point(noteX, y);
-                lines.AddRange(CreateLines(origin, distanceBetweenLines, length, treebleClefTop));
+                var origin = new Point(originX, y);
+                lines.AddRange(CreateLines(origin, distanceBetweenLines, length, treebleClefTop, thickness));
             }
 
             var treebleClefBottom = ledgerLines.TreebleClef.Bottom;
             if (treebleClefBottom > 0)
             {
                 var y = staffOriginY + Const.LinesInStaff * distanceBetweenLines;
-                var origin = new Point(noteX, y);
-                lines.AddRange(CreateLines(origin, distanceBetweenLines, length, treebleClefBottom));
+                var origin = new Point(originX, y);
+                lines.AddRange(CreateLines(origin, distanceBetweenLines, length, treebleClefBottom, thickness));
             }
 
             var bassClefTop = ledgerLines.BassClef.Top;
             if (bassClefTop > 0)
             {
                 var y = staffOriginY - bassClefTop * distanceBetweenLines + grandStaffOffset;
-                var origin = new Point(noteX, y);
-                lines.AddRange(CreateLines(origin, distanceBetweenLines, length, bassClefTop));
+                var origin = new Point(originX, y);
+                lines.AddRange(CreateLines(origin, distanceBetweenLines, length, bassClefTop, thickness));
             }
 
             var bassClefBottom = ledgerLines.BassClef.Bottom;
             if (bassClefBottom > 0)
             {
                 var y = staffOriginY + Const.LinesInStaff * distanceBetweenLines + grandStaffOffset;
-                var origin = new Point(noteX, y);
-                lines.AddRange(CreateLines(origin, distanceBetweenLines, length, bassClefBottom));
+                var origin = new Point(originX, y);
+                lines.AddRange(CreateLines(origin, distanceBetweenLines, length, bassClefBottom, thickness));
             }
         }
 
-        IEnumerable<LineObject> CreateLines(Point origin, double distanceBetweenLines, double length, int count)
+        IEnumerable<LineObject> CreateLines(
+            Point origin,
+            double distanceBetweenLines,
+            double length,
+            int count,
+            double thickness)
         {
             for (int i = 0; i != count; ++i)
             {
                 var offset = distanceBetweenLines * i;
                 var begin = origin + new Vector(0.0, offset);
                 var end = origin + new Vector(length, offset);
-                yield return new LineObject(begin, end);
+                yield return new LineObject(begin, end, thickness);
             }
         }
     }

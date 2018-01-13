@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MoreLinq;
 
 namespace Stride.Utility
 {
@@ -35,6 +36,30 @@ namespace Stride.Utility
             if (comparer == null)
                 comparer = EqualityComparer<T>.Default;
             return enumerable.FindIndex(v => comparer.Equals(v, value));
+        }
+
+        public static (T min, T max) MinMax<T>(this IEnumerable<T> enumerable)
+        {
+            bool started = false;
+            var comparer = Comparer<T>.Default;
+            var min = default(T);
+            var max = default(T);
+            foreach (var element in enumerable)
+                if (started)
+                {
+                    if (comparer.Compare(element, min) < 0)
+                        min = element;
+                    if (comparer.Compare(max, element) < 0)
+                        max = element;
+                }
+                else
+                {
+                    min = max = element;
+                    started = true;
+                }
+            if (!started)
+                throw new InvalidOperationException("The operation is not valid on empty enumerable.");
+            return (min, max);
         }
     }
 }

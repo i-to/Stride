@@ -3,7 +3,6 @@ using System.Linq;
 using System.Windows.Media;
 using MoreLinq;
 using Stride.Music.Layout;
-using Stride.Utility;
 
 namespace Stride.Gui.MusicDrawing
 {
@@ -29,21 +28,22 @@ namespace Stride.Gui.MusicDrawing
 
         public Drawing Drawing { get; }
 
-        public void BuildDrawing(Layout layout)
+        public void BuildDrawing(IEnumerable<LayoutObject> layout)
         {
             DrawingChildren.Clear();
-            var soundingNoteDrawings = BuildGlyphDrawings(layout.SoundingNotes, Brushes.Red, layout.GlyphSize);
-            var clefDrawings = BuildGlyphDrawings(layout.Clefs, Brushes.Black, layout.GlyphSize);
-            var lines = layout.StaffLines.Concat(layout.LedgerLines).ToReadOnlyList();
-            var staffDrawing = BuildLinesDrawing(lines, CreateSolidBlackLinePen(layout.StaffLineThickness));
-            var barlinesDrawing = BuildLinesDrawing(layout.BarLines, CreateSolidBlackLinePen(layout.BarLineThickness));
-            var testPhraseDrawing = BuildGlyphDrawings(layout.TestPhrase, Brushes.Black, layout.GlyphSize);
-            new Drawing[] { staffDrawing, barlinesDrawing}
-                .Concat(clefDrawings)
-                .Concat(testPhraseDrawing)
-                .Concat(soundingNoteDrawings)
-                .ForEach(DrawingChildren.Add);
+            var symbols = BuildGlyphDrawings(layout.OfType<SymbolObject>());
+            var lineDrawings = CreateLineDrawings(layout.OfType<LineObject>());
+            lineDrawings.Concat(symbols).ForEach(DrawingChildren.Add);
         }
+
+        IEnumerable<Drawing> CreateLineDrawings(IEnumerable<LineObject> lines) => 
+            lines
+            .GroupBy(LineObject.GetThickness)
+            .Select(group =>
+                {
+                    var pen = CreateSolidBlackLinePen(group.Key);
+                    return BuildLinesDrawing(group, pen);
+                });
 
         Pen CreateSolidBlackLinePen(double thickness) =>
             new Pen {Brush = Brushes.Black, Thickness = thickness};
@@ -63,25 +63,25 @@ namespace Stride.Gui.MusicDrawing
             return geometry;
         }
 
-        GeometryDrawing BuildLinesDrawing(IReadOnlyList<LineObject> lines, Pen pen) => 
+        GeometryDrawing BuildLinesDrawing(IEnumerable<LineObject> lines, Pen pen) => 
             new GeometryDrawing
             {
                 Geometry = BuildLinesGeometry(lines),
                 Pen = pen
             };
 
-        GlyphRunDrawing BuildGlyphDrawing(SymbolObject symbolObject, Brush brush, double glyphSize) => 
+        GlyphRunDrawing BuildGlyphDrawing(SymbolObject symbol) => 
             new GlyphRunDrawing
             {
                 GlyphRun = GlyphRunBuilder.CreateGlyphRun(
                     MusicTypefaceProvider.Typeface,
-                    FontSymbolMapping[symbolObject.Symbol].ToString(),
-                    symbolObject.Origin,
-                    glyphSize),
-                ForegroundBrush = brush
+                    FontSymbolMapping.Map[symbol.Symbol].ToString(),
+                    symbol.Origin,
+                    symbol.Size),
+                ForegroundBrush = symbol.IsHighlighted ? Brushes.Red : Brushes.Black
             };
 
-        IEnumerable<GlyphRunDrawing> BuildGlyphDrawings(IEnumerable<SymbolObject> symbolObjects, Brush brush, double glyphSize) =>
-            symbolObjects.Select(symbol => BuildGlyphDrawing(symbol, brush, glyphSize));
+        IEnumerable<GlyphRunDrawing> BuildGlyphDrawings(IEnumerable<SymbolObject> symbolObjects) => 
+            symbolObjects.Select(BuildGlyphDrawing);
     }
 }

@@ -1,11 +1,9 @@
-using System.Linq;
 using Stride.Gui.Input;
 using Stride.Gui.Model;
 using Stride.Gui.MusicDrawing;
 using Stride.Music.Layout;
 using Stride.Music.Score;
 using Stride.Music.Theory;
-using Stride.Utility;
 
 namespace Stride.Gui
 {
@@ -28,13 +26,15 @@ namespace Stride.Gui
             var glyphRunBuilder = new GlyphRunBuilder();
             var typefaceProvider = new MusicTypefaceProvider();
             var musicSymbolToFontText = new FontSymbolMapping();
-            var layoutEngine = CreateLayoutEngine();
+            var metrics = new StavesMetrics(halfSpace: 8.0, staffLineThickness: 1.5);
+            var layoutEngine = CreateLayoutEngine(metrics);
+            //var layout = CreateTestLayoutEngine(metrics);
             var musicDrawingBuilder = new MusicDrawingBuilder(
                 glyphRunBuilder,
                 musicSymbolToFontText,
                 typefaceProvider);
             DrillQuiz = new DrillQuiz();
-            var drillPageLayout = new DrillPageLayout(new StaffPositionComputation());
+            var drillPageLayout = new DrillPageLayout(new StaffPositionComputation(), new BarsComputation());
             DrillViewModel = new DrillViewModel(musicDrawingBuilder, DrillQuiz, layoutEngine, drillPageLayout);
             var keyboardPitchMappings = new KeyboardPitchMappings();
             var midiPitchMapping = new MidiPitchMapping();
@@ -48,20 +48,29 @@ namespace Stride.Gui
             MainWindow = new MainWindow(noteInputConverter, midiSink) {Content = DrillControl};
         }
 
-        LayoutEngine CreateLayoutEngine()
+        Layout CreateLayoutEngine(StavesMetrics metrics)
         {
+            var verticalLayout = new VerticalLayout(metrics);
             var staffLinesGeometryBuilder = new StaffLinesLayout();
-            var drawingMetrics = new StavesMetrics(baseSize: 8);
             var ledgerLinesComputation = new LedgerLinesComputation();
-            return new LayoutEngine(drawingMetrics, staffLinesGeometryBuilder, ledgerLinesComputation);
+            var stemLayout = new StemLayout(metrics, verticalLayout);
+            return new PageLayout(metrics, staffLinesGeometryBuilder, ledgerLinesComputation, verticalLayout, stemLayout);
+        }
+
+        Layout CreateTestLayoutEngine(StavesMetrics metrics)
+        {
+            return new TestLayout(metrics);
         }
 
         public void Run()
         {
-            var testPhrase = 
-                new[] {Pitch.C6, Pitch.D6, Pitch.E6, Pitch.B5}
-                .Select(Note.Whole)
-                .ToReadOnlyList();
+            var testPhrase = new[]
+            {   
+                Note.Whole(Pitch.C6),
+                Note.Half(Pitch.D6), Note.Half(Pitch.E6),
+                Note.Quarter(Pitch.C4), Note.Quarter(Pitch.D4), Note.Quarter(Pitch.F4),Note.Quarter(Pitch.C4),
+                Note.Whole(Pitch.B5)
+            };
             var drill = new Drill(testPhrase, Pitch.C4);
             DrillQuiz.Start(drill);
             DrillViewModel.InitializeDrillDrawing();
