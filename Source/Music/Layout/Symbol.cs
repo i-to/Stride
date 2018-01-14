@@ -6,6 +6,8 @@
         BassClef,
         NoteheadWhole,
         NoteheadHalf,
-        NoteheadBlack
+        NoteheadBlack,
+        FlagEighthUp,
+        FlagEightsDown,
     }
 }

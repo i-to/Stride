@@ -15,20 +15,20 @@ namespace Stride.Music.Layout
         readonly StaffLinesLayout StaffLinesLayout;
         readonly LedgerLinesComputation LedgerLinesComputation;
         readonly VerticalLayout VerticalLayout;
-        readonly StemLayout StemLayout;
+        readonly DurationsLayout DurationsLayout;
 
         public PageLayout(
             StavesMetrics metrics,
             StaffLinesLayout staffLinesLayout,
             LedgerLinesComputation ledgerLinesComputation,
             VerticalLayout verticalLayout,
-            StemLayout stemLayout)
+            DurationsLayout durationsLayout)
         {
             Metrics = metrics;
             StaffLinesLayout = staffLinesLayout;
             LedgerLinesComputation = ledgerLinesComputation;
             VerticalLayout = verticalLayout;
-            StemLayout = stemLayout;
+            DurationsLayout = durationsLayout;
         }
 
         Point TreebleClefOrigin => new Point(0, 4.0 * Metrics.HalfSpace);
@@ -113,6 +113,8 @@ namespace Stride.Music.Layout
                 case Duration.Half:
                     return Symbol.NoteheadHalf;
                 case Duration.Quarter:
+                case Duration.Eighth:
+                case Duration.Sixteenth:
                     return Symbol.NoteheadBlack;
             }
             throw new InvalidOperationException();
@@ -162,7 +164,7 @@ namespace Stride.Music.Layout
 
             var ledgerLines = StaffLinesLayout.CreateLedgerLines(Metrics, ledgerLinesByTicks, tickPositions);
             var staffLines = StaffLinesLayout.CreateGrandStaffLines(Metrics);
-            var stems = StemLayout.CreateStems(page.PageNotes, tickPositions);
+            var stems = DurationsLayout.Create(page.PageNotes, tickPositions);
             var barlines = CreateBarLines(barlinePositions);
 
             var notes = CreateNoteSymbols(tickPositions, page.PageNotes, false);

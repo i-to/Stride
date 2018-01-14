@@ -54,5 +54,7 @@ namespace Stride.Music.Layout
         public double HalfNoteMargin => 2.0 * OtherNoteheadWidth;
         public double QuarterNoteMargin => 1.0 * OtherNoteheadWidth;
         public double OtherNoteMargin => 0.5 * OtherNoteheadWidth;
+
+        public double RegularStemLength => 7.0 * HalfSpace;
     }
 }

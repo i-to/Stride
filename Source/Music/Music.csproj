@@ -52,7 +52,7 @@
     <Compile Include="Layout\LayoutObject.cs" />
     <Compile Include="Layout\LineObject.cs" />
     <Compile Include="Layout\StaffLinesLayout.cs" />
-    <Compile Include="Layout\StemLayout.cs" />
+    <Compile Include="Layout\DurationsLayout.cs" />
     <Compile Include="Layout\SymbolObject.cs" />
     <Compile Include="Layout\TestLayout.cs" />
     <Compile Include="Layout\VerticalLayout.cs" />

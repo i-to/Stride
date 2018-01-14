@@ -16,5 +16,6 @@
         public static Note Whole(Pitch pitch) => new Note(pitch, Duration.Whole);
         public static Note Half(Pitch pitch) => new Note(pitch, Duration.Half);
         public static Note Quarter(Pitch pitch) => new Note(pitch, Duration.Quarter);
+        public static Note Eighth(Pitch pitch) => new Note(pitch, Duration.Eighth);
     }
 }

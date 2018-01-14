@@ -13,6 +13,8 @@ namespace Stride.Gui.MusicDrawing
                 {Symbol.NoteheadWhole, (char)0xE0A2},
                 {Symbol.NoteheadHalf, (char)0xE0A3},
                 {Symbol.NoteheadBlack, (char)0xE0A4},
+                {Symbol.FlagEighthUp, (char)0xE240},
+                {Symbol.FlagEightsDown, (char)0xE241},
             };
     }
 }

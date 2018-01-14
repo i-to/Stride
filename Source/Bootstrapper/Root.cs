@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using Stride.Gui;
@@ -9,6 +11,7 @@ using Stride.Music.Layout;
 using Stride.Music.Score;
 using Stride.Music.Theory;
 using Stride.Resources;
+using Stride.Utility;
 
 namespace Stride.Bootstrapper
 {
@@ -63,7 +66,7 @@ namespace Stride.Bootstrapper
             var verticalLayout = new VerticalLayout(metrics);
             var staffLinesGeometryBuilder = new StaffLinesLayout();
             var ledgerLinesComputation = new LedgerLinesComputation();
-            var stemLayout = new StemLayout(metrics, verticalLayout);
+            var stemLayout = new DurationsLayout(metrics, verticalLayout);
             return new PageLayout(metrics, staffLinesGeometryBuilder, ledgerLinesComputation, verticalLayout, stemLayout);
         }
 
@@ -72,16 +75,26 @@ namespace Stride.Bootstrapper
             return new TestLayout(metrics);
         }
 
-        public void Run()
-        {
-            var testPhrase = new[]
-            {   
-                Note.Whole(Pitch.C6),
-                Note.Half(Pitch.D6), Note.Half(Pitch.E6),
-                Note.Quarter(Pitch.C4), Note.Quarter(Pitch.D4), Note.Quarter(Pitch.F4),Note.Quarter(Pitch.C4),
+        IEnumerable<Note> TestPhrase =>
+            new[]
+            {
+                Note.Half(Pitch.D6), Note.Quarter(Pitch.E6), Note.Eighth(Pitch.C5), Note.Eighth(Pitch.B4), 
+                Note.Quarter(Pitch.C4), Note.Quarter(Pitch.D4), Note.Quarter(Pitch.F4), Note.Quarter(Pitch.C4),
                 Note.Whole(Pitch.B5)
             };
-            var drill = new Drill(testPhrase, Pitch.C4);
+
+        IEnumerable<Note> EighthNotePhrase =>
+            new[]
+            {
+                Pitch.C4, Pitch.E4, Pitch.B4, /*#*/Pitch.G4, Pitch.A4, Pitch.B4, Pitch.C5, Pitch.D5,
+                Pitch.E5, Pitch.C5, Pitch.B4, Pitch.A4, /*#*/Pitch.G4, Pitch.A4, Pitch.E4, Pitch.C4
+            }
+            .Select(Note.Eighth);
+
+        public void Run()
+        {
+            var phrase = TestPhrase.Concat(EighthNotePhrase).ToReadOnlyList();
+            var drill = new Drill(phrase, Pitch.C4);
             DrillQuiz.Start(drill);
             DrillViewModel.InitializeDrillDrawing();
             Application.Run(MainWindow);
