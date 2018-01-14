@@ -1,6 +1,6 @@
 using System;
 
-namespace Stride.Gui
+namespace Stride.Bootstrapper
 {
     public static class EntryPoint
     {

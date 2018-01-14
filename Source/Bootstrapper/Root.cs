@@ -1,3 +1,5 @@
+using System.Windows;
+using Stride.Gui;
 using Stride.Gui.Input;
 using Stride.Gui.Model;
 using Stride.Gui.MusicDrawing;
@@ -5,13 +7,13 @@ using Stride.Music.Layout;
 using Stride.Music.Score;
 using Stride.Music.Theory;
 
-namespace Stride.Gui
+namespace Stride.Bootstrapper
 {
     public class Root
     {
         readonly NoteInputMode NoteInputMode;
 
-        public readonly App Application;
+        public readonly Application Application;
         public readonly MainWindow MainWindow;
         public readonly DrillControl DrillControl;
         public readonly DrillViewModel DrillViewModel;
@@ -22,7 +24,7 @@ namespace Stride.Gui
             //Properties.Settings.Default.NoteInputMode = NoteInputMode.Midi;
             //Properties.Settings.Default.Save();
             NoteInputMode = Properties.Settings.Default.NoteInputMode;
-            Application = new App();
+            Application = new Application();
             var glyphRunBuilder = new GlyphRunBuilder();
             var typefaceProvider = new MusicTypefaceProvider();
             var musicSymbolToFontText = new FontSymbolMapping();

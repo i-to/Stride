@@ -6,3 +6,4 @@ Binary/Release/*
 Source/Gui/obj/*
 Source/Utility/obj/*
 Source/Music/obj/*
+/Source/Bootstrapper/obj/*

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Gui.Wpf.Properties
+namespace Stride.Bootstrapper.Properties
 {
 
 
