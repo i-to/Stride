@@ -89,7 +89,6 @@
     <Compile Include="DrillControl.xaml.cs">
       <DependentUpon>DrillControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MusicDrawing\MusicTypefaceProvider.cs" />
     <Compile Include="MusicDrawing\GlyphRunBuilder.cs" />
     <Page Include="DrillControl.xaml">
       <SubType>Designer</SubType>
@@ -100,7 +99,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Resource Include="Fonts\Bravura.otf" />
     <None Include="packages.config" />
     <AppDesigner Include="Properties\" />
   </ItemGroup>

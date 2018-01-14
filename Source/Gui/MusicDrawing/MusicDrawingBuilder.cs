@@ -10,16 +10,13 @@ namespace Stride.Gui.MusicDrawing
     {
         readonly GlyphRunBuilder GlyphRunBuilder;
         readonly FontSymbolMapping FontSymbolMapping;
-        readonly MusicTypefaceProvider MusicTypefaceProvider;
         readonly DrawingCollection DrawingChildren;
 
         public MusicDrawingBuilder(
             GlyphRunBuilder glyphRunBuilder,
-            FontSymbolMapping fontSymbolMapping,
-            MusicTypefaceProvider musicTypefaceProvider)
+            FontSymbolMapping fontSymbolMapping)
         {
             GlyphRunBuilder = glyphRunBuilder;
-            MusicTypefaceProvider = musicTypefaceProvider;
             FontSymbolMapping = fontSymbolMapping;
             var drawing = new DrawingGroup();
             DrawingChildren = drawing.Children;
@@ -74,7 +71,6 @@ namespace Stride.Gui.MusicDrawing
             new GlyphRunDrawing
             {
                 GlyphRun = GlyphRunBuilder.CreateGlyphRun(
-                    MusicTypefaceProvider.Typeface,
                     FontSymbolMapping.Map[symbol.Symbol].ToString(),
                     symbol.Origin,
                     symbol.Size),

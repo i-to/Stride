@@ -1,4 +1,6 @@
+using System;
 using System.Windows;
+using System.Windows.Media;
 using Stride.Gui;
 using Stride.Gui.Input;
 using Stride.Gui.Model;
@@ -6,6 +8,7 @@ using Stride.Gui.MusicDrawing;
 using Stride.Music.Layout;
 using Stride.Music.Score;
 using Stride.Music.Theory;
+using Stride.Resources;
 
 namespace Stride.Bootstrapper
 {
@@ -13,6 +16,7 @@ namespace Stride.Bootstrapper
     {
         readonly NoteInputMode NoteInputMode;
 
+        public readonly CopiedResourcesPath CopiedResourcesPath;
         public readonly Application Application;
         public readonly MainWindow MainWindow;
         public readonly DrillControl DrillControl;
@@ -24,17 +28,15 @@ namespace Stride.Bootstrapper
             //Properties.Settings.Default.NoteInputMode = NoteInputMode.Midi;
             //Properties.Settings.Default.Save();
             NoteInputMode = Properties.Settings.Default.NoteInputMode;
+            CopiedResourcesPath = new CopiedResourcesPath();
             Application = new Application();
-            var glyphRunBuilder = new GlyphRunBuilder();
-            var typefaceProvider = new MusicTypefaceProvider();
+            var bravuraTypeface = LoadBravuraTypeface();
+            var glyphRunBuilder = new GlyphRunBuilder(bravuraTypeface);
             var musicSymbolToFontText = new FontSymbolMapping();
             var metrics = new StavesMetrics(halfSpace: 8.0, staffLineThickness: 1.5);
             var layoutEngine = CreateLayoutEngine(metrics);
             //var layout = CreateTestLayoutEngine(metrics);
-            var musicDrawingBuilder = new MusicDrawingBuilder(
-                glyphRunBuilder,
-                musicSymbolToFontText,
-                typefaceProvider);
+            var musicDrawingBuilder = new MusicDrawingBuilder(glyphRunBuilder, musicSymbolToFontText);
             DrillQuiz = new DrillQuiz();
             var drillPageLayout = new DrillPageLayout(new StaffPositionComputation(), new BarsComputation());
             DrillViewModel = new DrillViewModel(musicDrawingBuilder, DrillQuiz, layoutEngine, drillPageLayout);
@@ -48,6 +50,12 @@ namespace Stride.Bootstrapper
             DrillControl = new DrillControl(DrillViewModel);
             var midiSink = NoteInputMode == NoteInputMode.Midi ? noteInputConverter : null;
             MainWindow = new MainWindow(noteInputConverter, midiSink) {Content = DrillControl};
+        }
+
+        GlyphTypeface LoadBravuraTypeface()
+        {
+            var uri = CopiedResourcesPath.GetResourceUri("Fonts/Bravura.otf");
+            return new GlyphTypeface(uri);
         }
 
         Layout CreateLayoutEngine(StavesMetrics metrics)

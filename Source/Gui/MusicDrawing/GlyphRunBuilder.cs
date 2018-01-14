@@ -1,4 +1,3 @@
-using System;
 using System.Windows;
 using System.Windows.Media;
 
@@ -6,11 +5,15 @@ namespace Stride.Gui.MusicDrawing
 {
     public class GlyphRunBuilder
     {
-        public GlyphRun CreateGlyphRun(Typeface typeface, string text, Point origin, double size)
-        {
-            if (!typeface.TryGetGlyphTypeface(out GlyphTypeface glyphTypeface))
-                throw new InvalidOperationException("No glyph typeface found");
+        public readonly GlyphTypeface Typeface;
 
+        public GlyphRunBuilder(GlyphTypeface typeface)
+        {
+            Typeface = typeface;
+        }
+
+        public GlyphRun CreateGlyphRun(string text, Point origin, double size)
+        {
             var glyphIndexes = new ushort[text.Length];
             var advanceWidths = new double[text.Length];
 
@@ -18,16 +21,16 @@ namespace Stride.Gui.MusicDrawing
 
             for (int n = 0; n < text.Length; n++)
             {
-                ushort glyphIndex = glyphTypeface.CharacterToGlyphMap[text[n]];
+                ushort glyphIndex = Typeface.CharacterToGlyphMap[text[n]];
                 glyphIndexes[n] = glyphIndex;
 
-                double width = glyphTypeface.AdvanceWidths[glyphIndex] * size;
+                double width = Typeface.AdvanceWidths[glyphIndex] * size;
                 advanceWidths[n] = width;
 
                 totalWidth += width;
             }
 
-            return new GlyphRun(glyphTypeface, 0, false, size,
+            return new GlyphRun(Typeface, 0, false, size,
                 glyphIndexes, origin, advanceWidths, null, null, null, null,
                 null, null);
         }

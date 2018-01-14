@@ -62,6 +62,10 @@
       <Project>{3b36a966-c58e-4f71-a870-336c9daaa358}</Project>
       <Name>Music</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Resources\Resources.csproj">
+      <Project>{9bef7f61-02be-4a69-8779-dc2957be1bfd}</Project>
+      <Name>Resources</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{9d3d1a04-f04c-4fcc-8f17-5317e56ca863}</Project>
       <Name>Utility</Name>
