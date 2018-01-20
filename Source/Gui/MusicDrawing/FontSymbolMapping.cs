@@ -15,6 +15,11 @@ namespace Stride.Gui.MusicDrawing
                 {Symbol.NoteheadBlack, (char)0xE0A4},
                 {Symbol.FlagEighthUp, (char)0xE240},
                 {Symbol.FlagEightsDown, (char)0xE241},
+                {Symbol.DoubleSharp, (char)0xE263},
+                {Symbol.Sharp, (char)0xE262},
+                {Symbol.Natural, (char)0xE261},
+                {Symbol.Flat, (char)0xE260},
+                {Symbol.DoubleFlat, (char)0xE264},
             };
     }
 }

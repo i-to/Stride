@@ -3,7 +3,7 @@ using Stride.Utility;
 
 namespace Stride.Music.Theory
 {
-    public partial class Pitch : IEquatable<Pitch>, IComparable<Pitch>
+    public class Pitch : IEquatable<Pitch>, IComparable<Pitch>
     {
         public readonly Octave Octave;
         public readonly PitchClass PitchClass;
@@ -16,12 +16,16 @@ namespace Stride.Music.Theory
 
         public static Pitch Create(Octave octave, PitchClass pitchClass) => new Pitch(octave, pitchClass);
 
-        public Pitch NextDiatonic => Create(PitchClass == PitchClass.B ? Octave.Next : Octave, PitchClass.Next);
+        public Pitch DoubleFlat => Create(Octave, PitchClass.DoubleFlat);
+        public Pitch Flat => Create(Octave, PitchClass.Flat);
+        public Pitch Natural => Create(Octave, PitchClass.Natural);
+        public Pitch Sharp => Create(Octave, PitchClass.Sharp);
+        public Pitch DoubleSharp => Create(Octave, PitchClass.DoubleSharp);
 
         public int DiatonicDistanceTo(Pitch pitch)
         {
             var octaveDistance = pitch.Octave - Octave;
-            var pitchDistance = pitch.PitchClass.Number - PitchClass.Number;
+            var pitchDistance = pitch.PitchClass.NoteName - PitchClass.NoteName;
             return Const.NotesInOctave * octaveDistance + pitchDistance;
         }
 
@@ -38,12 +42,12 @@ namespace Stride.Music.Theory
 
         public static bool operator >(Pitch left, Pitch right) => 
             left.Octave == right.Octave
-                ? left.PitchClass.Number > right.PitchClass.Number
+                ? left.PitchClass.NoteName > right.PitchClass.NoteName
                 : left.Octave > right.Octave;
 
         public static bool operator <(Pitch left, Pitch right) =>
             left.Octave == right.Octave
-                ? left.PitchClass.Number < right.PitchClass.Number
+                ? left.PitchClass.NoteName < right.PitchClass.NoteName
                 : left.Octave < right.Octave;
 
         public static bool operator >=(Pitch left, Pitch right) => !(left < right);
@@ -64,5 +68,37 @@ namespace Stride.Music.Theory
         public override int GetHashCode() => Hash.Compute(Octave.GetHashCode(), PitchClass.GetHashCode());
 
         public override string ToString() => $"{PitchClass}{Octave.Number}";
+
+        public static Pitch C3 = Create(Octave.Third, PitchClass.C);
+        public static Pitch D3 = Create(Octave.Third, PitchClass.D);
+        public static Pitch E3 = Create(Octave.Third, PitchClass.E);
+        public static Pitch F3 = Create(Octave.Third, PitchClass.F);
+        public static Pitch G3 = Create(Octave.Third, PitchClass.G);
+        public static Pitch A3 = Create(Octave.Third, PitchClass.A);
+        public static Pitch B3 = Create(Octave.Third, PitchClass.B);
+
+        public static Pitch C4 = Create(Octave.Fourth, PitchClass.C);
+        public static Pitch D4 = Create(Octave.Fourth, PitchClass.D);
+        public static Pitch E4 = Create(Octave.Fourth, PitchClass.E);
+        public static Pitch F4 = Create(Octave.Fourth, PitchClass.F);
+        public static Pitch G4 = Create(Octave.Fourth, PitchClass.G);
+        public static Pitch A4 = Create(Octave.Fourth, PitchClass.A);
+        public static Pitch B4 = Create(Octave.Fourth, PitchClass.B);
+
+        public static Pitch C5 = Create(Octave.Fifth, PitchClass.C);
+        public static Pitch D5 = Create(Octave.Fifth, PitchClass.D);
+        public static Pitch E5 = Create(Octave.Fifth, PitchClass.E);
+        public static Pitch F5 = Create(Octave.Fifth, PitchClass.F);
+        public static Pitch G5 = Create(Octave.Fifth, PitchClass.G);
+        public static Pitch A5 = Create(Octave.Fifth, PitchClass.A);
+        public static Pitch B5 = Create(Octave.Fifth, PitchClass.B);
+
+        public static Pitch C6 = Create(Octave.Sixth, PitchClass.C);
+        public static Pitch D6 = Create(Octave.Sixth, PitchClass.D);
+        public static Pitch E6 = Create(Octave.Sixth, PitchClass.E);
+        public static Pitch F6 = Create(Octave.Sixth, PitchClass.F);
+        public static Pitch G6 = Create(Octave.Sixth, PitchClass.G);
+        public static Pitch A6 = Create(Octave.Sixth, PitchClass.A);
+        public static Pitch B6 = Create(Octave.Sixth, PitchClass.B);
     }
 }

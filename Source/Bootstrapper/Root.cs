@@ -86,8 +86,8 @@ namespace Stride.Bootstrapper
         IEnumerable<Note> EighthNotePhrase =>
             new[]
             {
-                Pitch.C4, Pitch.E4, Pitch.B4, /*#*/Pitch.G4, Pitch.A4, Pitch.B4, Pitch.C5, Pitch.D5,
-                Pitch.E5, Pitch.C5, Pitch.B4, Pitch.A4, /*#*/Pitch.G4, Pitch.A4, Pitch.E4, Pitch.C4
+                Pitch.C4, Pitch.E4, Pitch.B4, Pitch.G4.Sharp, Pitch.A4, Pitch.B4, Pitch.C5, Pitch.D5,
+                Pitch.E5, Pitch.C5, Pitch.B4, Pitch.A4, Pitch.G4.Sharp, Pitch.A4, Pitch.E4, Pitch.C4
             }
             .Select(Note.Eighth);
 

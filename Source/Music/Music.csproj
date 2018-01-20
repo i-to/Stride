@@ -65,15 +65,16 @@
     <Compile Include="Layout\Symbol.cs" />
     <Compile Include="Score\Page.cs" />
     <Compile Include="Score\Tick.cs" />
+    <Compile Include="Theory\Accidental.cs" />
+    <Compile Include="Theory\AccidentalExtensions.cs" />
     <Compile Include="Theory\Duration.cs" />
     <Compile Include="Theory\Clef.cs" />
     <Compile Include="Theory\Const.cs" />
     <Compile Include="Theory\Note.cs" />
+    <Compile Include="Theory\NoteName.cs" />
     <Compile Include="Theory\PitchClass.cs" />
     <Compile Include="Theory\Octave.cs" />
     <Compile Include="Theory\Pitch.cs" />
-    <Compile Include="Theory\Pitches.cs" />
-    <Compile Include="Theory\PitchLiterals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,5 +9,10 @@
         NoteheadBlack,
         FlagEighthUp,
         FlagEightsDown,
+        DoubleSharp,
+        Sharp,
+        Natural,
+        Flat,
+        DoubleFlat
     }
 }
