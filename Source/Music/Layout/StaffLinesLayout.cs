@@ -29,8 +29,8 @@ namespace Stride.Music.Layout
 
         public IReadOnlyList<LineObject> CreateLedgerLines(
             StavesMetrics metrics,
-            IEnumerable<(Tick, (GrandStaffLedgerLines, bool))> ledgerLinesForTicks,
-            IReadOnlyDictionary<Tick, double> tickPositions)
+            IEnumerable<(Beat, (GrandStaffLedgerLines, bool))> ledgerLinesForTicks,
+            IReadOnlyDictionary<Beat, double> tickPositions)
         {
             var result = new List<LineObject>();
             foreach (var (tick, (ledgerLines, isWholeNote)) in ledgerLinesForTicks)

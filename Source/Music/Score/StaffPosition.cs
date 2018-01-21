@@ -3,7 +3,7 @@
 namespace Stride.Music.Score
 {
     /// <summary>
-    /// Identifies position of the note at a particular tick within the staff.
+    /// Identifies position of the note at a particular beat within the staff.
     /// </summary>
     public class StaffPosition
     {

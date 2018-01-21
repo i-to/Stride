@@ -5,7 +5,7 @@ using Stride.Music.Score;
 
 namespace Stride.Music.Layout
 {
-    public class TestLayout : Layout
+    public class TestLayout
     {
         readonly StavesMetrics Metrics;
 
@@ -14,7 +14,7 @@ namespace Stride.Music.Layout
             Metrics = metrics;
         }
 
-        public IEnumerable<LayoutObject> CreateLayout(Page page)
+        public IEnumerable<LayoutObject> CreateLayout(IEnumerable<NoteOnPage> notes)
         {
             var x = 100;
             var y = 100;

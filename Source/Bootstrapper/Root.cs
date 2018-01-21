@@ -1,58 +1,41 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using Stride.Gui;
-using Stride.Gui.Input;
-using Stride.Gui.Model;
-using Stride.Gui.MusicDrawing;
+using MoreLinq;
+using Stride.Drawing.Wpf;
+using Stride.Visualizer.Wpf;
 using Stride.Music.Layout;
 using Stride.Music.Score;
 using Stride.Music.Theory;
 using Stride.Resources;
-using Stride.Utility;
 
 namespace Stride.Bootstrapper
 {
     public class Root
     {
-        readonly NoteInputMode NoteInputMode;
-
         public readonly CopiedResourcesPath CopiedResourcesPath;
         public readonly Application Application;
-        public readonly MainWindow MainWindow;
-        public readonly DrillControl DrillControl;
-        public readonly DrillViewModel DrillViewModel;
-        public readonly DrillQuiz DrillQuiz;
+        public readonly Window MainWindow;
+        public readonly MusicDrawingBuilder MusicDrawingBuilder;
+        public readonly ScoreLayout Layout;
+        public readonly ScoreBuilder ScoreBuilder;
+        public readonly DrawingControl DrawingControl;
 
         public Root()
         {
-            //Properties.Settings.Default.NoteInputMode = NoteInputMode.Midi;
-            //Properties.Settings.Default.Save();
-            NoteInputMode = Properties.Settings.Default.NoteInputMode;
             CopiedResourcesPath = new CopiedResourcesPath();
             Application = new Application();
             var bravuraTypeface = LoadBravuraTypeface();
             var glyphRunBuilder = new GlyphRunBuilder(bravuraTypeface);
             var musicSymbolToFontText = new FontSymbolMapping();
             var metrics = new StavesMetrics(halfSpace: 8.0, staffLineThickness: 1.5);
-            var layoutEngine = CreateLayoutEngine(metrics);
+            Layout = CreateLayoutEngine(metrics);
+            ScoreBuilder = new ScoreBuilder(new StaffPositionComputation(), new BarsComputation());
             //var layout = CreateTestLayoutEngine(metrics);
-            var musicDrawingBuilder = new MusicDrawingBuilder(glyphRunBuilder, musicSymbolToFontText);
-            DrillQuiz = new DrillQuiz();
-            var drillPageLayout = new DrillPageLayout(new StaffPositionComputation(), new BarsComputation());
-            DrillViewModel = new DrillViewModel(musicDrawingBuilder, DrillQuiz, layoutEngine, drillPageLayout);
-            var keyboardPitchMappings = new KeyboardPitchMappings();
-            var midiPitchMapping = new MidiPitchMapping();
-            var noteInputConverter = new NoteInputConverter(
-                keyboardPitchMappings,
-                midiPitchMapping,
-                DrillViewModel,
-                NoteInputMode);
-            DrillControl = new DrillControl(DrillViewModel);
-            var midiSink = NoteInputMode == NoteInputMode.Midi ? noteInputConverter : null;
-            MainWindow = new MainWindow(noteInputConverter, midiSink) {Content = DrillControl};
+            MusicDrawingBuilder = new MusicDrawingBuilder(glyphRunBuilder, musicSymbolToFontText);
+            DrawingControl = new DrawingControl();
+            MainWindow = new Window {Content = DrawingControl};
         }
 
         GlyphTypeface LoadBravuraTypeface()
@@ -61,16 +44,16 @@ namespace Stride.Bootstrapper
             return new GlyphTypeface(uri);
         }
 
-        Layout CreateLayoutEngine(StavesMetrics metrics)
+        ScoreLayout CreateLayoutEngine(StavesMetrics metrics)
         {
             var verticalLayout = new VerticalLayout(metrics);
             var staffLinesGeometryBuilder = new StaffLinesLayout();
             var ledgerLinesComputation = new LedgerLinesComputation();
             var stemLayout = new DurationsLayout(metrics, verticalLayout);
-            return new PageLayout(metrics, staffLinesGeometryBuilder, ledgerLinesComputation, verticalLayout, stemLayout);
+            return new ScoreLayout(metrics, staffLinesGeometryBuilder, ledgerLinesComputation, verticalLayout, stemLayout);
         }
 
-        Layout CreateTestLayoutEngine(StavesMetrics metrics)
+        TestLayout CreateTestLayout(StavesMetrics metrics)
         {
             return new TestLayout(metrics);
         }
@@ -91,14 +74,22 @@ namespace Stride.Bootstrapper
             }
             .Select(Note.Eighth);
 
+        
+
+        public void AddPhraseDrawing(IEnumerable<Note> phrase)
+        {
+            var lowestTreebleStaffPitch = Pitch.C4;
+            var score = ScoreBuilder.CreateScore(lowestTreebleStaffPitch, phrase);
+            var layout = Layout.CreateLayout(score);
+            var drawing = MusicDrawingBuilder.BuildDrawing(layout);
+            DrawingControl.AddDrawing(drawing);
+        }
+
         public void Run()
         {
-            var phrase = TestPhrase.Concat(EighthNotePhrase).ToReadOnlyList();
-            var drill = new Drill(phrase, Pitch.C4);
-            DrillQuiz.Start(drill);
-            DrillViewModel.InitializeDrillDrawing();
+            AddPhraseDrawing(TestPhrase);
+            AddPhraseDrawing(EighthNotePhrase);
             Application.Run(MainWindow);
-            MainWindow.Dispose();
         }
     }
 }

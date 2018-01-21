@@ -26,9 +26,9 @@ namespace Stride.Bootstrapper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Midi")]
-        public global::Stride.Gui.Input.NoteInputMode NoteInputMode {
+        public global::Stride.Gui.Wpf.Input.NoteInputMode NoteInputMode {
             get {
-                return ((global::Stride.Gui.Input.NoteInputMode)(this["NoteInputMode"]));
+                return ((global::Stride.Gui.Wpf.Input.NoteInputMode)(this["NoteInputMode"]));
             }
             set {
                 this["NoteInputMode"] = value;

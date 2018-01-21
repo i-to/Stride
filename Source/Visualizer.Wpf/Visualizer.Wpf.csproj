@@ -1,19 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3B36A966-C58E-4F71-A870-336C9DAAA358}</ProjectGuid>
+    <ProjectGuid>{A1E2E25A-AC16-4814-B5F1-F6BDCE1720E0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Stride.Music</RootNamespace>
-    <AssemblyName>Stride.Music</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>Stride.Visualizer.Wpf</RootNamespace>
+    <AssemblyName>Stride.Visualizer.Wpf</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,12 +27,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\Binary\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MoreLinq, Version=2.9.21302.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
@@ -38,54 +47,56 @@
       <HintPath>..\packages\Rationals.1.3.1\lib\net46\Rationals.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Layout\ScoreLayout.cs" />
-    <Compile Include="Layout\LayoutObject.cs" />
-    <Compile Include="Layout\LineObject.cs" />
-    <Compile Include="Layout\StaffLinesLayout.cs" />
-    <Compile Include="Layout\DurationsLayout.cs" />
-    <Compile Include="Layout\SymbolObject.cs" />
-    <Compile Include="Layout\TestLayout.cs" />
-    <Compile Include="Layout\VerticalLayout.cs" />
-    <Compile Include="Score\BarsComputation.cs" />
-    <Compile Include="Score\GrandStaffLedgerLines.cs" />
-    <Compile Include="Score\LedgerLines.cs" />
-    <Compile Include="Score\LedgerLinesComputation.cs" />
-    <Compile Include="Score\ScoreBuilder.cs" />
-    <Compile Include="Score\StaffPosition.cs" />
-    <Compile Include="Layout\StavesMetrics.cs" />
-    <Compile Include="Score\StaffPositionComputation.cs" />
-    <Compile Include="Layout\Symbol.cs" />
-    <Compile Include="Score\NoteOnPage.cs" />
-    <Compile Include="Score\Beat.cs" />
-    <Compile Include="Theory\Accidental.cs" />
-    <Compile Include="Theory\AccidentalExtensions.cs" />
-    <Compile Include="Theory\Duration.cs" />
-    <Compile Include="Theory\Clef.cs" />
-    <Compile Include="Theory\Const.cs" />
-    <Compile Include="Theory\Note.cs" />
-    <Compile Include="Theory\NoteName.cs" />
-    <Compile Include="Theory\PitchClass.cs" />
-    <Compile Include="Theory\Octave.cs" />
-    <Compile Include="Theory\Pitch.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <!-- <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition> -->
+    <Compile Include="DrawingControl.xaml.cs">
+      <DependentUpon>DrawingControl.xaml</DependentUpon>
+    </Compile>
+    <Page Include="DrawingControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <None Include="packages.config" />
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Music\Music.csproj">
+      <Project>{3b36a966-c58e-4f71-a870-336c9daaa358}</Project>
+      <Name>Music</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{9d3d1a04-f04c-4fcc-8f17-5317e56ca863}</Project>
       <Name>Utility</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

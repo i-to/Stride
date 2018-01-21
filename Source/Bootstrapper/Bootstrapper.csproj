@@ -34,9 +34,18 @@
     <StartupObject>Stride.Bootstrapper.EntryPoint</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MoreLinq, Version=2.9.21302.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\packages\morelinq.2.9.0\lib\net40\MoreLinq.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -54,7 +63,11 @@
     <Compile Include="Root.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Gui\Gui.csproj">
+    <ProjectReference Include="..\Drawing.Wpf\Drawing.Wpf.csproj">
+      <Project>{22a4a597-4a95-40e6-9c18-c938f3a64501}</Project>
+      <Name>Drawing.Wpf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gui.Wpf\Gui.Wpf.csproj">
       <Project>{4d8d8a97-bcef-43c9-9203-11bfd66f3400}</Project>
       <Name>Gui</Name>
     </ProjectReference>
@@ -69,6 +82,10 @@
     <ProjectReference Include="..\Utility\Utility.csproj">
       <Project>{9d3d1a04-f04c-4fcc-8f17-5317e56ca863}</Project>
       <Name>Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Visualizer.Wpf\Visualizer.Wpf.csproj">
+      <Project>{a1e2e25a-ac16-4814-b5f1-f6bdce1720e0}</Project>
+      <Name>Visualizer.Wpf</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

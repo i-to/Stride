@@ -3,8 +3,10 @@ Source/packages/*
 
 Binary/Debug/*
 Binary/Release/*
-Source/Gui/obj/*
+Source/Gui.Wpf/obj/*
+Source/Visualizer.Wpf/obj/*
+Source/Drawing.Wpf/obj/*
 Source/Utility/obj/*
 Source/Music/obj/*
-/Source/Bootstrapper/obj/*
-/Source/Resources/obj/*
+Source/Bootstrapper/obj/*
+Source/Resources/obj/*

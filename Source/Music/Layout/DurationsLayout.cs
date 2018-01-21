@@ -19,15 +19,15 @@ namespace Stride.Music.Layout
 
         public IEnumerable<LayoutObject> Create(
             IEnumerable<NoteOnPage> pageNotes,
-            IReadOnlyDictionary<Tick, double> tickPositions) =>
+            IReadOnlyDictionary<Beat, double> tickPositions) =>
             CreateStemsAndFlags(pageNotes, tickPositions);
 
         IEnumerable<LayoutObject> CreateStemsAndFlags(
             IEnumerable<NoteOnPage> pageNotes,
-            IReadOnlyDictionary<Tick, double> tickPositions) => 
+            IReadOnlyDictionary<Beat, double> tickPositions) => 
             pageNotes.SelectMany(note => CreateStemAndFlag(tickPositions, note));
 
-        IEnumerable<LayoutObject> CreateStemAndFlag(IReadOnlyDictionary<Tick, double> tickPositions, NoteOnPage note)
+        IEnumerable<LayoutObject> CreateStemAndFlag(IReadOnlyDictionary<Beat, double> tickPositions, NoteOnPage note)
         {
             if (note.Duration.IsWhole())
                 yield break;
@@ -38,7 +38,7 @@ namespace Stride.Music.Layout
             var (xOffset, yOffset, length) = stemUp
                 ? (Metrics.OtherNoteheadWidth - Metrics.StemLineThickness, 0, -stemLength)
                 : (0, 2, stemLength);
-            var x = xOffset + tickPositions[note.Tick];
+            var x = xOffset + tickPositions[note.Beat];
             var y = yOffset + VerticalLayout.StaffPositionToYOffset(position);
             var origin = new Point(x, y);
             var end = new Point(x, y + length);
