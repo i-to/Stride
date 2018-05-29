@@ -18,33 +18,35 @@ namespace Stride.Music.Layout
         }
 
         public IEnumerable<LayoutObject> Create(
-            IEnumerable<NoteOnPage> pageNotes,
+            IEnumerable<BeatGroup> beatGroups,
             IReadOnlyDictionary<Beat, double> tickPositions) =>
-            CreateStemsAndFlags(pageNotes, tickPositions);
+            CreateStemsAndFlags(beatGroups, tickPositions);
 
         IEnumerable<LayoutObject> CreateStemsAndFlags(
-            IEnumerable<NoteOnPage> pageNotes,
-            IReadOnlyDictionary<Beat, double> tickPositions) => 
-            pageNotes.SelectMany(note => CreateStemAndFlag(tickPositions, note));
+            IEnumerable<BeatGroup> beatGroups,
+            IReadOnlyDictionary<Beat, double> tickPositions) =>
+            beatGroups.SelectMany(note => CreateStemAndFlag(tickPositions, note));
 
-        IEnumerable<LayoutObject> CreateStemAndFlag(IReadOnlyDictionary<Beat, double> tickPositions, NoteOnPage note)
+        IEnumerable<LayoutObject> CreateStemAndFlag(IReadOnlyDictionary<Beat, double> tickPositions, BeatGroup beatGroup)
         {
-            if (note.Duration.IsWhole())
+            // todo: handle groups correctly
+            var scoreNote = beatGroup.ScoreNotes.First();
+            if (scoreNote.Duration.IsWhole())
                 yield break;
 
             var stemLength = Metrics.RegularStemLength;
-            var position = note.StaffPosition;
+            var position = scoreNote.StaffPosition;
             bool stemUp = position.VerticalOffset < 0;
             var (xOffset, yOffset, length) = stemUp
                 ? (Metrics.OtherNoteheadWidth - Metrics.StemLineThickness, 0, -stemLength)
                 : (0, 2, stemLength);
-            var x = xOffset + tickPositions[note.Beat];
+            var x = xOffset + tickPositions[beatGroup.Beat];
             var y = yOffset + VerticalLayout.StaffPositionToYOffset(position);
             var origin = new Point(x, y);
             var end = new Point(x, y + length);
             yield return new LineObject(origin, end, Metrics.StemLineThickness);
 
-            if (note.Duration.IsHalf() || note.Duration.IsQuarter())
+            if (scoreNote.Duration.IsHalf() || scoreNote.Duration.IsQuarter())
                 yield break;
             var (flagY, symbol) = stemUp
                 ? (y - stemLength, Symbol.FlagEighthUp)

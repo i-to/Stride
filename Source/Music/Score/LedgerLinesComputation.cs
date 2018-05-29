@@ -29,7 +29,7 @@ namespace Stride.Music.Score
             return Combine(testLedgerLines, playedNotePosition);
         }
 
-        public GrandStaffLedgerLines ComputeLedgerLines(IEnumerable<NoteOnPage> notes) =>
+        public GrandStaffLedgerLines ComputeLedgerLines(IEnumerable<ScoreNote> notes) =>
             ComputeLedgerLines(notes.Select(note => note.StaffPosition));
 
         public GrandStaffLedgerLines ComputeLedgerLines(IEnumerable<StaffPosition> notePositions) => 

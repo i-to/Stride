@@ -12,11 +12,6 @@ namespace Stride.Music.Score
                 ? StaffPosition.InTreebleClef(-pitch.DiatonicDistanceTo(Pitch.B4))
                 : StaffPosition.InBassClef(-pitch.DiatonicDistanceTo(Pitch.D3));
 
-        public IReadOnlyList<StaffPosition> ComputeStaffPositions(
-            Pitch lowestTreebleStaffPitch,
-            IEnumerable<Pitch> pitches) =>
-            pitches.Select(p => ComputeStaffPosition(lowestTreebleStaffPitch, p)).ToReadOnlyList();
-
         public IReadOnlyList<StaffPosition> ComputeStaffPositionsHarmonic(
             Pitch lowestTreebleStaffPitch,
             IEnumerable<Pitch> pitches)

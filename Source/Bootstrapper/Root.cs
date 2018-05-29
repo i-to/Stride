@@ -9,6 +9,7 @@ using Stride.Music.Layout;
 using Stride.Music.Score;
 using Stride.Music.Theory;
 using Stride.Resources;
+using Duration = Stride.Music.Theory.Duration;
 
 namespace Stride.Bootstrapper
 {
@@ -31,7 +32,7 @@ namespace Stride.Bootstrapper
             var musicSymbolToFontText = new FontSymbolMapping();
             var metrics = new StavesMetrics(halfSpace: 8.0, staffLineThickness: 1.5);
             Layout = CreateLayoutEngine(metrics);
-            ScoreBuilder = new ScoreBuilder(new StaffPositionComputation(), new BarsComputation());
+            ScoreBuilder = new ScoreBuilder(new StaffPositionComputation(), new BarsComputation(), Pitch.C4);
             //var layout = CreateTestLayoutEngine(metrics);
             MusicDrawingBuilder = new MusicDrawingBuilder(glyphRunBuilder, musicSymbolToFontText);
             DrawingControl = new DrawingControl();
@@ -58,7 +59,7 @@ namespace Stride.Bootstrapper
             return new TestLayout(metrics);
         }
 
-        IEnumerable<Note> TestPhrase =>
+        public IEnumerable<Note> TestPhrase =>
             new[]
             {
                 Note.Half(Pitch.D6), Note.Quarter(Pitch.E6), Note.Eighth(Pitch.C5), Note.Eighth(Pitch.B4), 
@@ -66,7 +67,7 @@ namespace Stride.Bootstrapper
                 Note.Whole(Pitch.B5)
             };
 
-        IEnumerable<Note> EighthNotePhrase =>
+        public IEnumerable<Note> EighthNotePhrase =>
             new[]
             {
                 Pitch.C4, Pitch.E4, Pitch.B4, Pitch.G4.Sharp, Pitch.A4, Pitch.B4, Pitch.C5, Pitch.D5,
@@ -74,21 +75,39 @@ namespace Stride.Bootstrapper
             }
             .Select(Note.Eighth);
 
-        
+        public IEnumerable<IEnumerable<Pitch>> ChordsPhrase => new[]
+            {
+                new [] {Pitch.C4, Pitch.E4, Pitch.G4, Pitch.B4},
+                new [] {Pitch.D4, Pitch.F4, Pitch.A4, Pitch.C5},
+                new [] {Pitch.E4, Pitch.G4, Pitch.B4, Pitch.D5},
+                new [] {Pitch.F4, Pitch.A4, Pitch.C5, Pitch.E5},
+            };
 
         public void AddPhraseDrawing(IEnumerable<Note> phrase)
         {
-            var lowestTreebleStaffPitch = Pitch.C4;
-            var score = ScoreBuilder.CreateScore(lowestTreebleStaffPitch, phrase);
+            var score = ScoreBuilder.FromMelodicPhrase(phrase);
+            AddScoreDrawing(score);
+        }
+
+        public void AddScoreDrawing(IEnumerable<BeatGroup> score)
+        {
             var layout = Layout.CreateLayout(score);
             var drawing = MusicDrawingBuilder.BuildDrawing(layout);
             DrawingControl.AddDrawing(drawing);
+        }
+
+        public void AddChordPhraseDrawing()
+        {
+            var chordPhrase = ChordsPhrase.Select(chords => (chords, Duration.Quarter));
+            var score = ScoreBuilder.FromChordsPhrase(chordPhrase);
+            AddScoreDrawing(score);
         }
 
         public void Run()
         {
             AddPhraseDrawing(TestPhrase);
             AddPhraseDrawing(EighthNotePhrase);
+            AddChordPhraseDrawing();
             Application.Run(MainWindow);
         }
     }

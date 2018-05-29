@@ -36,7 +36,7 @@ namespace Stride.Gui.Wpf
 
         void Update()
         {
-            var score = ScoreBuilder.CreateScore(DrillQuiz.LowestTreebleStaffPitch, DrillQuiz.TestPhrase);
+            var score = ScoreBuilder.FromMelodicPhrase(/*DrillQuiz.LowestTreebleStaffPitch, */DrillQuiz.TestPhrase);
             var layout = Layout.CreateLayout(score);
             MusicDrawing = MusicDrawingBuilder.BuildDrawing(layout);
             RaiseMusicDrawingChanged();

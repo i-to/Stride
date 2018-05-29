@@ -64,7 +64,7 @@
     <Compile Include="Layout\StavesMetrics.cs" />
     <Compile Include="Score\StaffPositionComputation.cs" />
     <Compile Include="Layout\Symbol.cs" />
-    <Compile Include="Score\NoteOnPage.cs" />
+    <Compile Include="Score\ScoreNote.cs" />
     <Compile Include="Score\Beat.cs" />
     <Compile Include="Theory\Accidental.cs" />
     <Compile Include="Theory\AccidentalExtensions.cs" />

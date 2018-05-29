@@ -61,5 +61,8 @@ namespace Stride.Utility
                 throw new InvalidOperationException("The operation is not valid on empty enumerable.");
             return (min, max);
         }
+
+        public static IReadOnlyList<T> YieldReadOnlyList<T>(this T element) => new[] { element };
+        public static IEnumerable<T> Yield<T>(this T element) => element.YieldReadOnlyList();
     }
 }

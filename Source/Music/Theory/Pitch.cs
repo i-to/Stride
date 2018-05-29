@@ -15,6 +15,7 @@ namespace Stride.Music.Theory
         }
 
         public static Pitch Create(Octave octave, PitchClass pitchClass) => new Pitch(octave, pitchClass);
+        public static Accidental GetAccidental(Pitch pitch) => pitch.PitchClass.Accidental;
 
         public Pitch DoubleFlat => Create(Octave, PitchClass.DoubleFlat);
         public Pitch Flat => Create(Octave, PitchClass.Flat);

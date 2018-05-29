@@ -14,7 +14,7 @@ namespace Stride.Music.Layout
             Metrics = metrics;
         }
 
-        public IEnumerable<LayoutObject> CreateLayout(IEnumerable<NoteOnPage> notes)
+        public IEnumerable<LayoutObject> CreateLayout(IEnumerable<ScoreNote> notes)
         {
             var x = 100;
             var y = 100;

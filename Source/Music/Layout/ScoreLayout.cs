@@ -39,33 +39,33 @@ namespace Stride.Music.Layout
         SymbolObject PlaceBassClef() => new SymbolObject(BassClefOrigin, Symbol.BassClef, Metrics.GlyphSize, false);
 
 
-        (IReadOnlyDictionary<Beat, double>, IReadOnlyList<double>) ComputeHorizontalLayout(
+        (IReadOnlyDictionary<Beat, double> BeatPositions, IReadOnlyList<double> BarlinePositions) ComputeHorizontalLayout(
             double baseOffset,
-            IEnumerable<IGrouping<int, NoteOnPage>> notesByBars)
+            IReadOnlyList<IEnumerable<BeatGroup>> barGroups)
         {
-            var tickPositions = new Dictionary<Beat, double>();
+            var beatPositions = new Dictionary<Beat, double>();
             var barlinePositions = new List<double>();
             double currentOffset = baseOffset;
-            foreach (var bar in notesByBars)
+            foreach (var bar in barGroups)
             {
-                var ticksGroups = bar.GroupBy(note => note.Beat).OrderBy(group => group.Key);
-                foreach (var tickGroup in ticksGroups)
+                //var beatGroups = bar.GroupBy(note => note.Beat).OrderBy(group => group.Key);
+                foreach (var beatGroup in bar)
                 {
-                    var (leftMargin, span, rightMargin) = GetTickDimensions(tickGroup);
+                    var (leftMargin, span, rightMargin) = GetBeatGroupWidths(beatGroup);
                     currentOffset += leftMargin;
-                    tickPositions.Add(tickGroup.Key, currentOffset);
+                    beatPositions.Add(beatGroup.Beat, currentOffset);
                     currentOffset += span;
                     currentOffset += rightMargin;
-                }
+                };
                 barlinePositions.Add(currentOffset);
                 currentOffset += Metrics.BarLineThickness;
-            }
-            return (tickPositions, barlinePositions);
+            };
+            return (beatPositions, barlinePositions);
         }
 
-        (double leftMargin, double span, double rightMargin) GetTickDimensions(IEnumerable<NoteOnPage> tickNotes)
+        (double leftMargin, double span, double rightMargin) GetBeatGroupWidths(BeatGroup group)
         {
-            var (minDuration, maxDuration) = tickNotes.Select(note => note.Duration).MinMax();
+            var (minDuration, maxDuration) = group.ScoreNotes.Select(note => note.Duration).MinMax();
             return (
                 leftMargin: GetNoteMargin(maxDuration),
                 // todo: account for space to accomodate second offsets here
@@ -94,7 +94,7 @@ namespace Stride.Music.Layout
             }
         }
 
-        SymbolObject CreateNoteSymbol(StaffPosition notePosition, Duration duration, double tickOffset, bool highlighted)
+        SymbolObject CreateNoteSymbol(StaffPosition notePosition, Duration duration, double tickOffset, bool highlighted = false)
         {
             var secondOffset = notePosition.HorisontalOffset ? Metrics.SecondNoteOffset : 0.0;
             var y = VerticalLayout.StaffPositionToYOffset(notePosition);
@@ -120,11 +120,11 @@ namespace Stride.Music.Layout
             throw new InvalidOperationException();
         }
 
-        IEnumerable<SymbolObject> CreateNoteSymbols(
-            IReadOnlyDictionary<Beat, double> tickOffsets,
-            IEnumerable<NoteOnPage> notes,
-            bool highlighted) =>
-            notes.Select(note => CreateNoteSymbol(note.StaffPosition, note.Duration, tickOffsets[note.Beat], highlighted));
+        IEnumerable<SymbolObject> CreateNoteSymbols(IReadOnlyDictionary<Beat, double> beatOffsets, BeatGroup beatGroup)
+            => beatGroup.ScoreNotes.Select(note => CreateNoteSymbol(note.StaffPosition, note.Duration, beatOffsets[beatGroup.Beat]));
+
+        IEnumerable<SymbolObject> CreateNoteSymbols(IReadOnlyDictionary<Beat, double> beatOffsets, IEnumerable<BeatGroup> beatGroups)
+            => beatGroups.SelectMany(group => CreateNoteSymbols(beatOffsets, group));
 
         IEnumerable<LineObject> CreateBarLines(IEnumerable<double> barlinePositions)
         {
@@ -142,31 +142,33 @@ namespace Stride.Music.Layout
             return new LineObject(origin, end, Metrics.BarLineThickness);
         }
 
-        IEnumerable<(Beat, (GrandStaffLedgerLines, bool isWholeNote))> ComputeLedgerLinesForTicks(
-            IEnumerable<IGrouping<Beat, NoteOnPage>> notesByTicks) => 
-            notesByTicks.Select(ComputeLedgerLinesForTick);
+        IEnumerable<(Beat, (GrandStaffLedgerLines, bool isWholeNote))> ComputeLedgerLinesForBeats(
+            IEnumerable<BeatGroup> beatGroups)
+            => beatGroups.Select(ComputeLedgerLinesForBeat);
 
-        bool HasWholeNote(IEnumerable<NoteOnPage> notes) =>
-            notes.Aggregate(false, (hasWholeNote, note) => hasWholeNote || note.Duration.IsWhole());
+        bool HasWholeNote(BeatGroup group) 
+            => group.ScoreNotes.Aggregate(false, (hasWholeNote, note) => hasWholeNote || note.Duration.IsWhole());
 
-        (Beat, (GrandStaffLedgerLines, bool isWholeNote)) ComputeLedgerLinesForTick(IGrouping<Beat, NoteOnPage> group) => 
-            (group.Key, (LedgerLinesComputation.ComputeLedgerLines(group), HasWholeNote(group)));
+        (Beat, (GrandStaffLedgerLines, bool isWholeNote)) ComputeLedgerLinesForBeat(BeatGroup group) 
+            => (group.Beat, (LedgerLinesComputation.ComputeLedgerLines(group.ScoreNotes), HasWholeNote(group)));
 
-        public IEnumerable<LayoutObject> CreateLayout(IEnumerable<NoteOnPage> notes)
+        IReadOnlyList<IEnumerable<BeatGroup>> GroupByBars(IEnumerable<BeatGroup> beatGroups) 
+            => beatGroups.GroupBy(group => group.Beat.Bar).ToReadOnlyList();
+
+        public IEnumerable<LayoutObject> CreateLayout(IEnumerable<BeatGroup> beatGroups)
         {
-            var notesByTicks = notes.GroupBy(note => note.Beat);
-            var notesByBars = notes.GroupBy(note => note.Beat.Bar);
+            var barGroups = GroupByBars(beatGroups);
 
-            var (tickPositions, barlinePositions) = ComputeHorizontalLayout(FirstNoteXBias, notesByBars);
+            var (tickPositions, barlinePositions) = ComputeHorizontalLayout(FirstNoteXBias, barGroups);
 
-            var ledgerLinesByTicks = ComputeLedgerLinesForTicks(notesByTicks);
+            var ledgerLinesByBeats = ComputeLedgerLinesForBeats(beatGroups);
 
-            var ledgerLines = StaffLinesLayout.CreateLedgerLines(Metrics, ledgerLinesByTicks, tickPositions);
+            var ledgerLines = StaffLinesLayout.CreateLedgerLines(Metrics, ledgerLinesByBeats, tickPositions);
             var staffLines = StaffLinesLayout.CreateGrandStaffLines(Metrics);
-            var stems = DurationsLayout.Create(notes, tickPositions);
+            var stems = DurationsLayout.Create(beatGroups, tickPositions);
             var barlines = CreateBarLines(barlinePositions);
 
-            var noteSymbols = CreateNoteSymbols(tickPositions, notes, false);
+            var noteSymbols = CreateNoteSymbols(tickPositions, beatGroups);
 
             return (new[] {PlaceBassClef(), PlaceTreebleClef()} as IEnumerable<LayoutObject>)
                 .Concat(staffLines)
