@@ -47,15 +47,21 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Layout\ScoreLayout.cs" />
+    <Compile Include="Layout\BeatGroupLayout.cs" />
+    <Compile Include="Layout\BeatGroupLayoutAlgorithm.cs" />
+    <Compile Include="Layout\BeatGroupSpan.cs" />
+    <Compile Include="Layout\BeatGroupSpanComputation.cs" />
+    <Compile Include="Layout\HorizontalLayoutAlgorithm.cs" />
+    <Compile Include="Layout\ScoreLayoutAlgorithm.cs" />
     <Compile Include="Layout\LayoutObject.cs" />
     <Compile Include="Layout\LineObject.cs" />
-    <Compile Include="Layout\StaffLinesLayout.cs" />
-    <Compile Include="Layout\DurationsLayout.cs" />
+    <Compile Include="Layout\StaffLinesLayoutAlgorithm.cs" />
+    <Compile Include="Layout\StemsLayoutAlgorithm.cs" />
     <Compile Include="Layout\SymbolObject.cs" />
     <Compile Include="Layout\TestLayout.cs" />
-    <Compile Include="Layout\VerticalLayout.cs" />
+    <Compile Include="Layout\VerticalLayoutAlgorithm.cs" />
     <Compile Include="Score\BarsComputation.cs" />
+    <Compile Include="Score\BeatGroup.cs" />
     <Compile Include="Score\GrandStaffLedgerLines.cs" />
     <Compile Include="Score\LedgerLines.cs" />
     <Compile Include="Score\LedgerLinesComputation.cs" />

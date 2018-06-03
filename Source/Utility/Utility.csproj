@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Combinator.cs" />
+    <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="DoubleExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Hash.cs" />

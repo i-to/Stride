@@ -6,7 +6,7 @@ using Stride.Music.Theory;
 
 namespace Stride.Music.Layout
 {
-    public class StaffLinesLayout
+    public class StaffLinesLayoutAlgorithm
     {
         public IEnumerable<LineObject> CreateGrandStaffLines(StavesMetrics metrics)
         {
@@ -29,12 +29,14 @@ namespace Stride.Music.Layout
 
         public IReadOnlyList<LineObject> CreateLedgerLines(
             StavesMetrics metrics,
-            IEnumerable<(Beat, (GrandStaffLedgerLines, bool))> ledgerLinesForBeats,
+            IReadOnlyDictionary<Beat, (GrandStaffLedgerLines, bool)> ledgerLinesForBeats,
             IReadOnlyDictionary<Beat, double> beatPositions)
         {
             var result = new List<LineObject>();
-            foreach (var (beat, (ledgerLines, isWholeNote)) in ledgerLinesForBeats)
+            foreach (var kv in ledgerLinesForBeats)
             {
+                var beat = kv.Key;
+                var (ledgerLines, isWholeNote) = kv.Value;
                 var noteWidth = isWholeNote
                     ? metrics.WholeNoteheadWidth
                     : metrics.OtherNoteheadWidth;

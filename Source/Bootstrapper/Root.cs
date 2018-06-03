@@ -19,7 +19,7 @@ namespace Stride.Bootstrapper
         public readonly Application Application;
         public readonly Window MainWindow;
         public readonly MusicDrawingBuilder MusicDrawingBuilder;
-        public readonly ScoreLayout Layout;
+        public readonly ScoreLayoutAlgorithm Layout;
         public readonly ScoreBuilder ScoreBuilder;
         public readonly DrawingControl DrawingControl;
 
@@ -36,7 +36,12 @@ namespace Stride.Bootstrapper
             //var layout = CreateTestLayoutEngine(metrics);
             MusicDrawingBuilder = new MusicDrawingBuilder(glyphRunBuilder, musicSymbolToFontText);
             DrawingControl = new DrawingControl();
-            MainWindow = new Window {Content = DrawingControl};
+            MainWindow = new Window
+            {
+                Content = DrawingControl,
+                Width = 1200, Height = 900,
+                Left = 100, Top = 50
+            };
         }
 
         GlyphTypeface LoadBravuraTypeface()
@@ -45,13 +50,24 @@ namespace Stride.Bootstrapper
             return new GlyphTypeface(uri);
         }
 
-        ScoreLayout CreateLayoutEngine(StavesMetrics metrics)
+        ScoreLayoutAlgorithm CreateLayoutEngine(StavesMetrics metrics)
         {
-            var verticalLayout = new VerticalLayout(metrics);
-            var staffLinesGeometryBuilder = new StaffLinesLayout();
+            var staffLinesGeometryBuilder = new StaffLinesLayoutAlgorithm();
             var ledgerLinesComputation = new LedgerLinesComputation();
-            var stemLayout = new DurationsLayout(metrics, verticalLayout);
-            return new ScoreLayout(metrics, staffLinesGeometryBuilder, ledgerLinesComputation, verticalLayout, stemLayout);
+            var beatGroupLayoutAlgorithm = new BeatGroupLayoutAlgorithm();
+            var beatGroupSpanComputation = new BeatGroupSpanComputation(metrics);
+            var horizontalLayout = new HorizontalLayoutAlgorithm(metrics);
+            var verticalLayout = new VerticalLayoutAlgorithm(metrics);
+            var stemLayout = new StemsLayoutAlgorithm(metrics, verticalLayout);
+            return new ScoreLayoutAlgorithm(
+                metrics,
+                staffLinesGeometryBuilder,
+                ledgerLinesComputation,
+                beatGroupLayoutAlgorithm,
+                beatGroupSpanComputation,
+                horizontalLayout,
+                verticalLayout,
+                stemLayout);
         }
 
         TestLayout CreateTestLayout(StavesMetrics metrics)
@@ -81,6 +97,10 @@ namespace Stride.Bootstrapper
                 new [] {Pitch.D4, Pitch.F4, Pitch.A4, Pitch.C5},
                 new [] {Pitch.E4, Pitch.G4, Pitch.B4, Pitch.D5},
                 new [] {Pitch.F4, Pitch.A4, Pitch.C5, Pitch.E5},
+                new [] {Pitch.C4, Pitch.F4, Pitch.G4, Pitch.B4},
+                new [] {Pitch.D4, Pitch.F4, Pitch.A4, Pitch.C5},
+                new [] {Pitch.E4, Pitch.G4, Pitch.B4, Pitch.D5},
+                new [] {Pitch.F4, Pitch.A4, Pitch.C5, Pitch.E5},
             };
 
         public void AddPhraseDrawing(IEnumerable<Note> phrase)
@@ -89,7 +109,7 @@ namespace Stride.Bootstrapper
             AddScoreDrawing(score);
         }
 
-        public void AddScoreDrawing(IEnumerable<BeatGroup> score)
+        public void AddScoreDrawing(IReadOnlyDictionary<Beat, BeatGroup> score)
         {
             var layout = Layout.CreateLayout(score);
             var drawing = MusicDrawingBuilder.BuildDrawing(layout);

@@ -1,21 +1,7 @@
-﻿using System.Collections.Generic;
-using Stride.Music.Theory;
+﻿using Stride.Music.Theory;
 
 namespace Stride.Music.Score
 {
-    public class BeatGroup
-    {
-        public readonly Beat Beat;
-
-        public readonly IReadOnlyList<ScoreNote> ScoreNotes;
-
-        public BeatGroup(Beat beat, IReadOnlyList<ScoreNote> scoreNotes)
-        {
-            Beat = beat;
-            ScoreNotes = scoreNotes;
-        }
-    }
-
     public class ScoreNote
     {
         public readonly Duration Duration;

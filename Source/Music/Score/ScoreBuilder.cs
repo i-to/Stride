@@ -23,33 +23,38 @@ namespace Stride.Music.Score
             LowestTreebleStaffPitch = lowestTreebleStaffPitch;
         }
 
-        public IEnumerable<BeatGroup> FromMelodicPhrase(IEnumerable<Note> phrase)
+        public IReadOnlyDictionary<Beat, BeatGroup> FromMelodicPhrase(IEnumerable<Note> phrase) => 
+            MelodicPhraseToBeatGroups(phrase).ToReadOnlyDictionary();
+
+        public IReadOnlyDictionary<Beat, BeatGroup> FromChordsPhrase(
+            IEnumerable<(IEnumerable<Pitch> Chord, Duration Duration)> phrase)
+            => ChordsPhraseToBeatGroups(phrase).ToReadOnlyDictionary();
+
+        IEnumerable<(Beat, BeatGroup)> MelodicPhraseToBeatGroups(IEnumerable<Note> phrase)
         {
             var pitches = phrase.Select(Note.GetPitch);
             var staffPositions = pitches.Select(p => StaffPositionComputation.ComputeStaffPosition(LowestTreebleStaffPitch, p));
             var beats = BarsComputation.SplitToBars(phrase);
             return phrase.EquiZip(staffPositions, beats,
                 (note, staffPosition, beat) => 
-                    new BeatGroup(beat, new ScoreNote(note.Duration, staffPosition, note.Pitch.PitchClass.Accidental).YieldReadOnlyList()));
+                    (beat, BeatGroup.Create(new ScoreNote(note.Duration, staffPosition, note.Pitch.PitchClass.Accidental))));
         }
 
-        public IEnumerable<BeatGroup> FromChordsPhrase(IEnumerable<(IEnumerable<Pitch> Chord, Duration Duration)> phrase)
+        IEnumerable<(Beat, BeatGroup)> ChordsPhraseToBeatGroups(IEnumerable<(IEnumerable<Pitch> Chord, Duration Duration)> phrase)
         {
             var lowNotes = phrase.Select(chord => new Note(chord.Chord.First(), chord.Duration));
             var beats = BarsComputation.SplitToBars(lowNotes);
             return phrase.EquiZip(beats, (phraseEntry, beat) =>
-                CreateBeatGroup(phraseEntry.Chord, phraseEntry.Duration, beat));
+                (beat, CreateBeatGroup(phraseEntry.Chord, phraseEntry.Duration)));
         }
 
-        BeatGroup CreateBeatGroup(IEnumerable<Pitch> pitches, Duration duration, Beat beat)
+        BeatGroup CreateBeatGroup(IEnumerable<Pitch> pitches, Duration duration)
         {
-            var staffPositions = StaffPositionComputation.ComputeStaffPositionsHarmonic(LowestTreebleStaffPitch, pitches);
+            var staffPositions = StaffPositionComputation.ComputeStaffPositions(LowestTreebleStaffPitch, pitches);
             var accidentals = pitches.Select(Pitch.GetAccidental);
-            var scoreNotes = staffPositions
-                .EquiZip(accidentals,
-                    (staffPosition, accidental) => new ScoreNote(duration, staffPosition, accidental))
-                .ToReadOnlyList();
-            return new BeatGroup(beat, scoreNotes);
+            var scoreNotes = staffPositions.EquiZip(accidentals,
+                (staffPosition, accidental) => new ScoreNote(duration, staffPosition, accidental));
+            return BeatGroup.Create(scoreNotes);
         }
     }
 }

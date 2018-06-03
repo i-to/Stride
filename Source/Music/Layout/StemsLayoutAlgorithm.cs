@@ -6,28 +6,26 @@ using Stride.Music.Theory;
 
 namespace Stride.Music.Layout
 {
-    public class DurationsLayout
+    public class StemsLayoutAlgorithm
     {
         readonly StavesMetrics Metrics;
-        readonly VerticalLayout VerticalLayout;
+        readonly VerticalLayoutAlgorithm VerticalLayout;
 
-        public DurationsLayout(StavesMetrics metrics, VerticalLayout verticalLayout)
+        public StemsLayoutAlgorithm(StavesMetrics metrics, VerticalLayoutAlgorithm verticalLayout)
         {
             Metrics = metrics;
             VerticalLayout = verticalLayout;
         }
 
         public IEnumerable<LayoutObject> Create(
-            IEnumerable<BeatGroup> beatGroups,
-            IReadOnlyDictionary<Beat, double> tickPositions) =>
-            CreateStemsAndFlags(beatGroups, tickPositions);
+            IReadOnlyDictionary<Beat, BeatGroup> beatGroups,
+            IReadOnlyDictionary<Beat, double> tickPositions)
+            => beatGroups.SelectMany(
+                kv => CreateStemAndFlag(tickPositions[kv.Key], kv.Value));
 
-        IEnumerable<LayoutObject> CreateStemsAndFlags(
-            IEnumerable<BeatGroup> beatGroups,
-            IReadOnlyDictionary<Beat, double> tickPositions) =>
-            beatGroups.SelectMany(note => CreateStemAndFlag(tickPositions, note));
-
-        IEnumerable<LayoutObject> CreateStemAndFlag(IReadOnlyDictionary<Beat, double> tickPositions, BeatGroup beatGroup)
+        IEnumerable<LayoutObject> CreateStemAndFlag(
+            double tickPosition,
+            BeatGroup beatGroup)
         {
             // todo: handle groups correctly
             var scoreNote = beatGroup.ScoreNotes.First();
@@ -40,7 +38,7 @@ namespace Stride.Music.Layout
             var (xOffset, yOffset, length) = stemUp
                 ? (Metrics.OtherNoteheadWidth - Metrics.StemLineThickness, 0, -stemLength)
                 : (0, 2, stemLength);
-            var x = xOffset + tickPositions[beatGroup.Beat];
+            var x = xOffset + tickPosition;
             var y = yOffset + VerticalLayout.StaffPositionToYOffset(position);
             var origin = new Point(x, y);
             var end = new Point(x, y + length);

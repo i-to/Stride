@@ -3,11 +3,11 @@ using Stride.Music.Theory;
 
 namespace Stride.Music.Layout
 {
-    public class VerticalLayout
+    public class VerticalLayoutAlgorithm
     {
         readonly StavesMetrics Metrics;
 
-        public VerticalLayout(StavesMetrics metrics)
+        public VerticalLayoutAlgorithm(StavesMetrics metrics)
         {
             Metrics = metrics;
         }

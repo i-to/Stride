@@ -20,31 +20,22 @@ namespace Stride.Music.Score
         /// </summary>
         public readonly int VerticalOffset;
 
-        /// <summary>
-        /// Horizontal offset used when drawing harmonic seconds.
-        /// </summary>
-        public readonly bool HorisontalOffset;
-
-        public StaffPosition(Clef clef, int verticalOffset, bool horisontalOffset)
+        public StaffPosition(Clef clef, int verticalOffset)
         {
             Clef = clef;
             VerticalOffset = verticalOffset;
-            HorisontalOffset = horisontalOffset;
         }
 
-        public StaffPosition WithHorizontalOffset(bool offset) =>
-            new StaffPosition(Clef, VerticalOffset, offset);
+        public StaffPosition WithHorizontalOffset(bool offset)
+            => new StaffPosition(Clef, VerticalOffset);
 
-        public static StaffPosition InTreebleClef(int offset) =>
-            new StaffPosition(Clef.Treeble, offset, false);
+        public static StaffPosition InTreebleClef(int offset)
+            => new StaffPosition(Clef.Treeble, offset);
 
-        public static StaffPosition InBassClef(int offset) =>
-            new StaffPosition(Clef.Bass, offset, false);
+        public static StaffPosition InBassClef(int offset) 
+            => new StaffPosition(Clef.Bass, offset);
 
         public override string ToString()
-        {
-            var horisontalOffset = HorisontalOffset ? "->" : "";
-            return $"{Clef}:{VerticalOffset}{horisontalOffset}";
-        }
+            => $"{Clef}:{VerticalOffset}";
     }
 }

@@ -7,14 +7,14 @@ namespace Stride.Utility
 {
     public static class EnumerableExtensions
     {
-        public static IEnumerable<T> OrderAscending<T>(this IEnumerable<T> enumerable) =>
-            enumerable.OrderBy(Combinator.Identity);
+        public static IEnumerable<T> OrderAscending<T>(this IEnumerable<T> enumerable)
+            => enumerable.OrderBy(Combinator.Identity);
 
-        public static IEnumerable<T> OrderDescending<T>(this IEnumerable<T> enumerable) =>
-            enumerable.OrderByDescending(Combinator.Identity);
+        public static IEnumerable<T> OrderDescending<T>(this IEnumerable<T> enumerable)
+            => enumerable.OrderByDescending(Combinator.Identity);
 
-        public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> enumerable) =>
-            enumerable.ToArray();
+        public static IReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> enumerable)
+            => enumerable.ToArray();
 
         public static int FindIndex<T>(this IEnumerable<T> enumerable, Func<T, bool> predicate)
         {
@@ -61,6 +61,9 @@ namespace Stride.Utility
                 throw new InvalidOperationException("The operation is not valid on empty enumerable.");
             return (min, max);
         }
+
+        public static IEnumerable<T> SelectMany<T>(this IEnumerable<IEnumerable<T>> enumerable)
+            => enumerable.SelectMany(Combinator.Identity);
 
         public static IReadOnlyList<T> YieldReadOnlyList<T>(this T element) => new[] { element };
         public static IEnumerable<T> Yield<T>(this T element) => element.YieldReadOnlyList();

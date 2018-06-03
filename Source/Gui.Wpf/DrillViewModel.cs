@@ -14,13 +14,13 @@ namespace Stride.Gui.Wpf
         readonly MusicDrawingBuilder MusicDrawingBuilder;
         readonly DrillQuiz DrillQuiz;
         readonly ScoreBuilder ScoreBuilder;
-        readonly ScoreLayout Layout;
+        readonly ScoreLayoutAlgorithm Layout;
 
         public DrillViewModel(
             MusicDrawingBuilder musicDrawingBuilder,
             DrillQuiz drillQuiz,
             ScoreBuilder scoreBuilder,
-            ScoreLayout layout)
+            ScoreLayoutAlgorithm layout)
         {
             MusicDrawingBuilder = musicDrawingBuilder;
             DrillQuiz = drillQuiz;
