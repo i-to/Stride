@@ -2,6 +2,7 @@
 using NAudio.Midi;
 using Stride.Music.Theory;
 using Stride.Utility;
+using Stride.Utility.Fluent;
 
 namespace Stride.Gui.Wpf.Input
 {

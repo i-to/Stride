@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Stride.Utility
+namespace Stride.Utility.Fluent
 {
     public static class StringExtensions
     {

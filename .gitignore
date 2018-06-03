@@ -10,3 +10,4 @@ Source/Utility/obj/*
 Source/Music/obj/*
 Source/Bootstrapper/obj/*
 Source/Resources/obj/*
+/Output/*

@@ -6,6 +6,7 @@ using MoreLinq;
 using Stride.Music.Theory;
 using Stride.Utility;
 using Stride.Music.Score;
+using Stride.Utility.Fluent;
 
 namespace Stride.Music.Layout
 {

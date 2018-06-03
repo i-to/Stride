@@ -46,6 +46,8 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BitmapConverter.cs" />
+    <Compile Include="BitmapUtility.cs" />
     <Compile Include="FontSymbolMapping.cs" />
     <Compile Include="GlyphRunBuilder.cs" />
     <Compile Include="MusicDrawingBuilder.cs" />

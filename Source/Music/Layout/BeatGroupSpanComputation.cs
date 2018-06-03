@@ -3,6 +3,7 @@ using System.Linq;
 using Stride.Music.Score;
 using Stride.Music.Theory;
 using Stride.Utility;
+using Stride.Utility.Fluent;
 
 namespace Stride.Music.Layout
 {

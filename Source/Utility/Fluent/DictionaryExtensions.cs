@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
 
-namespace Stride.Utility
+namespace Stride.Utility.Fluent
 {
     public static class DictionaryExtensions
     {

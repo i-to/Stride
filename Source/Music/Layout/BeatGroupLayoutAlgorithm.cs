@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Stride.Music.Score;
 using Stride.Utility;
+using Stride.Utility.Fluent;
 
 namespace Stride.Music.Layout
 {

@@ -49,7 +49,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DrawingModule.cs" />
     <Compile Include="EntryPoint.cs" />
+    <Compile Include="MusicModule.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -60,7 +62,13 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Root.cs" />
+    <Compile Include="DrawingVisualizeRoot.cs" />
+    <Compile Include="Test\TestConfiguration.cs" />
+    <Compile Include="DrawingTestRoot.cs" />
+    <Compile Include="Test\ScoreRendererTest.cs" />
+    <Compile Include="TestScores.cs" />
+    <Compile Include="Test\TestSession.cs" />
+    <Compile Include="Test\TestUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Drawing.Wpf\Drawing.Wpf.csproj">

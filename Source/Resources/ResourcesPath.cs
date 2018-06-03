@@ -4,14 +4,19 @@ using System.IO;
 namespace Stride.Resources
 {
     /// <summary>
-    /// Provides access to content resources copied to output directory.
+    /// Creates paths to access resources.
     /// </summary>
-    public class CopiedResourcesPath
+    public class ResourcesPath
     {
-        public CopiedResourcesPath()
+        public ResourcesPath()
         {
             var assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
             DirectoryPath = Path.GetDirectoryName(assemblyPath);
+        }
+
+        public ResourcesPath(string directoryPath)
+        {
+            DirectoryPath = directoryPath;
         }
 
         public string DirectoryPath { get; }

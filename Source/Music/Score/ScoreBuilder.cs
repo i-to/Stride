@@ -3,6 +3,7 @@ using System.Linq;
 using MoreLinq;
 using Stride.Music.Theory;
 using Stride.Utility;
+using Stride.Utility.Fluent;
 
 namespace Stride.Music.Score
 {

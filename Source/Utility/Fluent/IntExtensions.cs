@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Stride.Utility
+namespace Stride.Utility.Fluent
 {
     public static class IntExtensions
     {

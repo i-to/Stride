@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using MoreLinq;
+using Stride.Utility.Fluent;
 
 namespace Stride.Utility
 {
