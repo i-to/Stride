@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using MoreLinq;
 using Stride.Music.Score;
 using Stride.Music.Theory;
 
@@ -18,22 +20,58 @@ namespace Stride.Music.Layout
         }
 
         public IEnumerable<LayoutObject> Create(
+            IEnumerable<IEnumerable<Beat>> barsActiveBeats,
             IReadOnlyDictionary<Beat, BeatGroup> beatGroups,
             IReadOnlyDictionary<Beat, double> tickPositions)
-            => beatGroups.SelectMany(
-                kv => CreateStemAndFlag(tickPositions[kv.Key], kv.Value));
+            => barsActiveBeats.SelectMany(
+                barActiveBeats => ComputeStemsAndFlagsForBar(barActiveBeats, beatGroups, tickPositions));
 
-        IEnumerable<LayoutObject> CreateStemAndFlag(
+        IEnumerable<LayoutObject> ComputeStemsAndFlagsForBar(
+            IEnumerable<Beat> barActiveBeats,
+            IReadOnlyDictionary<Beat, BeatGroup> beatGroups,
+            IReadOnlyDictionary<Beat, double> tickPositions) 
+            => barActiveBeats.SelectMany(
+                    beat => CreateStemAndFlagObjects(tickPositions[beat], beatGroups[beat]));
+
+        IEnumerable<LayoutObject> CreateStemAndFlagObjects(
             double tickPosition,
             BeatGroup beatGroup)
         {
-            // todo: handle groups correctly
-            var scoreNote = beatGroup.ScoreNotes.First();
-            if (scoreNote.Duration.IsWhole())
-                yield break;
+            var (stem, flag) = CreateStemAndFlagForIndividualBeat(tickPosition, beatGroup);
+            if (stem != null)
+                yield return stem;
+            if (flag != null)
+                yield return flag;
+        }
 
-            var stemLength = Metrics.RegularStemLength;
-            var position = scoreNote.StaffPosition;
+        (LineObject stem, SymbolObject flag) CreateStemAndFlagForIndividualBeat(
+            double tickPosition,
+            BeatGroup beatGroup)
+        {
+            var result = (stem: (LineObject) null, flag: (SymbolObject) null);
+
+            var notes = beatGroup.ScoreNotes;
+            var duration = notes.First().Duration;
+            var clef = notes.First().StaffPosition.Clef;
+            if (notes.Skip(1).Any(note => note.Duration != duration))
+                throw new NotImplementedException("Stemming of beat groups of non-uniform direction is not implemented yet.");
+            if (notes.Skip(1).Any(note => note.StaffPosition.Clef != clef))
+                throw new NotImplementedException("Stemming of beat groups spanning different clefs is not implemented yet.");
+
+            if (duration.IsWhole())
+                return result;
+
+            // todo: handle groups correctly
+            var stemmedNotes = notes.Where(note => !note.Duration.IsWhole());
+            if (!stemmedNotes.Any())
+                return result;
+
+            // todo: this assumes single clef
+            var offsetDistance = notes.Last().StaffPosition.VerticalOffset - notes.First().StaffPosition.VerticalOffset;
+            var groupHeight = offsetDistance * Metrics.HalfSpace;
+
+            var stemLength = Metrics.RegularStemLength + groupHeight;
+            var position = notes.First().StaffPosition;
             bool stemUp = position.VerticalOffset < 0;
             var (xOffset, yOffset, length) = stemUp
                 ? (Metrics.OtherNoteheadWidth - Metrics.StemLineThickness, 0, -stemLength)
@@ -42,15 +80,16 @@ namespace Stride.Music.Layout
             var y = yOffset + VerticalLayout.StaffPositionToYOffset(position);
             var origin = new Point(x, y);
             var end = new Point(x, y + length);
-            yield return new LineObject(origin, end, Metrics.StemLineThickness);
+            result.stem = new LineObject(origin, end, Metrics.StemLineThickness);
 
-            if (scoreNote.Duration.IsHalf() || scoreNote.Duration.IsQuarter())
-                yield break;
+            if (duration.IsHalf() || duration.IsQuarter())
+                return result;
             var (flagY, symbol) = stemUp
                 ? (y - stemLength, Symbol.FlagEighthUp)
                 : (y + stemLength, Symbol.FlagEightsDown);
             var flagOrigin = new Point(x, flagY);
-            yield return new SymbolObject(flagOrigin, symbol, Metrics.GlyphSize, false);
+            result.flag = new SymbolObject(flagOrigin, symbol, Metrics.GlyphSize, false);
+            return result;
         }
     }
 }

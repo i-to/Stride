@@ -139,7 +139,7 @@ namespace Stride.Music.Layout
 
             var ledgerLines = StaffLinesLayout.CreateLedgerLines(Metrics, ledgerLinesByBeats, beatPositions);
             var staffLines = StaffLinesLayout.CreateGrandStaffLines(Metrics);
-            var stems = StemsLayout.Create(score, beatPositions);
+            var stems = StemsLayout.Create(barsActiveBeats, score, beatPositions);
             var barlines = CreateBarLines(barlinePositions);
 
             var noteSymbols = CreateNoteSymbols(score, beatPositions);

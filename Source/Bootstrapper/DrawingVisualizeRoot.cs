@@ -34,12 +34,6 @@ namespace Stride.Bootstrapper
             };
         }
 
-        public void AddPhraseDrawing(IEnumerable<Note> phrase)
-        {
-            var score = MusicModule.ScoreBuilder.FromMelodicPhrase(phrase);
-            AddScoreDrawing(score);
-        }
-
         public void AddScoreDrawing(IReadOnlyDictionary<Beat, BeatGroup> score)
         {
             var layout = MusicModule.Layout.CreateLayout(score);
@@ -50,8 +44,8 @@ namespace Stride.Bootstrapper
         public void Run()
         {
             var testScores = new TestScores(MusicModule.ScoreBuilder);
-            AddScoreDrawing(testScores.SimpleTestPhraseScore);
-            AddScoreDrawing(testScores.EightNotePhraseScore);
+            //AddScoreDrawing(testScores.SimpleTestPhraseScore);
+            //AddScoreDrawing(testScores.EightNotePhraseScore);
             AddScoreDrawing(testScores.ChordPhraseScore);
             Application.Run(MainWindow);
         }

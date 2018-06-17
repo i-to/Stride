@@ -22,9 +22,9 @@ namespace Stride.Bootstrapper
             DrawingModule = new DrawingModule(resourceLoader);
         }
 
-        public void Run()
+        public void Run(bool goldenDataGenerationMode)
         {
-            var testSession = CreateTestSession();
+            var testSession = CreateTestSession(goldenDataGenerationMode);
             testSession.Prepare();
             testSession.Run(TestScores.Scores);
         }
@@ -38,10 +38,10 @@ namespace Stride.Bootstrapper
                 outputImagePath: $"../../Output/Test/{outputSubfolder}",
                 goldenDataGenerationMode: goldenDataGenerationMode);
 
-        TestSession CreateTestSession()
+        TestSession CreateTestSession(bool goldenDataGenerationMode)
         {
             var outputSubfolder = DateTime.Now.ToStringForFileName();
-            var config = CreateConfig(false, outputSubfolder);
+            var config = CreateConfig(goldenDataGenerationMode, outputSubfolder);
             var testUtility = new TestUtility(
                 config,
                 new BitmapUtility(),
